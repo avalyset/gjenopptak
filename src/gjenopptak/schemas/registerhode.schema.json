@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/avalyset/gjenopptak/schemas/registerhode.schema.json",
+  "title": "Registerhode — hvilken port lista har passert, og forbeholdene som alltid følger",
+  "description": "Byggeplanen B3: headeren bærer portstatus og de globale forbeholdene. Uten en bestått port heter lista «ubekreftet kandidatliste», og det er ikke en feil.",
+  "type": "object",
+  "required": [
+    "kjøring",
+    "tid",
+    "port",
+    "bekreftet",
+    "n_rader",
+    "n_dømt",
+    "forbehold",
+    "adr"
+  ],
+  "properties": {
+    "kjøring": {
+      "type": "string"
+    },
+    "tid": {
+      "type": "string"
+    },
+    "port": {
+      "type": "string",
+      "description": "Navnet på porten lista har bestått. «ubekreftet kandidatliste» når ingen er bestått. En arbeidsliste kan bare komme fra en PROSPEKTIV port på nytt materiale."
+    },
+    "bekreftet": {
+      "type": "boolean"
+    },
+    "n_rader": {
+      "type": "integer"
+    },
+    "n_dømt": {
+      "type": "integer"
+    },
+    "forbehold": {
+      "type": "object",
+      "required": [
+        "stabil_kjerne",
+        "n3_spredning",
+        "ikke_prosa"
+      ],
+      "properties": {
+        "stabil_kjerne": {
+          "type": "string",
+          "description": "Fasitens stabile kjerne: 3 av 27 har enighet mellom to kodere OG ingen tvil (ADDENDUM-23 §1). En terskel nær settets ytterkant måler settet, ikke leseren."
+        },
+        "n3_spredning": {
+          "type": "string",
+          "description": "N3-grensen bærer koderidentitet: 5,8–13,6 % mellom åtte kodere på tilfeldig delt materiale (ADDENDUM-22 §9.4)."
+        },
+        "ikke_prosa": {
+          "type": "string",
+          "description": "merket, aldri fjernet"
+        }
+      }
+    },
+    "adr": {
+      "type": "string"
+    },
+    "register_sha256": {
+      "type": "string"
+    },
+    "register_innhold_sha256": {
+      "type": "string",
+      "description": "uten daterte felter; den sha en røyktest kan bruke"
+    }
+  },
+  "additionalProperties": false
+}

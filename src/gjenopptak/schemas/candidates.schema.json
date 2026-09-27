@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gjenopptak.local/schemas/candidates-1.json",
+  "title": "candidate",
+  "description": "Én dømt setning: treff (H1-H9) eller ikke-treff (N1-N3). Løftbarhet slås opp, ADR-0004. Modellsignatur kreves, ADR-0003.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "sentence_id",
+    "doc_id",
+    "field_key",
+    "section_raw",
+    "is_hit",
+    "obstacle_class",
+    "liftable",
+    "liftability_table_version",
+    "judge",
+    "judged_at",
+    "section_label_provenance",
+    "unit",
+    "passage_span"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "candidates-1"
+    },
+    "candidate_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sentence_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "doc_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "field_key": {
+      "enum": [
+        "tekstvitenskap",
+        "klinisk_epidemiologi",
+        "arkeologi",
+        "energimodellering"
+      ]
+    },
+    "section_raw": {
+      "type": "string",
+      "description": "Båret videre urørt fra sentences, ADR-0002."
+    },
+    "section_norm": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "section_label_provenance": {
+      "enum": [
+        "source",
+        "parser"
+      ],
+      "description": "Hvor seksjonsetiketten kommer fra. source = kilden merker seksjonen selv (JATS <sec sec-type>/<title> el.l.); parser = utledet av oss, typisk GROBID. Påkrevd, lukket sett, ingen standardverdi. ADR-0007."
+    },
+    "parser_version": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "GROBID-versjon. Påkrevd og ikke-tom når provenance er parser. ADR-0007."
+    },
+    "parser_model_version": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Modellversjonen som ga seksjonsinndelingen. Påkrevd og ikke-tom når provenance er parser. ADR-0007."
+    },
+    "unit": {
+      "enum": [
+        "sentence",
+        "passage"
+      ],
+      "description": "Hvor snevert treffkriteriet ble oppfylt: sentence = det ugjorte OG hindringen står i samme setning; passage = de står innenfor passasjen (±2 setninger) og er knyttet til hverandre. Observasjonsenheten er alltid passasjen; dette feltet bærer følsomheten. ADDENDUM-03 §1."
+    },
+    "passage_span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start_index",
+        "end_index",
+        "n_sentences",
+        "window"
+      ],
+      "description": "Passasjen treffet ble avgjort på, i setningsindekser fra sentences.jsonl. ADDENDUM-03 §1.",
+      "properties": {
+        "start_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "n_sentences": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "window": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "±k setninger rundt treffsetningen. 2 etter ADDENDUM-03 §1."
+        }
+      }
+    },
+    "is_hit": {
+      "type": "boolean",
+      "description": "Navngir noe som ikke ble gjort OG oppgir en hindring. PREREG-v1 §2 M1."
+    },
+    "obstacle_class": {
+      "enum": [
+        "H1",
+        "H2",
+        "H3",
+        "H4",
+        "H5",
+        "H6",
+        "H7",
+        "H8",
+        "H9",
+        "H5/H7-uavklart",
+        "H3/H7-uavklart",
+        "H2/H7-uavklart",
+        "H1/H7-uavklart",
+        "N1",
+        "N2",
+        "N3",
+        "UNSURE"
+      ],
+      "description": "PREREG-v1 §5. Én klasse per setning. Naboparene H1/H2/H3/H5 mot H7 kan ikke alltid skilles av passasjen: arbeidsmengde og manglende data ser like ut i formuleringen. Er den uavklart, kodes <klasse>/H7-uavklart. ADDENDUM-05."
+    },
+    "liftable": {
+      "enum": [
+        "ja",
+        "ja_med_forbehold",
+        "delvis",
+        "nei",
+        "usikker",
+        "uavklart"
+      ],
+      "description": "KUN fra oppslag i PREREG-v1 §5-tabellen. Aldri satt av modell. ADR-0004. Uavklarte naboklasser får «uavklart», aldri «ja»: PREREG §5 gir H1 «ja», og det anslaget er kjent for høyt. ADDENDUM-05."
+    },
+    "liftability_table_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "judgeable": {
+      "enum": [
+        "ja",
+        "nei",
+        "usikker"
+      ],
+      "description": "PREREG-v1 §2 M2: kan «er hindringen opphevet i dag» avgjøres uten domeneekspert."
+    },
+    "unsure": {
+      "type": "boolean",
+      "default": false,
+      "description": "Usikre rapporteres i egen kolonne, PREREG-v1 §2."
+    },
+    "judge": {
+      "type": "string",
+      "minLength": 1,
+      "description": "owner | local:<model_id> | external:<model_id>. PREREG-v1 §6/§7."
+    },
+    "judged_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rationale": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Fri tekst, brukes ikke i tellinger."
+    },
+    "model_signature": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "description": "Kreves når judge ikke er owner. Mangler ett felt, er oppføringen ugyldig. ADR-0003.",
+      "required": [
+        "model_id",
+        "weights_sha256",
+        "temperature",
+        "seed",
+        "keep_alive",
+        "runtime",
+        "prompt_sha256",
+        "judged_at"
+      ],
+      "properties": {
+        "model_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_digest": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "weights_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "keep_alive": {
+          "const": 0,
+          "description": "Må være 0: modellen lastes ut mellom setninger."
+        },
+        "runtime": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quantization": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "prompt_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "judged_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "round": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "1 = første koding, 2 = blind runde, PREREG-v1 §7."
+    }
+  },
+  "if": {
+    "properties": {
+      "section_label_provenance": {
+        "const": "parser"
+      }
+    },
+    "required": [
+      "section_label_provenance"
+    ]
+  },
+  "then": {
+    "required": [
+      "parser_version",
+      "parser_model_version"
+    ],
+    "properties": {
+      "parser_version": {
+        "type": "string",
+        "minLength": 1
+      },
+      "parser_model_version": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

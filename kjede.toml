@@ -1,0 +1,114 @@
+# Kjeden i én fil. Ingen sti, modell, frø eller terskel skal stå i koden.
+# Stier er relative til katalogen denne filen ligger i, om de ikke er absolutte.
+# ADR-0012: kjeden er ramme → henting → tekstbiter → sil → leser → register.
+
+[kjede]
+navn = "gjenopptak"
+# Arbeidskatalog for en kjøring. Under data/, som er gitignorert (ADR-0001).
+arbeid = "data/kjede"
+
+[vault]
+# ADR-0009: Vault er standard, ingen fallback.
+rot = "/Volumes/Vault"
+navn = "gjenopptak-kilder"
+disk_gulv_gb = 5
+
+[tekstbiter]
+# Samme deler og vindusregel som porten. spesifikasjon.json er fasit for formatet.
+window = 2
+stride = 3
+fasit_spesifikasjon = "data/port/spesifikasjon.json"
+
+[dommer]
+# L3 sil A. ADR-0003 signatur per dom, ADR-0008 determinismesjekk ved batch.
+modell = "gemma2:9b"
+vekt_sha256 = "ff1d1fc78170d787ee1201778e2dd65ea211654ca5fb7d69b5a2e7b123a50373"
+ledetekst = "src/gjenopptak/classify/prompts/l3-poc-v1-system.txt"
+ledetekst_sha256 = "de9f82296950146baccf3a02f273e501bf71e359a4f89c9e7b629ef86e40efe0"
+num_ctx = 8192
+temperatur = 0
+fro = 734248
+keep_alive = "30m"
+vert = "http://localhost:11434"
+# Kanari: setningen legges sist i et vindu fylt til num_ctx, og må siteres tilbake.
+# Kanarisetningen legges sist i et ekte vindu og må komme tilbake. Engelsk, som korpuset.
+kanari = "We could not date the layer, because no suitable sample was preserved."
+
+[ekstraksjon]
+# L3 sil B. Preregistrert i ADDENDUM-16 (sha 20e777e481f766ea…).
+modell = "gemma2:9b"
+ledetekst = "prompts/ekstraksjon-v1.txt"
+ledetekst_sha256 = "c8c276df9ffe62c906db566c24abcf6f415746a8271f737928f426f94dbeb534"
+num_ctx = 8192
+temperatur = 0
+fro = 734248
+# Vinduet steget faktisk sender, i tegn. Kanarien bruker det samme, så den prøver
+# produksjonsvinduet og ikke et gjettet et.
+vindu_tegn = 6000
+# Q-linjer kobles til ALLE overlappende vindu, ikke bare det første.
+kobling = "alle-treff"
+
+[sil]
+# L3. ADR-0012: unionen er silen; snittet er sorteringsnøkkel, ikke filter.
+ikke_prosa_regel = "src/gjenopptak/classify/ikkeprosa.py"
+ikke_prosa_sha256 = "63ed734555a8bc95efd0d86c782805627032fdfeed7430635170ed6bff488aff"
+# Målt presisjon per kilde med Wilson-intervall (ADDENDUM-22 §10, 2 844 dømte passasjer).
+# Følger hver kandidatrad. Per KLASSE er presisjonen ikke målt — per kilde er den.
+presisjon_begge = 0.345
+presisjon_begge_ki = [0.298, 0.396]
+presisjon_dommer = 0.143
+presisjon_dommer_ki = [0.128, 0.160]
+presisjon_ekstraksjon = 0.072
+presisjon_ekstraksjon_ki = [0.054, 0.094]
+presisjon_kilde = "ADDENDUM-22 §10; teller/nevner 124/359, 260/1814, 48/671"
+
+# B4: silen bak grensesnittet sil(tekstbiter) -> kandidater. Målt recall og kostnad, med kilde.
+[sil.implementasjon]
+navn = "dommer ∪ ekstraksjon"
+recall_kjente = "27 av 27 kjente treff (METODE §5, d1-2x2.json)"
+andel_av_korpus = 0.128
+andel_kilde = "2 844 av 22 243 tekstbiter (ADDENDUM-22 §10)"
+leserpassasjer_per_bekreftet_treff = 6.6
+kostnad_kilde = "2 844 / 432 bekreftede treff (arbeidsliste/koder-c-komplett.json)"
+# Forkastede alternativer, med målt grunn. Står her for at en ny sil skal kunne sammenliknes.
+forkastet_embeddings = "84 % recall ved 2,0x kostnad (ADDENDUM-14)"
+forkastet_seksjon = "1,09x — under terskelen (ADDENDUM-15)"
+forkastet_naersok = "84 % recall ved 5,25x kostnad (ADDENDUM-15)"
+forkastet_ekstraksjon_alene = "36 % recall som enhet (ADR-0011, ADDENDUM-16)"
+
+[leser]
+# L4. ADR-0012: agentisk Opus-instans. Ett-kall-modeller er sil-klasse.
+modell = "claude-opus-5"
+regelfil = "koder2/koderegler-gjenvunnet.md"          # relativ til Vault-målet
+regelfil_sha256 = "234695dd4e1777a958801ddf6535e6a6444436ea1d46c3121db01585a9108449"
+oppdrag_mal = "arbeidsliste/oppdrag-koder-c.md"        # relativ til Vault-målet
+oppdrag_mal_sha256 = "0025f3e1e9a74869b36a7c6e9736b1692b7fbcb801cb1c21ce8fce5a46839921"
+okt_storrelse = 356
+fro = 734248
+serielt = true                                         # aldri parallelle Opus-instanser
+kladd_rot = "data/kjede/kladd"                         # egen underkatalog per instans
+# Målt forbruk per passasje og per økt. Brukes av kvoteporten.
+kontekst_tokens_per_passasje = 25034
+harness_tokens_per_okt = 287533
+minutter_per_okt = 29.5
+# Blind presisjon ved tvil-flagget (ADDENDUM-23 §7.2). Følger hver rad.
+presisjon_uten_tvil = 0.976
+presisjon_med_tvil = 0.759
+
+# [api] er FJERNET 27.09.2026. Verktøyet kaller ikke Anthropics API. Leseren er en CC-instans
+# på Max-abonnementet, som underinstans eller `claude -p`. Skal en ekstern modell noen gang inn,
+# er den Gemini — ikke i denne byggeplanen. Se ADR-0012, datert tillegg.
+
+[register]
+skjema = "claims-2"
+# Header-tekst når ingen port er bestått.
+uten_port = "ubekreftet kandidatliste"
+# Globale forbehold som følger hver liste (ADDENDUM-23 §1, §9.4).
+stabil_kjerne = "3 av 27"
+n3_spredning = "5,8–13,6 % mellom kodere"
+
+[kvote]
+# Kvoteporten er en port, ikke en advarsel: en fase nektes hvis budsjettet ikke rekker.
+openalex_gulv = 50
+# Ukesgrense i prosent som kjeden nekter å starte en leserfase over.
+harness_ukesgrense_tak = 90

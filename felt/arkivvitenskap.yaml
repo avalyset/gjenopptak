@@ -1,0 +1,19 @@
+# Nytt felt, lagt til 27.09.2026 UTEN kodeendring — bare denne filen.
+# Topic-ID og navn er hentet fra de frosne rådatafilene (`raw/topics-search-*.json`), ikke
+# oppdiktet: T11657 = «Digital and Traditional Archives Management», 149 061 verk i OpenAlex.
+# Rammen er IKKE frosset ennå, så feltet er planleggbart (`--torr`) og ikke kjørbart.
+
+felt: arkivvitenskap
+topics: [T11657]
+ar: [2015, 2020]
+ar_spurt: [2015, 2020]
+
+ramme:
+  fil: frames/frame-arkivvitenskap-RAW.jsonl
+  sha256: 0000000000000000000000000000000000000000000000000000000000000000
+  rader: 149061
+  krav: hentbar
+
+terskler:
+  n_verk: 25
+  gulv: 0

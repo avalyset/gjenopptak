@@ -1,0 +1,19 @@
+# Feltdefinisjon for kjeden. Alt som gjør et felt til et felt, står her — ingenting i kode.
+# Topics er hentet fra spørringen i det FROSNE rådata-manifestet, ikke fra verkenes egne
+# primary_topic: `data/raw/MANIFEST.md` fører kilde-URL med `topics.id:` per kall, og den URL-en
+# er det som definerte rammen. Rammelistens sha256 er kilden til at listen ikke har flyttet seg.
+
+felt: energimodellering
+topics: [T10424, T11185, T11941]
+ar: [2015, 2020]
+ar_spurt: [2015, 2020]          # året i spørringen, som rammen ble frosset på
+
+ramme:
+  fil: frames/frame-energimodellering-RAW.jsonl      # relativ til Vault-målet
+  sha256: 56d80195d2df726fe49961269a2a4b2f215c6534cb9783c7dc66a1d725048209
+  rader: 30362
+  krav: hentbar                            # is_oa true OG fulltekst faktisk hentbar
+
+terskler:
+  n_verk: 25                        # trukket per felt (ADDENDUM-09)
+  gulv: 0   # måleskranke i treffstratumet, ikke vekting (LAERDOM §15)

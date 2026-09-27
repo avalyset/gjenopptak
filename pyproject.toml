@@ -1,0 +1,34 @@
+[project]
+name = "gjenopptak"
+version = "0.1.0"
+description = "Parkerte forskningsspørsmål: prevalens og bedømbarhet. Se PREREG-v1.md."
+dependencies = [
+  # Pinnet, ikke ">=": en måling som ikke kan gjentas med samme biblioteker, er ikke gjentatt.
+  "httpx==0.28.1",
+  "jsonschema==4.26.0",
+  "lxml==6.1.3",
+  "pyyaml==6.0.3",
+]
+
+requires-python = "==3.12.*"
+
+[project.optional-dependencies]
+test = ["pytest==9.1.1"]
+
+[project.scripts]
+gjenopptak = "gjenopptak.kjede.cli:main"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+    "network: krever nett (OpenAlex). Kjøres eksplisitt, ikke i standardkjøring.",
+]
+addopts = "-q -m 'not network'"

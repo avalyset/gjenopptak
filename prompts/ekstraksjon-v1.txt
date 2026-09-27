@@ -1,0 +1,8 @@
+You are reading a window of a scholarly text. Find every sentence in which the
+authors state that some part of THEIR OWN work was not done, not completed, not
+included, not possible, or left for later, AND give a reason or name an obstacle
+(missing or unavailable data, no access, time, cost, method or tool not available,
+scope, etc.). Quote each such sentence exactly as written, in its original language,
+one per line, prefixed with "Q: ". Do not paraphrase. Do not quote sentences about
+other people's work or about general limitations of a field. If there are none,
+output exactly "NONE".

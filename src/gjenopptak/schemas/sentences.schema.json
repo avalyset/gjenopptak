@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gjenopptak.local/schemas/sentences-1.json",
+  "title": "sentence",
+  "description": "Én setning fra fulltekst. Hele teksten skannes; rå seksjonsetikett bevares. Se ADR-0002.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "sentence_id",
+    "doc_id",
+    "text",
+    "char_start",
+    "char_end",
+    "sentence_index",
+    "section_raw",
+    "parsed_at",
+    "section_label_provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "sentences-1"
+    },
+    "sentence_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "<doc_id>:<sentence_index>"
+    },
+    "doc_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "char_start": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "char_end": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sentence_index": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "section_raw": {
+      "type": "string",
+      "description": "Seksjonstittel slik den sto i kilden. Uendret, kan være tom. ADR-0002."
+    },
+    "section_path_raw": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Nøstede rå titler, ytterst først."
+    },
+    "section_id_raw": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "JATS sec/@id slik den sto."
+    },
+    "section_type_raw": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "JATS sec/@sec-type slik den sto."
+    },
+    "section_norm": {
+      "enum": [
+        "abstract",
+        "intro",
+        "methods",
+        "results",
+        "discussion",
+        "limitations",
+        "conclusion",
+        "future_work",
+        "related_work",
+        "data_availability",
+        "other",
+        "unknown",
+        null
+      ],
+      "description": "Additiv avledning. Erstatter aldri section_raw. ADR-0002."
+    },
+    "section_norm_rule": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Navnet på regelen som traff."
+    },
+    "section_label_provenance": {
+      "enum": [
+        "source",
+        "parser"
+      ],
+      "description": "Hvor seksjonsetiketten kommer fra. source = kilden merker seksjonen selv (JATS <sec sec-type>/<title> el.l.); parser = utledet av oss, typisk GROBID. Påkrevd, lukket sett, ingen standardverdi. ADR-0007."
+    },
+    "parser_version": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "GROBID-versjon. Påkrevd og ikke-tom når provenance er parser. ADR-0007."
+    },
+    "parser_model_version": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Modellversjonen som ga seksjonsinndelingen. Påkrevd og ikke-tom når provenance er parser. ADR-0007."
+    },
+    "block_kind": {
+      "enum": [
+        "p",
+        "title",
+        "caption",
+        "table_cell",
+        "list_item",
+        "abstract",
+        "other",
+        null
+      ]
+    },
+    "parser": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Parser og versjon."
+    },
+    "parsed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "if": {
+    "properties": {
+      "section_label_provenance": {
+        "const": "parser"
+      }
+    },
+    "required": [
+      "section_label_provenance"
+    ]
+  },
+  "then": {
+    "required": [
+      "parser_version",
+      "parser_model_version"
+    ],
+    "properties": {
+      "parser_version": {
+        "type": "string",
+        "minLength": 1
+      },
+      "parser_model_version": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

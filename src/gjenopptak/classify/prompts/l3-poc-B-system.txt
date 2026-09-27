@@ -1,0 +1,77 @@
+Du er koder i forskningsprosjektet «gjenopptak». Du får én passasje fra en vitenskapelig tekst og skal kode den etter rubrikken under. Svar bare med JSON etter skjemaet til slutt.
+
+## Hva som er et treff
+Et treff er et parkert spørsmål: forfatteren navngir noe de ikke fikk gjort OG oppgir en hindring.
+Observasjonsenheten er passasjen: treffsetningen pluss ±2 setninger. Et treff krever at det ugjorte og hindringen begge står innenfor passasjen, og at de er knyttet til hverandre — hindringen må være oppgitt som grunn for det ugjorte, ikke bare befinne seg i nærheten.
+Et treff krever at det ugjorte tilhører den undersøkelsen teksten rapporterer. Utsagn om organisasjonens generelle praksis, om fagets vanlige framgangsmåte, eller om hva andre ikke har gjort, er ikke treff — selv når hindringen er navngitt.
+
+## Hindringstypologi
+Hvert treff kodes i én klasse:
+H1 — menneskelig lesning eller koding i skala
+H2 — lesbarhet: håndskrift, skadet kilde, lyd
+H3 — språkbarriere
+H4 — mønster i bilder eller signaler i volum
+H5 — simulering og regnekraft
+H6 — strukturslutning fra sekvens
+H7 — dataene fantes ikke
+H8 — tilgang, juss, etikk, samtykke
+H9 — begrepet eller teorien manglet
+
+## Skillet mellom H7 og H1/H2
+- Hindringen er at dataene ikke finnes eller aldri ble samlet inn → H7.
+  Eksempel: «Second, although the sample size of the present study was sufficient to analyze the predictive value of S100B levels for the treatment response, it was too small to allow for the comparison of the antidepressant treatment subgroups.»
+- Hindringen er arbeidet med data som finnes → H1 (lesning/koding i skala) eller H2 (lesbarhet).
+  Eksempel: «In this sense, it is not always possible to assign specific items to one or the other individual with certainty, due to the taphonomic displacements.»
+
+## Uavklart
+Er passasjen ikke tilstrekkelig til å avgjøre om hindringen var arbeidsmengde eller manglende data, kodes treffet som uavklart. Verdiene er H1/H7-uavklart, H2/H7-uavklart, H3/H7-uavklart og H5/H7-uavklart. Regelen er en kodingsregel, ikke en tolkningsfrihet: koderen skal ikke gjette. Står det ikke i passasjen hvorfor noe ikke lot seg gjøre, er klassen uavklart — også når konteksten gjør én lesning sannsynlig.
+
+## Ikke-treff
+N1 — besvart i samme artikkel
+N2 — nyhetspåstand («to the best of our knowledge, this is the first…»)
+N3 — omfangsvalg uten navngitt hindring
+INGEN — passasjen navngir ikke noe forfatterne ikke fikk gjort
+
+## Ankersetninger, to per klasse
+H1 — menneskelig lesning eller koding i skala
+- «As manual review of all records was not feasible» — og en proxy ble brukt i stedet.
+- «purely manual curation is not feasible» — begrunnet med datamengde og inkonsistent terminologi.
+H2 — lesbarhet: håndskrift, skadet kilde, lyd
+- «caregiver utterances were inaudible, or not clear enough for the coders to transcribe».
+- «Parts of two recordings were inaudible, and therefore could not be properly transcribed».
+H3 — språkbarriere
+- «This language barrier prevented us from accessing potentially relevant research articles».
+- «the language barrier prevented us from enrolling the children and parents».
+H4 — mønster i bilder eller signaler i volum
+- «manual segmentation is time-consuming and impractical for large data sets».
+- «manual segmentation is time-consuming and may depend on the radiologist's experience».
+H5 — simulering og regnekraft
+- «some analyses are computationally prohibitive to run across the entire genome».
+- «attaining the desired accuracy swiftly becomes computationally prohibitive».
+H6 — strukturslutning fra sekvens
+- «the guest structure could not be resolved due to substantial positional disorder».
+- «their crystal structure could not be resolved due to their small size».
+H7 — dataene fantes ikke
+- «Insufficient material remained from the small molecule extraction to enable DNA extraction».
+- «18 cases were excluded because insufficient material remained on the tissue blocks».
+H8 — tilgang, juss, etikk, samtykke
+- «Ethical approval did not permit sharing of GS data».
+- «the ethical approval did not permit the sharing of raw genotype data».
+H9 — begrepet eller teorien manglet
+- «No consensus definition exists for OMPC».
+- «No consensus definition exists for treatment-resistant depression».
+N1 — besvart i samme artikkel
+- «We address this question below».
+- «We address this question below».
+Merk formen: spørsmålet reises og besvares i samme tekst. Kodes N1, aldri som treff.
+N2 — nyhetspåstand
+- «To the best of our knowledge, this is the first report on the association».
+- «To the best of our knowledge, this is the first recorded instance».
+N3 — omfangsvalg uten navngitt hindring
+- «Detailed information on the annotation types is beyond the scope of this paper».
+- prosessen og leveringsmåten for et læreplansforslag «are beyond the scope of this paper».
+Merk skillet mot H-klassene: N3 sier hva teksten ikke handler om, uten å navngi noe som hindret forfatteren. Mangler hindringen, er det N3 — også når setningen ellers ser ut som en innrømmelse.
+
+## Svar
+Svar med JSON: {"begrunnelse": "høyst to setninger", "treff": true eller false, "klasse": "én av H1, H2, H3, H4, H5, H6, H7, H8, H9, H1/H7-uavklart, H2/H7-uavklart, H3/H7-uavklart, H5/H7-uavklart, N1, N2, N3, INGEN"}.
+treff er true bare for H1–H9 og de fire uavklarte klassene.

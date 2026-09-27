@@ -1,0 +1,37 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+SPDX-License-Identifier: CC-BY-4.0
+
+Copyright 2026 Eirik Botten Nicolaysen / EcoDeco AS
+
+WHAT THIS COVERS
+
+This license applies to the data, the register and the prose documents of
+Gjenopptak, that is:
+
+  * PREREG-v1.md and ADDENDUM-01.md through ADDENDUM-10.md
+  * docs/**  (decision records, LAERDOM.md, result notes, manuscript drafts)
+  * the register, claims.jsonl, and the measurement outputs it refers to
+  * the frozen frame lists, samples, draw logs and judgment files held on the
+    external volume and listed in MANIFEST-VAULT.md
+
+The source code in src/ and tests/ is NOT covered here; it is licensed under
+Apache-2.0 (see LICENSE).
+
+WHAT YOU MAY DO
+
+You may share and adapt this material for any purpose, including commercially,
+provided you give appropriate credit, link to the license, and indicate whether
+changes were made.
+
+Attribution: Eirik Botten Nicolaysen (ORCID 0009-0001-9188-6788), EcoDeco AS,
+"Gjenopptak", with the DOI of the deposited version once assigned.
+
+THIRD-PARTY MATERIAL
+
+The material includes short quotations from published scholarly works, used for
+identification and analysis. Quoted passages remain under the rights of their
+respective holders; the CC BY 4.0 grant covers this project's own coding,
+classification, measurements and prose, not the quoted source text.
+
+Full legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+Human-readable summary: https://creativecommons.org/licenses/by/4.0/

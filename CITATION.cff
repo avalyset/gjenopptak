@@ -1,0 +1,51 @@
+cff-version: 1.2.0
+message: "If you use this material, please cite it as below."
+title: "Gjenopptak: obstacle types behind authors' own statements of undone work"
+abstract: >-
+  A preregistered study of how often researchers record work they did not get
+  done, and which obstacles they name. Four purposively chosen fields, 100
+  open-access works, 22,243 passages judged by a local model and a stratified
+  sample read blind against a typology locked before data collection.
+type: software
+authors:
+  - family-names: "Botten Nicolaysen"
+    given-names: "Eirik"
+    orcid: "https://orcid.org/0009-0001-9188-6788"
+    affiliation: "EcoDeco AS"
+repository-code: "https://github.com/avalyset/gjenopptak"
+url: "https://github.com/avalyset/gjenopptak"
+license: Apache-2.0
+license-url: "https://www.apache.org/licenses/LICENSE-2.0"
+version: "0.3.0"
+date-released: "2026-09-26"
+keywords:
+  - metascience
+  - preregistration
+  - research limitations
+  - self-admitted technical debt
+  - open access
+  - text classification
+doi: "10.5281/zenodo.22959326"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.22959326"
+    description: "Concept DOI — all versions"
+  - type: doi
+    value: "10.5281/zenodo.22976464"
+    description: "Version DOI — v0.3.0, deposited 2026-09-26 (corrects eleven figures in the result note that ADDENDUM-10 and -11 had superseded)"
+  - type: doi
+    value: "10.5281/zenodo.22975301"
+    description: "Version DOI — v0.2.1, deposited 2026-09-26 (metadata only: a stale CITATION.cff)"
+  - type: doi
+    value: "10.5281/zenodo.22965761"
+    description: "Version DOI — v0.2.0, deposited 2026-09-25 (adds ADDENDUM-11 and the κ measurement)"
+  - type: doi
+    value: "10.5281/zenodo.22959327"
+    description: "Version DOI — v0.1.0, deposited 2026-09-25"
+references:
+  - type: generic
+    title: "Gjenopptak data, register and frozen lists"
+    notes: >-
+      Data, frozen frame lists, samples and judgment files are held outside git
+      on an external volume, listed with sha256 in MANIFEST-VAULT.md. They are
+      licensed CC BY 4.0; see LICENSE-DATA.
