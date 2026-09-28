@@ -724,3 +724,114 @@ overlevde. **Flaks er ikke en sikringsrutine.**
   feilet.
 * **Filer:** `ADDENDUM-19.md` §3b, `ekstraksjon/2026-09-26/addendum-19/opus5-dommer.jsonl` (ugyldig,
   beholdt), `addendum-18/*-avkuttet-rekjort.jsonl`.
+
+## 35 En tjeneste som svarer 200 på et sted som ikke finnes, gjør bom til treff (2026-09-27)
+
+* **Målt:** SAK-14 slo opp 76 unike greske referanser mot Perseus Hopper og Scaife Viewer. Begge
+  tjenestene svarer **HTTP 200 med en annen passasje** når referansen ikke finnes: `Lib. 37` ga `20`,
+  `Lib. 10.37` ga `10.67`, `Hann. 114` ga `9`, `AR 2.31.41` ga `2.31.3`. Ingen feilkode, ingen
+  advarsel, gresk tekst i svaret.
+* **Tall:** **11 av 90 steder** er tilbakefall eller utenfor utgaven. Uten en nivå-for-nivå-
+  sammenligning av det forespurte mot det returnerte ville alle elleve blitt ført som treff, og
+  saken stått som **opphevet på 100 %** i stedet for **ikke opphevet på 87,8 %**. Porten ville
+  snudd på en feil ingen logg viste.
+* **Slutning:** en oppslagstjeneste er ikke en orakel som sier «finnes ikke». Den er en funksjon som
+  alltid svarer noe. **Regelen: les den oppløste adressen ut av svaret og sammenlign den med den
+  forespurte, nivå for nivå, før innholdet brukes til noe.** Hopper oppgir den i
+  `addDocument('…')`, Scaife i `urn`-feltet. Et svar uten oppløst adresse er et ikke-treff, ikke et
+  tomt treff.
+* **Gjort:** `hent.py`/`hent2.py` avgjør status som `opplost` bare når hvert nivå stemmer og det
+  finnes minst én gresk ordform; alt annet er `tilbakefall`, `tom` eller `utenfor_verket`.
+* **Filer:** `saker/SAK-14/hent.py`, `hent2.py`, `oppslag.json`, `tabell.json`,
+  `docs/saker/SAK-14/RESULTAT.md`.
+
+## 36 Et umålt nulltall overlever en skjemastramming (2026-09-27)
+
+* **Målt:** register v2 (432 rader) ble validert mot `kandidat.schema.json` fordi `sak`-feltet skulle
+  settes på to rader. **Registeret validerte ikke.** To felt manglet på **alle 432 rader**:
+  `sil.presisjon_ki`, og `status` i `cites_coverage` — der tallene sto som
+  `fulltext_available: 0, fulltext_total: 0`.
+* **Tall:** `falsified` er `false` på alle 432. Falsifiseringsleddet ga aldri et tall for kjøringen,
+  men registeret rapporterte **0 av 0** — som leses som «ingen siterende fulltekst fantes».
+  Skjemaets egen beskrivelse advarer mot nøyaktig dette: «Uten måling er den «ikke målt», ALDRI 0 —
+  et umålt nulltall var ett av de ti grønn-og-feil-tilfellene.»
+* **Slutning:** skjemaet ble strammet i B3, men **materialet som alt var produsert, ble ikke kjørt
+  gjennom det**. En stramming som ikke valideres bakover, fanger bare framtidige rader. **Regelen:
+  når et skjema strammes, valider alt eksisterende materiale mot det i samme arbeidsøkt — ellers er
+  strammingen en hensikt, ikke en kontroll.**
+* **Gjort:** `presisjon_ki` fylt fra `kjede.toml` etter kontroll av at `presisjon` stemte eksakt for
+  alle tre silkilder; `cites_coverage` satt til `status: "ikke målt"` med `null` på alle tre tallene.
+  Ingen ny måling. `register_sha256` `aa8f7c2e…` → `6caabaff…`, hodet bærer en `rettet`-linje.
+* **Filer:** `kandidat432/8-register.jsonl`, `8-register-header.json`,
+  `docs/saker/REGISTER-SAKER.md`.
+
+## 37 En port med to ledd må si hva som skjer når det andre ikke kan måles (2026-09-27)
+
+* **Målt:** SAK-14s port krevde at «≥ 90 % av stedene får gresk tekst **med de bærende termene
+  identifisert**». Presisering 3 definerte den bærende termen mot «det franske uttrykket
+  avhandlingen bygger sin påstand på i den setningen».
+* **Tall:** avhandlingen gjengir gresk ordrett bare på **11 av 90 steder** (12,2 % [7,0–20,6]). For
+  de øvrige 79 fantes det ikke noe fransk uttrykk å måle termen mot, og **det andre leddet i porten
+  var umålbart for 88 % av nevneren**.
+* **Slutning:** porten falt på det *første* leddet (87,8 % < 90 %), så svakheten endret ikke
+  utfallet — men det var flaks. Hadde det første leddet bestått, ville porten ikke hatt noe svar.
+  **Regelen: en konjunktiv port må oppgi hva som skjer med et sted der ett av leddene ikke kan
+  måles — teller det som ikke-treff, eller faller det ut av nevneren?** Sies det ikke før
+  beregningen, blir det bestemt etter tallene.
+* **Gjort:** ført i `RESULTAT.md` under *Dødsbetingelser* som en svakhet i kriteriet, ikke som en
+  egenskap ved materialet. Kravet tas inn i malen for de neste sakskriteriene.
+* **Filer:** `docs/saker/SAK-14/KRITERIUM.md` presisering 3, `docs/saker/SAK-14/RESULTAT.md`.
+
+## 38 Fritt blokktypevalg gjør generalisert blokkmodellering meningsløs (2026-09-27)
+
+* **Målt:** SAK-09b reproduserte en publisert blokkmodell. Da blokktypen fikk velges fritt per blokk
+  blant `{null, com, reg, rre, cre}`, nådde **både** min egen implementasjon og R-pakken
+  `blockmodeling` 1.1.8 **total feil 0** — R fant **11 løsninger med feil 0** fra 50 tilfeldige
+  starter.
+* **Tall:** forfatterens publiserte løsning har feil **14**. Med fritt typevalg falt den til **3** for
+  samme partisjon, og til **0** for nesten hvilken som helst partisjon. Grunnen er `rre`: en
+  radregulær blokk har null feil så snart hver rad har minst én 1-er, og det kan nesten alltid
+  oppnås ved å flytte én node.
+* **Slutning:** kriteriefunksjonen i generalisert blokkmodellering er bare meningsfull med en
+  **forhåndsgitt** blokkmodell — enten typene låst per posisjon, eller prioriteter/vekter per type.
+  **Regelen: en reprodusert blokkmodell må oppgi den forhåndsgitte strukturen, ellers er tallet ikke
+  etterprøvbart.** Avhandlingen her oppgir at vekter *kan* settes, men ikke hvilke, så
+  optimaliseringen kan ikke reproduseres — bare feilen for en gitt partisjon.
+* **Gjort:** typene låst per posisjon til forfatterens egen bildematrise i alle søk, og betingelsen
+  ført i `RESULTAT.md` som en betingelse på resultatet.
+* **Filer:** `saker/SAK-09b/kjoring.py` (fritt valg, degenerert), `kjoring2.py`/`kjoring3.py` (låst),
+  `r-kjoring.R`, `docs/saker/SAK-09b/RESULTAT.md`.
+
+## 39 En feildefinisjon kan utledes av kildens egne delresultater (2026-09-27)
+
+* **Målt:** avhandlingen oppgir total feil 14 uten å definere hvordan en regulær blokks feil telles.
+  Fire varianter fra litteraturen (nullrader, nullkolonner, maks, min) gir alle **1** for blokk (1,7),
+  men figur 8.2 oppgir **3**.
+* **Tall:** blokken er 3 × 3 med **én nullrad**. Definisjonen som treffer, er at en nullrad koster
+  blokkens **kolonnetall** og en nullkolonne **radtallet**: 1 × 3 = 3. Den definisjonen gir deretter
+  **14** over de 32 tre-modus-blokkene og **163** over alle 144 — og `blockmodeling` 1.1.8 gir samme
+  tall i **hver enkelt celle**.
+* **Slutning:** en publisert **feilmatrise** er mye mer verdt enn en publisert total. Totalen alene
+  kan nås av flere definisjoner; en enkelt blokkverdi utelukker tre av fire. **Regelen: når en
+  størrelse skal reproduseres og definisjonen ikke er oppgitt, se etter kildens delresultater og la
+  dem velge definisjonen — og bekreft med en uavhengig implementasjon før tallet føres.**
+* **Filer:** `saker/SAK-09b/feil.py`, `r-kontroll.R`, `docs/saker/SAK-09b/RESULTAT.md`.
+
+## 40 En verktøygrense kan sperre en representasjon uten å sperre et resultat (2026-09-27)
+
+* **Målt:** AL-0852 sier at Pajek ikke kan tvinge mellomnivåets rad- og kolonnepartisjon like i den
+  begrensede matrisen 𝑀, og at forfatteren derfor brukte en augmentert én-modus-matrise i stedet.
+  `blockmodeling` 1.1.8 — det navngitte alternativet, publisert i 2018 **før** innleveringen — har
+  **heller ikke** mekanismen: `fixClusters` fryser klynger, `exchageClusters` styrer flytting,
+  `sameIM` gjelder bildet på tvers av relasjoner. Ingen binder en radpartisjon til en kolonnepartisjon.
+* **Tall:** utvunget ble de to partisjonene like **0 av 120** ganger i min implementasjon, og ulike i
+  R også. Men forfatterens omgåelse **er** en tvungen løsning — den augmenterte matrisen har bare én
+  partisjon av de 34 nodene — og den har feil **14**, mot 18 for beste tvungne søk fra 120 tilfeldige
+  starter. Et tvungent søk **startet fra** forfatterens partisjon finner ingen forbedring.
+* **Slutning:** det ugjorte var ikke ugjort av mangel på verktøy. Det var **unødvendig**: omgåelsen
+  oppnådde det samme og mer. **Regelen: før et ugjort arbeid klassifiseres som en verktøygrense, sjekk
+  om forfatterens egen omgåelse allerede oppfyller kravet det ugjorte skulle oppfylle.** En hindring
+  som er løftbar men konsekvensløs, er et annet funn enn en hindring som ikke er løftbar, og de skal
+  ikke føres likt.
+* **Filer:** `docs/saker/SAK-09b/RESULTAT.md`, `saker/SAK-09b/kjoring3.json`,
+  `docs/saker/REGISTER-SAKER.md`.

@@ -536,7 +536,11 @@ def append_repo_manifest(dest: Path, bundle: BundleResult,
 # --------------------------------------------------------------------------- #
 
 #: Filer som utløser en ny bundle når de kommer inn i en commit.
-TRIGGER_PATTERN = re.compile(r"^(PREREG-v1\.md|ADDENDUM-\d+\.md)$")
+#: Filer som utløser en kanon-bundle når de committes. Sakskriteriene er med fra 27.09.2026:
+#: et kriterium låst før beregning er samme slags forpliktelse som et addendum, og må kunne
+#: etterprøves på at det ikke flyttet seg etterpå (oppdrag R, fase 2d).
+TRIGGER_PATTERN = re.compile(
+    r"^(PREREG-v1\.md|ADDENDUM-\d+\.md|docs/saker/SAK-[0-9a-z]+/KRITERIUM\.md)$")
 
 
 def commit_touches_locked(repo: Path, rev: str = "HEAD") -> list[str]:

@@ -242,6 +242,33 @@ documents cite instead:
 Any of those three can be checked without this repository's history. That is deliberate: the audit
 trail lives in the deposits, which are immutable, rather than in a branch that can be rewritten.
 
+## Publication policy — the `offentlig` branch
+
+This repository publishes **states, not history**. The rule is fixed (ADR-0012, dated addition
+2026-09-28) so that it does not have to be decided under pressure:
+
+* **`main` is never pushed.** It carries the full working history — one author, hundreds of commits,
+  every wrong turn and every correction. That history is preserved in the canonical `git bundle --all`
+  archives on the project volume and in the Zenodo deposits.
+* **`offentlig` is the published branch.** It consists of the **root commit plus exactly one release
+  commit per MASTER version**. The tree of each release commit is the state of `main` at the moment that
+  MASTER version was set; its parent is the previous release commit. No commit from `main` is ever
+  carried over.
+* **Each release commit is tagged `vX.Y`**, matching the MASTER version, which is also named in the
+  commit message. One tag, one MASTER version, one release commit.
+* **Never force-push.** Every push is a fast-forward adding exactly one commit. If it is not a
+  fast-forward, something is wrong and the answer is to investigate, not to force.
+* **A secret scrub runs over the release tree before every release commit** — eleven patterns covering
+  API keys, private keys, bearer tokens, private and business email addresses, absolute home paths.
+  Matched values are never printed, only the pattern name, file and line.
+* **If a release names people other than the manuscript's authors, the owner reads those files before
+  the push.** This applies to `docs/saker/*`, the case register and the triage, which name the authors
+  of the works the cases are about.
+
+**Consequence for readers:** you cannot see commit-by-commit history here, and that is deliberate. What
+you can do is cite an exact state — a tag, a MASTER version, and a Zenodo DOI that all name the same
+tree.
+
 ## Licensing
 
 | What | License | File |

@@ -300,6 +300,14 @@
     "notes": {
       "type": "string",
       "description": "leserens begrunnelse, én setning"
+    },
+    "sak": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Sak-id som grupperer passasjer til én sakbehandlingsenhet: verk × hindring (triagen 27.09.2026). 50 passasjer er 17 saker — 23 av dem er ett og samme ugjorte. Valgfritt felt, B3-tillegg. Gruppering er ikke en måling: feltet endrer ingen andel og inngår ikke i noen nevner.",
+      "pattern": "^SAK-[0-9a-z]+$"
     }
   }
 }

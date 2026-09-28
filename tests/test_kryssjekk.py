@@ -42,3 +42,15 @@ def test_manglende_fil_rapporteres(tmp_path):
 def test_de_ekte_dokumentene_er_rene():
     """Selve repoet skal stå grønt — dette er porten mot at et tall blir stale igjen."""
     assert K.main([]) == 0
+
+
+def test_bar_prosentsats_er_ikke_signatur_for_en_paastand():
+    """28.09.2026: «83,3 %» sto som foreldet-signatur for løftbar andel uten emneord, og
+    flagget SAK-14s Perseus-rate «75/90 = 83,3 %». En vokter som matcher på et tall alene,
+    vokter tallet og ikke påstanden. Kravet er at emnet står på samme linje."""
+    gamle = next(g for navn, _, g, _ in K.STØRRELSER if navn == "løftbar andel")
+    import re
+    uskyldig = "**75/90 = 83,3 %** [74,3–89,6]. **Utfallet er det samme under begge.**"
+    assert not any(re.search(m, uskyldig) for m in gamle), "falsk positiv på en ærlig 83,3 %"
+    skyldig = "20 av 24 løftbare = 83,3 % av de leste treffene"
+    assert any(re.search(m, skyldig) for m in gamle), "den ekte foreldede verdien slipper unna"

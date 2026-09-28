@@ -1,6 +1,40 @@
-# B5 — portstatus før push. Ingen push er gjort.
+# B5 — portstatus. Pushet 2026-09-27 fra én rotcommit.
 
-**Skrevet:** 2026-09-27. **Status: STOPPET FØR PUSH.** Push er irreversibel og autoriseres av eieren
+**Skrevet:** 2026-09-27, **oppdatert etter push.** **Status: PUSHET.**
+`https://github.com/avalyset/gjenopptak`, offentlig, **153 filer, én commit** (`5fcb353`),
+Apache-2.0 gjenkjent av GitHub. Eieren autoriserte vei 3: ny rotcommit, full historikk blir liggende
+i Zenodo-bundlene.
+
+**Scrub over den ene commiten, før push:** grønt på ni av elleve mønstre — ingen Anthropic-, Google-,
+OpenAI-, GitHub- eller AWS-nøkler, ingen PEM-privatnøkler, ingen Bearer-tokens, **ingen privat e-post**
+(gmail/hotmail/outlook/icloud/live/yahoo) og ingen absolutte hjemmestier. To treff, begge redegjort:
+forretningsadressen i det låste ADDENDUM-03 som OpenAlex' polite-pool-parameter, og ordet «sealed» i
+denne filen, som beskriver scrubben. Ingen hemmelighet i noen av dem.
+
+## G3-svaret, og konsekvensen av det
+
+**Spurt:** ligger `3dc08ad`, `82df4e0` og `9459884` i noen deponert bundle, v0.1.0–v0.3.0?
+
+**Svar: ja, i alle fire.** De tre commitene er fra **12.09.2026**. Testet på slektskap mot alle 35
+bundler på Vault: **32 inneholder alle tre**, og de tre som ikke gjør det, har head fra 12.09 — før
+commitene. Fordelt på bundlens head-dato: 12.09 → 0 av 3, 13.09 → 2 av 2, 25.09 → 4 av 4, 26.09 → 6 av
+6, 27.09 → 20 av 20. Tidligste deponering er **25.09** (v0.1.0), så hver deponert bundle bærer dem.
+
+**Konsekvensen er at rotcommiten ikke fjerner eksponeringen — den hindrer bare ny.** Adressen ligger
+alt i fire offentlige Zenodo-poster, og Zenodo-versjoner kan ikke endres. De to tingene som *kan*
+gjøres, om eieren vil:
+
+1. **En ny Zenodo-versjon (v0.4.0) med en scrubbet bundle** — laget fra rotcommiten eller fra en
+   filtrert historikk. De gamle versjonene består, men den *gjeldende* og den konsept-DOI-en peker på,
+   blir ren.
+2. **Ingenting.** Adressen er eierens egen, i en `mailto=`-parameter av samme slag som den i
+   ADDENDUM-03, og skaden er å bli funnet av en skraper som alt har den fra andre kilder.
+
+Valget er eierens. Ingen av dem er gjort.
+
+---
+
+## Portstatus som den var før push Push er irreversibel og autoriseres av eieren
 på grønne porter. Denne filen er portstatusen, ikke en anbefaling om å pushe.
 
 ## Portene

@@ -110,3 +110,48 @@ Anthropic og står uendret.
 **Hvis en ekstern modell noen gang skal inn, er den Gemini** (nøkkelen finnes i miljøet). Det er ikke i
 denne byggeplanen, og det krever sin egen port og sin egen preregistrering. Ingen del av kjeden
 forbereder det nå.
+
+---
+
+## Datert tillegg 28.09.2026 — publiseringspolicy: grenen `offentlig`
+
+**Besluttet før neste push, for å slippe å bestemme det under press senere.**
+
+Sporet har to grener med ulik oppgave, og de blandes aldri:
+
+| gren | hva den er | pushes |
+|---|---|---|
+| `main` | full arbeidshistorikk, én forfatter, hundrevis av commiter | **aldri** |
+| `offentlig` | **rotcommiten pluss én utgivelsescommit per MASTER-versjon** | ja, kun fast-forward |
+
+**Regelen, uten unntak:**
+
+1. **`offentlig` starter i rotcommiten** (`5fcb353`, 27.09.2026, 153 filer) og vokser med **én commit per
+   MASTER-versjon**. Ikke én per endring, ikke én per dag.
+2. **Hver utgivelsescommit er et squash av `main`-tilstanden** på det tidspunktet MASTER-versjonen ble
+   satt: treet er `main`s tre, forelderen er forrige utgivelsescommit. Ingen commit fra `main` går over.
+3. **Commiten merkes med versjonen.** Tag `vX.Y` som svarer til MASTER-versjonen, og MASTER-versjonen
+   navngis i commitmeldingen. Én tag, én MASTER-versjon, én utgivelsescommit — tre navn på samme
+   tilstand.
+4. **Aldri force-push.** Hver push er en fast-forward som legger til nøyaktig én commit. Er den ikke
+   fast-forward, er noe galt, og svaret er å undersøke det, ikke å tvinge.
+5. **Aldri historikk.** Arbeidshistorikken på `main` er sikret i kanon-bundlene på Vault og i
+   Zenodo-deponeringene. Den blir ikke offentlig, og det er ikke et tap: `git bundle --all` per
+   låsecommit er et strengere revisjonsspor enn en offentlig loggetikett.
+6. **Scrubben kjøres over utgivelsestreet før hver commit**, ikke over diffen. Elleve mønstre: nøkler
+   for Anthropic, OpenAI, Google, GitHub og AWS, PEM-privatnøkler, Bearer-tokens, privat e-post,
+   forretnings-e-post, absolutte hjemmestier, og ordet «sealed». **Verdier skrives aldri ut** — bare
+   mønsternavn, fil og linje.
+7. **Navngir utgivelsen personer utenfor manuskriptforfatterne, leses de av eieren før push.** Det
+   gjelder `docs/saker/*`, sakregisteret og triagen, som navngir forfattere av de verkene sakene
+   handler om. Enumereringen lages av CC og rapporteres; **avgjørelsen er eierens.**
+
+**Hvorfor `offentlig` og ikke `main` som publiseringsgren.** Fordi de to har motsatte krav. `main` skal
+bevare hver feilspor og hver retting — det er hele verdien av LAERDOM. `offentlig` skal bare bære
+tilstander noen kan sitere. Blandes de, må man velge mellom å publisere sitt eget rot eller å skrive om
+historien, og begge er dårlige.
+
+**Én uavklart ting, som er eierens:** fjerngrenen heter i dag `main` og står på rotcommiten. Lokal
+`offentlig` starter i **nøyaktig samme commit**, så en push av `offentlig` til fjerngrenen `main` er en
+fast-forward og bryter ingen regel over. Alternativet er å gi fjerngrenen navnet `offentlig` og sette den
+som default på GitHub. **Ikke gjort, og ingen push skjer før valget er tatt.**

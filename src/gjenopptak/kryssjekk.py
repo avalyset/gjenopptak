@@ -50,8 +50,14 @@ STØRRELSER: tuple[tuple[str, str, tuple[str, ...], tuple[str, ...]], ...] = (
      (r"16,0 ?% \(24", r"24 av 150", r"24/150"), (r"16,7 ?%", r"25 av 150", r"25/150")),
     ("presisjon energimodellering", "7,0 % (koder 1) · 1,8 % (koder 2)",
      (r"energimodellering 5,3", r"3/57"), (r"7,0 ?%", r"4/57")),
+    # 28.09.2026: «83,3 ?%» sto her uten emneord og ga falsk positiv på SAK-14s
+    # Perseus-rate «75/90 = 83,3 %», som ikke har noe med løftbarhet å gjøre. En bar
+    # prosentsats er ikke en signatur for en påstand. Kravet er nå at tallet står på
+    # samme linje som emnet sitt.
     ("løftbar andel", "5 av 25 = 20,0 % (koder 1) · 2 av 19 = 10,5 % (koder 2)",
-     (r"4 av 24", r"20 av 24", r"83,3 ?%"), (r"5 av 25", r"20 av 25", r"20,0 ?%", r"80,0 ?%")),
+     (r"4 av 24", r"20 av 24",
+      r"83,3 ?%[^\n]{0,60}løftbar", r"løftbar[^\n]{0,60}83,3 ?%"),
+     (r"5 av 25", r"20 av 25", r"20,0 ?%", r"80,0 ?%")),
     ("letekostnad per løftbart", "~30 dømte treff (koder 1) · ~75 (koder 2)",
      (r"37 dømte treff", r"ca\. 37 dømte"), (r"30 dømte treff", r"~30")),
     ("skalert løftbare i materialet", "~72 (koder 1) · ~29 (koder 2)",
