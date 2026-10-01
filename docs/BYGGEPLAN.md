@@ -7,7 +7,8 @@ registeret fra B1 — den venter ikke på B5–B7.
 **Endringer fra v3:** førsteleddet er avgjort (B4) — silen er dommer ∪ ekstraksjon, embeddings
 er død · detektoren er ikke den lokale dommeren men en agentisk Opus-leser (B1) · kvoteporten
 dekker Opus-økter og API-kreditt, ikke bare OpenAlex (B1) · utgangen bærer tvil-felt og
-fasitens stabile kjerne (B3) · depositumet bærer alt en låst måling leste (B5).
+fasitens stabile kjerne (B3) · depositumet bærer alt en låst måling leste, blindfilene som indeks med
+sha256 og teksten utenfor (B5) *(rettet 28.09.2026: sto uten forbehold om blindfilene)*.
 
 ---
 
@@ -77,8 +78,11 @@ uten kodeendring.
 
 Hver kandidatrad får med:
 
-- silens presisjon for kandidatens klasse, med intervall (A∩B 34 %, A alene 14 %, B alene 7 %)
-- **leserens tvil-flagg** — blind presisjon 98 % ved `tvil: false`, 76 % ved `tvil: true`
+- silens presisjon for kandidatens **silkilde**, med intervall (A∩B 34 %, A alene 14 %, B alene 7 %) —
+  presisjon per hindringsklasse er ikke målt *(rettet 28.09.2026, sto «for kandidatens klasse»)*
+- **leserens tvil-flagg** — post hoc delgruppe (ADDENDUM-23 § 7.2): blind presisjon 41/42 = 97,6 %
+  [87,7–99,6] ved `tvil: false`, 44/58 = 75,9 % [63,5–85,0] ved `tvil: true` *(rettet 28.09.2026, sto
+  «98 % … 76 %» uten intervall og uten «post hoc», jf. KORRIGENDUM-2026-09-28 § F)*
 - verksnivåets vurdering og hva den ikke ser (H8 utenfor verket)
 - falsifiseringens dekningsgrad for det verket
 - løftbarhet med vurderingsdato og tabellversjon (ADR-0010)
@@ -115,7 +119,9 @@ Verktøyet er lokalt uten remote. Ingen kan bruke det.
 - scrub over alle refs før push (E2), eksponeringssjekk utenfor git (G3)
 - `CITATION.cff` med konsept-DOI
 - releases som peker på Zenodo-versjonen
-- depositumet bærer **alt en låst måling leste**: regelfil, blindfiler, sperrelister, leseroppdrag
+- depositumet bærer **alt en låst måling leste**: regelfil, blindfiler som indeks med sha256 (id, verk,
+  spenn; teksten holdes utenfor, avgjort av eieren 28.09.2026, `docs/UTGIVELSE-v0.4.0-PORTSTATUS.md` § 7),
+  sperrelister, leseroppdrag *(rettet 28.09.2026: sto «blindfiler» uten forbehold)*
 
 **Leveranse:** repoet er offentlig og klonbart.
 

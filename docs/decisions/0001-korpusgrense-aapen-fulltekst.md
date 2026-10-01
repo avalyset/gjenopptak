@@ -45,3 +45,16 @@ Korpuset er åpen fulltekst, og bare åpen fulltekst.
 - Falsifiseringstesten i PREREG-v1 §8 arver samme grense: siteringsgrafen kan bare sjekkes der
   siterende arbeid har tilgjengelig fulltekst. Dekningsgraden rapporteres derfor per felt der òg.
 - Korpuslisten (ID-er, lisenser, sha256) kan deles fritt; fulltekstene kan ikke.
+
+## Tillegg 2026-09-28: rammen og substitusjonsregelen er endret av ADDENDUM-01
+
+Den opprinnelige teksten står uendret. To punkter i den gjelder ikke lenger:
+
+* **Rammen er ikke `has_fulltext: true`.** ADDENDUM-01 § 2 forkaster `has_fulltext` som utvalgsramme
+  (en indekseringsramme, ikke en hentbarhetsramme); rammen er åpen tilgang pluss hentbarhet
+  (ADDENDUM-01, ADDENDUM-04, `docs/METODE.md` § 6).
+* **Lisens utløser substitusjon.** ADDENDUM-01 § 6 punkt 2–3 gjør `lisens` til en av fem utløsende
+  årsaker for erstatning fra reservelisten for samme felt — det motsatte av «blir ikke erstattet» over.
+* **Lisensvilkåret er i praksis «åpen og hentbar».** 21 av de 60 verkene i kandidatregisteret har ingen
+  brukbar lisensangivelse (17 uten oppgitt lisens, 4 `other-oa`), og fulltekstene deres er likevel lagret
+  på volumet (`docs/LISENSAUDIT-2026-09-28.md` § 1). De deponeres ikke.

@@ -11,7 +11,8 @@ setning kan dømmes i skyggen av en tidligere. Kravet ble skrevet for POC-en, de
 være uavhengig og antallet dommer var lite (110).
 
 Porten dømmer hele teksten i de 100 trukne verkene: **22 243 passasjer**. Med `keep_alive=0` er
-takten målt til **11,6 sekunder per passasje** (median over 47 dommer), altså om lag **64 timer**.
+takten målt til **11,6 sekunder per passasje** (median over 47 dommer), altså om lag **72 timer**
+(22 243 × 11,6 s = 71,7 t; *rettet 28.09.2026, sto «64»*).
 
 Målingen viser samtidig at lasting ikke er hovedkostnaden: **median `load_duration` er 1,5 s av
 11,6 s**. Resten går med til prefill av ledeteksten på om lag 1 400 tokens, og den ledeteksten er
@@ -46,7 +47,7 @@ Betingelsene:
 | vektfil før og etter | uendret, `ff1d1fc7…0373` |
 | takt med `keep_alive=0` | 11,6 s per passasje |
 | takt med lastet modell | **3,96 s per passasje** |
-| gjenstående tid for porten | fra om lag 64 til om lag 24 timer |
+| gjenstående tid for porten | fra om lag 72 til om lag 24 timer *(rettet 28.09.2026, sto «64»)* |
 
 ## Konsekvens
 

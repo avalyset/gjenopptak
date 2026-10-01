@@ -1,6 +1,6 @@
 # ADR-0011 — Enheten for søk er setningen, ekstrahert per dokumentvindu
 
-**Status:** besluttet 2026-09-26. **Gjelder:** L2-rørledningen.
+**Status:** besluttet 2026-09-26, **forkastet 2026-09-28** (se tillegget nederst). **Gjelder:** L2-rørledningen.
 **Erstatter ikke:** ADR-0002 (seksjonsbevaring), ADR-0003 (modellsignatur), ADR-0007
 (seksjonsetikettens opphav). **Nummer:** kontrollert mot alle refs
 (`git for-each-ref` + `git ls-tree -r --name-only` over `refs/heads` og `refs/tags`);
@@ -87,7 +87,8 @@ vindusbredden, ikke redundansen.
 **Følgen for begrunnelsen:** kostnadsgevinsten ved ekstraksjon kan ikke tilskrives at redundansen
 fjernes — det er lite redundans å fjerne. **Gevinsten, om den finnes, ligger i færre kall og kortere
 utdata:** 598 vinduer mot 22 243 dommer, og ett svar per vindu framfor ett per tekstbit.
-**Beslutningen står; mekanismen var feil beskrevet.**
+**Beslutningen står; mekanismen var feil beskrevet.** *(Foreldet av tillegget 2026-09-28 nedenfor:
+beslutningen står ikke.)*
 
 ### C2 — type-forholdet 2,22× hviler på to fasit-treff
 
@@ -113,3 +114,18 @@ denne innvendingen.
   2048. Vindu verifiseres med en kanarisetning før kjøring.
 * Dommeren kjøres **uendret** på de siterte linjene, så den ene endringen som måles, er enheten.
 * **Ingen ADR for ruting nå.** Ruting skrives når det finnes kode den styrer.
+
+## Tillegg 2026-09-28: påstand 1 og 3 er falsifisert — beslutningen er forkastet
+
+**Status: forkastet.** Ekstraksjon per dokumentvindu er målt og død etter ADR-ens egne
+dødsbetingelser (`docs/METODE.md` § 5, ADDENDUM-16 § 6):
+
+| påstand | målt | kilde | utfall |
+|---|---|---|---|
+| 1 recall ≥ 21/25 | **9 av 25 = 36,0 %** | `ekstraksjon/2026-09-26/2d-recall.json` | **falsifisert** |
+| 2 samlet tid under nærsøk-ruten | 4,28 t | `2d-tid.json` | står |
+| 3 blind presisjon > 23,4 % | **17 av 100 = 17,0 %** [10,9–25,5] | `2d-blind-presisjon.json` | **falsifisert** |
+
+Én død betingelse var nok. Ekstraksjonen lever videre bare som det ene leddet i silen dommer ∪
+ekstraksjon (ADR-0012), ikke som søkeenhet. Setningen «Beslutningen står» i C1 over sa det
+uten å nevne utfallet; utfallet er ført her.

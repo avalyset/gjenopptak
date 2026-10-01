@@ -5,14 +5,34 @@ Copyright 2026 Eirik Botten Nicolaysen / EcoDeco AS
 
 WHAT THIS COVERS
 
-This license applies to the data, the register and the prose documents of
-Gjenopptak, that is:
+This license applies to OUR OWN data and prose, that is:
 
-  * PREREG-v1.md and ADDENDUM-01.md through ADDENDUM-10.md
+  * PREREG-v1.md and every ADDENDUM-NN.md in the repository and the deposit
   * docs/**  (decision records, LAERDOM.md, result notes, manuscript drafts)
   * the register, claims.jsonl, and the measurement outputs it refers to
-  * the frozen frame lists, samples, draw logs and judgment files held on the
-    external volume and listed in MANIFEST-VAULT.md
+  * our derived measurements held on the external volume and listed in
+    MANIFEST-VAULT.md: classifications, spans, verdicts, agreement statistics
+
+WHAT THIS DOES *NOT* COVER  (added 2026-09-28, licence audit)
+
+  * VERBATIM QUOTATIONS from third-party works. The prose documents contain
+    short verbatim quotations from the works in the register; the heaviest
+    file, the candidate list, holds 50 from 14 works (corrected 2026-09-28:
+    an earlier count of "422 from 60 works" included the project's own
+    prose and is withdrawn). Those quotations are reproduced
+    under the right of quotation for scholarly criticism, which applies
+    independently of the works' own licences. WE DO NOT AND CANNOT
+    SUB-LICENSE THEM. The licence of each source work is listed per work in
+    docs/LISENS-PER-VERK.md: 13 of the 60 carry NC or ND terms, and 17 state
+    no licence at all.
+  * FULL TEXTS and the 22 243 SENTENCE WINDOWS derived from them. These are
+    NOT part of this repository or of any deposit. They are held on the
+    external volume and appear only as sha256 in MANIFEST-VAULT.md. Keeping
+    them out is a deliberate decision, not an oversight: as a derived corpus
+    they would constitute a substantial part of each source work, and the
+    source licences would then govern.
+  * FRAME LISTS derived from OpenAlex, whose metadata is CC0. Attribution to
+    OpenAlex is appropriate; this licence adds nothing there.
 
 The source code in src/ and tests/ is NOT covered here; it is licensed under
 Apache-2.0 (see LICENSE).
@@ -24,7 +44,8 @@ provided you give appropriate credit, link to the license, and indicate whether
 changes were made.
 
 Attribution: Eirik Botten Nicolaysen (ORCID 0009-0001-9188-6788), EcoDeco AS,
-"Gjenopptak", with the DOI of the deposited version once assigned.
+"Gjenopptak", concept DOI 10.5281/zenodo.22959326 (resolves to the newest
+version).
 
 THIRD-PARTY MATERIAL
 

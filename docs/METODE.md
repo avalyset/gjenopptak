@@ -68,6 +68,35 @@ ikke-flaggede, finnes ikke i fasiten; (c) **prevalens**, jf. §1 rad a.
 og et tall som «21 av 25» betyr «21 av de 25 dommeren fant og vi bekreftet», ikke «21 av alle treff
 i materialet».
 
+### Klasse-κ per klasse — hvilke grenser reglene avgjør, og hvilke de ikke gjør
+
+Regnet 28.09.2026 av de to koderfilene alene (`port-presisjonssett-ADDENDUM10.jsonl` og
+`port-presisjonssett-verdikter-koder2.jsonl`), n = 320. **Samlet klasse-κ over alle klasser
+samtidig: 0,722**, rå enighet 85,6 %. Per klasse, den mot resten:
+
+| klasse | koder 1 | koder 2 | begge | κ |
+|---|---|---|---|---|
+| `INGEN` | 213 | 220 | 208 | **0,879** |
+| `H7` | 26 | 22 | 20 | **0,820** |
+| `H2` | 2 | 1 | 1 | 0,665 |
+| `H5` | 4 | 2 | 2 | 0,664 |
+| `N1` | 6 | 12 | 6 | 0,658 |
+| `N2` | 8 | 21 | 8 | **0,535** |
+| `N3` | 54 | 34 | 26 | **0,530** |
+| `H1/H7-uavklart` | 1 | 3 | 1 | 0,498 |
+| `H9` | 1 | 3 | 1 | 0,498 |
+| `H8` | 3 | 2 | 1 | 0,395 |
+| `H1`, `H3` | 1 | 0 | 0 | — (n = 1, ingen overlapp) |
+
+**De to svakeste grensene er ikke-treff-klassene.** `N3` og `N2` ligger på 0,53, mot 0,88 for `INGEN`
+og 0,82 for `H7`. For `N3` avvek de to koderne med en faktor **1,6** på hvor ofte de brukte klassen —
+54 mot 34, enige om 26. Det er grunnen til at N3-grensen nå har en **eksplisitt beslutningsregel** med
+ankereksempler, versjonert: [`REGEL-N3-v1.md`](REGEL-N3-v1.md), sha256 `96cd8372e3f847f0da15…`.
+
+**Klassene med n = 1 til 4 har ikke et tolkbart κ.** `H1`, `H3`, `H8`, `H9` og `H1/H7-uavklart` er
+oppført fordi utelatelse ville sett ut som enighet, men tallene skal ikke siteres som mål på grensene —
+de måler at klassen nesten ikke forekom i de 320.
+
 **Den stabile kjernen er tre av 27.** Av de 27 kjente treffene i portmaterialet er det bare **tre** —
 PS-044, PS-205, PS-266 — der koder 1 og koder 2 er enige om treffstatus *og* ingen av dem har merket
 `tvil`. Delkriteriene: enige 19 av 27, uten tvil hos koder 1 bare **7**, hos koder 2 bare **4**
@@ -120,7 +149,7 @@ PYTHONPATH=src .venv/bin/python -m gjenopptak.classify.port_run mål
 PYTHONPATH=src .venv/bin/python -m gjenopptak.classify.port_run determinisme --keep-alive 0 --utsnitt 50 --bare-batch
 ```
 
-**Kryssdokumentsjekk** (skal gi 0 umerkede foreldede verdier over 40 filer):
+**Kryssdokumentsjekk** (skal gi 0 umerkede foreldede verdier over alle dokumentene den finner; 69 filer etter frys-rettelsene 28.09.2026):
 
 ```bash
 PYTHONPATH=src .venv/bin/python -m gjenopptak.kryssjekk
@@ -138,7 +167,7 @@ PYTHONPATH=src .venv/bin/python -m gjenopptak.speil --check
 PYTHONPATH=src .venv/bin/python -m gjenopptak.securerepo --check
 ```
 
-**Testene** (354 grønne, én nettverkstest deselektert):
+**Testene** (403 grønne ved frys-rettelsene 28.09.2026, én nettverkstest deselektert):
 
 ```bash
 .venv/bin/python -m pytest -q
@@ -185,7 +214,7 @@ forsøk og mangler; ingen fasit-treff lå i dem.
   **16 av de 17 sanne lå blant dem**: presisjon i snittet **31,4 % [20,3–45,0]** ved **94,1 %
   [73,0–99,0]** bevaring av de sanne (`ekstraksjon/2026-09-26/d1-2x2.json`). Og på de 27 kjente treffene
   er **unionen av dommer og ekstraksjon 27 av 27**, snittet 9. Ingen av leddene er en detektor; sammen
-  dekker de materialet.
+  dekker de de 27 kjente treffene. Om de dekker materialet, er ikke målt (§ 8).
 
 **Ruting har fortsatt ingen ADR og ingen kode.** Den skrives når det finnes kode den styrer.
 
@@ -247,9 +276,9 @@ eksempler, ordrett:
 * **H9** — «No consensus definition exists for OMPC» (10.3390/cancers14246194)
 
 **Ikke-treff telles og rapporteres for seg:** `N1` besvart i samme passasje, `N2` nyhetspåstand, `N3`
-omfangsvalg uten navngitt hindring. **`N3`-grensen bærer koderidentitet** — åtte uavhengige kodere på
-tilfeldig delt materiale spredte seg over **5,8–13,6 %** (ADDENDUM-22 §9.4). Det er ikke støy; det er
-en grense reglene ikke avgjør.
+omfangsvalg uten navngitt hindring. **`N3`-grensen er en grense reglene ikke avgjør** — åtte Opus-økter på
+ulike tilfeldige delmengder spredte seg over **5,8–13,6 %** (ADDENDUM-22 §9.4). Materialet er ulikt fra
+økt til økt, så spredningen er ikke testet mot utvalgsvariasjon, og den er ikke vist å være koderidentitet.
 
 **De uavklarte parene** (ADDENDUM-05): der passasjen ikke avgjør om hindringen var arbeidsmengde eller
 manglende data, er klassen `<klasse>/H7-uavklart`, og løftbarheten **`uavklart`** — ikke naboens verdi.
@@ -276,8 +305,10 @@ Silen er `sil(tekstbiter) -> kandidater` (B4), med **én** implementasjon: **dom
 | bare ekstraksjonen | 48 / 671 | 7,2 % [5,4–9,4] |
 
 Snittet er det presiseste leddet, men **unionen** er den eneste som fanget alt — snittet brukes derfor
-som sorteringsnøkkel, ikke som filter. **Kostnaden er 6,6 leserpassasjer per bekreftet treff**
-(2 844 / 432).
+som sorteringsnøkkel, ikke som filter. **Kostnaden er 6,6 leserpassasjer per treff leseren meldte**
+(2 844 / 432); **≈ 7,7 per treff bekreftet av en uavhengig leser** ved 85 % (ADDENDUM-23 § 7.2, 2 844 / 367).
+*(Rettet 28.09.2026, frys-lesning 2: sto «per bekreftet treff»; 432 er treffene koder c meldte, jf.
+KORRIGENDUM-2026-09-28 § F.)*
 
 **Koblingen mellom Q-linje og tekstbit er alle-treff, ikke første-treff.** En Q-linje ligger ofte i mer
 enn ett overlappende vindu (473 av de koblede gjorde det). Med første-treff mistet unionen PS-300 og
@@ -285,6 +316,21 @@ dekket 26 av 27; med alle-treff dekker den 27 av 27 og reproduserer D1s tall for
 
 **Ikke-prosa merkes og fjernes aldri** (`ikkeprosa.py`, versjonert): 18,1 % av dømt materiale er ikke
 prosa, men bare 2,5 % av treffene. Nevneren er materialet slik porten så det.
+**Silens recall er «ikke målt», og det er ikke en formulering — det er tilstanden.** Presisjonen er målt
+per silkilde (begge 0,345 · dommer 0,143 · ekstraksjon 0,072), men **recall for silen som helhet kan ikke
+måles av dette materialet**: teller og nevner er begge dommerbetinget, og et treff dommeren aldri flagget,
+og som ikke falt i de 150 leste ikke-flaggede, finnes ikke i fasiten (§ 2). De 27 kjente treffene er
+dommerens egne flagg pluss to ekstraksjonen fant, så de er ikke et uavhengig mål. **Et tall for
+silrecall skal ikke oppgis**, verken som anslag eller som intervall, før noen har lest blindt i en ramme
+silen ikke har sett.
+*(Tillegg 30.09.2026: den lesningen er gjort for ett felt. Fase 3 (ADDENDUM-25) bygde et referansesett — 20 av
+100 nye arkeologiverk lest perm til perm før silen kjørte — og silen beholdt **95 av 104 = 91,3 % [84,4–95,4]**
+av referansetreffene (`docs/RESULTAT-ADDENDUM-25.md` § 1.2). Tallet gjelder de 20 verkene, mot en LLM-lesning
+av samme modellfamilie og regelfil, ikke et menneske. For de første 100 verkene og kandidatlista på 432 står
+«ikke målt» uendret, og registerhodets skjema tillater fortsatt bare den verdien. **Treffene er klynget** — 104 i
+12 av 20 verk, 51 i ett — så intervallet er for smalt; uten det største verket er det 45 av 53 = 84,9 %
+[72,9–92,1], RESULTAT § 1.2.)*
+
 
 ## 9 Leseren — regelfil, øktform, og hvorfor ett kall ikke holder
 
@@ -305,18 +351,195 @@ bedre regler enn referansekoderen hadde.
 | Haiku 4.5 | 0,031 [−0,024–0,129] | **sil** |
 | Sonnet 5 | 0,294 [0,126–0,455] | **sil** |
 | Opus 5, ett kall per passasje | 0,636 [0,478–0,768] | grensetilfelle |
-| Opus 5, **agentisk, én sammenhengende økt** | **0,812** [0,712–0,917] | **leser** |
+| Opus 5, **agentisk, én sammenhengende økt** | **0,812** [0,697–0,906] | **leser** |
+| qwen2.5:7b lokalt, **agentisk: regelfil + parti på 20 i samme kontekst** (ADDENDUM-24, 28.09.2026) | 0,248 [0,113–0,376] | **sil** |
 
 Rekken er monoton, og Haiku/Opus-spennene overlapper ikke. **Ett-kall-modeller under Opus er
 sil-klasse:** de kan redusere en mengde, men ikke avgjøre et register. Mellom per-kall-Opus og agentisk
-Opus overlapper intervallene i 0,712–0,768, så **øktformens bidrag er mulig og umålt**.
+Opus overlapper intervallene i 0,697–0,768, så **øktformens bidrag er mulig og umålt**.
+**Lokal agentisk leser er sil-klasse** (ADDENDUM-24, `docs/RESULTAT-ADDENDUM-24.md`): samme modus som gjorde
+Opus til leser, gir en lokal 7B-modell κ = 0,248 — på høyde med gemma2 i ett kall (0,289). `LokalLeser` i
+`kjede/leser.py` er implementasjonen av `Leser`, klassifisert som sil.
+*(Rettet 28.09.2026, frys-lesningen: intervallet sto som [0,712–0,917], som hører til κ = 0,826 mot koder 1s
+første lesning; for 0,812 gir ADDENDUM-11 § 4 [0,697–0,906]. Ingen slutning endres.)*
 
 **Øktene er serielle.** Sju parallelle Opus-instanser falt på leverandørens øktgrense ved 87 % dekning
 og kostet fem av åtte økter. Hver instans har egen kladdekatalog. Øktstørrelsen er ≤ 356 passasjer,
 målt til 25 034 kontekst-tokens per passasje og 29,5 minutter per økt.
 
-**Leserens `tvil`-flagg er den enkeltopplysningen som forutsier presisjon best:** blind presisjon
-**97,6 %** der `tvil` er `false`, **75,9 %** der den er `true` (ADDENDUM-23 §7.2).
+**Leserens `tvil`-flagg skiller presisjonen sterkt:** blind presisjon **97,6 %** (41/42) der `tvil` er
+`false`, **75,9 %** der den er `true` (ADDENDUM-23 §7.2), i en post hoc delgruppe. Andre prediktorer
+(f.eks. silkilde) er ikke sammenlignet, og forskjellen er ikke testet.
+### Koder 4 — Fable 5.1, chat, ikke menneske (28.09.2026)
+
+**Hvorfor den finnes:** de to første koderne er begge Opus-instanser, og «uavhengig» har hittil betydt
+tom kontekst og egen kladdekatalog, ikke uavhengig dømmekraft. Koder 4 er en **annen modellfamilie**
+på samme 320 passasjer, samme blindfil (`15ce72a7687cea57…`), samme regelfil
+(`234695dd4e1777a9…`), én gjennomgang i PS-rekkefølge. **Den er fortsatt ikke et menneske**, så
+`κ` mot menneskelig lesning er uendret ukjent.
+
+**Treffbeslutningen, tre par side om side.** Cohens κ, paret bootstrap, 10 000 gjentak, frø 734248.
+
+| par | n | rå enighet | κ | bootstrap 95 % |
+|---|---|---|---|---|
+| **koder 4 mot koder 2** | 320 | 0,981 | **0,899** | 0,808–0,969 |
+| koder 1 mot koder 2 | 320 | 0,963 | 0,812 | 0,697–0,906 |
+| koder 4 mot koder 1 | 320 | 0,956 | **0,781** | 0,659–0,883 |
+| koder 4 mot koder 2 | 300 uten ankere | 0,983 | 0,875 | 0,751–0,971 |
+| koder 1 mot koder 2 | 300 uten ankere | 0,967 | 0,774 | 0,623–0,898 |
+| koder 4 mot koder 1 | 300 uten ankere | 0,957 | 0,711 | 0,540–0,847 |
+
+**Funnet:** en annen modellfamilie gjenskaper koder 2s treffbeslutning **bedre (0,899) enn koder 1 og
+koder 2 gjenskaper hverandres (0,812)**. Intervallene overlapper, så rekkefølgen er ikke etablert — men
+retningen er motsatt av det modellfamilie-forbeholdet forutså, og **koder 1 er den av de tre som
+avviker mest** fra de to andre. 2×2 mot koder 1: 29 begge, 4 bare koder 4, **10 bare koder 1**, 277 ingen.
+
+**Klasse er en svakere enighet enn treff, for alle tre par.** κ blant passasjer begge kaller treff:
+
+| par | n felles treff | rå enighet | κ | bootstrap |
+|---|---|---|---|---|
+| koder 1 mot koder 2 | 30 | 0,867 | 0,732 | 0,481–0,936 |
+| koder 4 mot koder 2 | 30 | 0,800 | 0,683 | 0,435–0,890 |
+| koder 4 mot koder 1 | 29 | 0,690 | **0,501** | 0,248–0,728 |
+
+**Konfusjonen har ett dominerende felt, og det er N3 mot INGEN.** Koder 4 satte `INGEN` der koder 1
+satte `N3` **40 ganger** — den største enkeltcellen utenfor diagonalen i hele tabellen. Koder 4 brukte
+`N3` **13** ganger, koder 1 **54**. Det er en **definisjonsforskjell**, ikke støy: N3 krever at det
+finnes et ugjort uten navngitt hindring, og koder 4 leser de samme passasjene som at det ikke finnes
+noe ugjort i det hele tatt. Med koder 1 mot koder 2 var κ for N3 **0,530**; koder 4 gjør den grensen til
+det klareste uenighetspunktet i sporet, og det er en tredje uavhengig bekreftelse av at
+[`REGEL-N3-v1.md`](REGEL-N3-v1.md) trengtes.
+
+**M1 og M2, oppgitt hver for seg og aldri sammenslått** (ADDENDUM-03 § 1.2, PREREG § 6):
+
+| mål | koder 4 | dommeren (`gemma2`) på koder 1s 39 treff |
+|---|---|---|
+| treff | 33 av 320 | 39 av 320 (koder 1) |
+| **M1-streng** (samme setning) | **27 av 33 treff = 81,8 %** [65,6–91,4] · 8,44 % av 320 [5,86–12,00] | 23 av 39 = 59,0 % (14 ikke dømt av dommeren) |
+| **M1-passasje** (±2 setninger) | 33 av 33 · 10,31 % av 320 [7,44–14,13] | — |
+| **M2** `ja` | **17 av 33 = 51,5 %** [35,2–67,5] | 4 av 39 |
+| M2 `usikker` | 15 = 45,5 % [29,8–62,0] | 15 |
+| M2 `nei` | 1 = 3,0 % [0,5–15,3] | 6 (14 ikke dømt) |
+
+**Høyre kolonne er ikke koder 1s koding** *(rettet 28.09.2026, frys-lesningen)*. Sammenligningsskriptet
+(`tmp-koder4b.py` på Vault, `koder4/`) leste `samme_setning` og `bedømbar` i
+`data/port-presisjonssett-ADDENDUM10.jsonl`; det er dommerens felt fra oppfølgingskallet (§ 11 punkt 6),
+og de mangler for de 14 av koder 1s treff dommeren ikke flagget. Koder 1s eget felt er `min_bedømbar`:
+**35 av 39 = 89,7 %** [76,4–95,9] `True`, 4 `False`. Koder 1 har ikke eget felt for samme setning.
+
+**Slutningen som sto her — at koder 4s treff er «tettere og mer avgjørbare» enn koder 1s — er trukket.**
+Den sammenlignet koder 4 med dommeren, ikke med koder 1. M2 for koder 4 (tre verdier) og for koder 1
+(to verdier) er dessuten ikke samme skala, og ADDENDUM-11 § 5 viser at M2 bærer koderidentitet.
+
+**De 27 kjente treffene: koder 4 fant 18 = 66,7 %** [47,8–81,4]. **Alle ni tapte var merket `tvil` av
+koder 1**, og sju av de ni ble også mistet av koder 2. Tapene ligger altså i nøyaktig den ustabile
+delen av fasiten, og det er en tredje kilde til funnet at **den stabile kjernen er tre av 27**.
+
+**Tvil forutsier presisjon også her.** 25 av koder 4s 33 treff bærer `tvil` (75,8 % [59,0–87,2]).
+Mot koder 1:
+
+| | n | rå enighet | κ | presisjon blant koder 4s treff |
+|---|---|---|---|---|
+| `tvil = false` | 283 | 0,982 | 0,753 | **8 av 8 = 100 %** [67,6–100] |
+| `tvil = true` | 37 | 0,757 | 0,433 | 21 av 25 = 84,0 % [65,3–93,6] |
+
+Samme retning som ADDENDUM-23 § 7.2 fant for koder c (97,6 % mot 75,9 %, post hoc), nå i en annen
+modellfamilie. **`tvil` peker samme vei i to modellfamilier; forskjellen er ikke testet, og andre
+prediktorer er ikke sammenlignet** — intervallene over, [67,6–100] og [65,3–93,6], overlapper nesten helt.
+*(Rettet 28.09.2026, frys-lesning 2: sto «`tvil` er den mest overførbare enkeltopplysningen i kjeden», en
+rangering ingen har målt; jf. § 9 om andre prediktorer.)*
+
+#### Datert note 28.09.2026 — koder 4 var delvis eksponert, og følsomheten er regnet
+
+**Koder 4 leste `docs/SAKBEHANDLING-2026-09-27-kandidater.md` dagen før kodingen**, og kjente PS-246,
+PS-257 og PS-300 på id fra sporets dokumenter. **7 av 320 rader er derfor ikke blindt kodet.**
+
+| PS | grunn til eksponering | kilde |
+|---|---|---|
+| PS-266 | **eksakt tekstmatch** | AL-0925 (`W3217588367`) |
+| PS-246 | 2 felles setninger | AL-0314 (`W2551114598`) — og kjent på id |
+| PS-288 | 2 felles setninger | AL-2440 (`W2551114598`) |
+| PS-289 | 2 felles setninger | AL-0681 (`W2974992769`) |
+| PS-319 | 2 felles setninger | AL-0068 (`W2551114598`) |
+| PS-257 | kjent på id | sporets dokumenter |
+| PS-300 | kjent på id | sporets dokumenter |
+
+Matchregelen er NFC og samlet mellomrom. **Settet er komplett:** en romsligere grense (≥ 1 felles lang
+setning) fant **ingen nye**. **Ingen av de sju er anker.** 116 rader stammer fra verk kandidatfila
+navngir, men med annen tekst — det er kjennskap til verket, ikke til passasjen, og telles ikke.
+
+**Følsomhet: κ med og uten de eksponerte radene.** Samme bootstrap, 10 000 gjentak, frø 734248. Koder 1
+og koder 2 er ikke regnet om utover samme radutvalg, som kontroll.
+
+| par | alle 320 | 320 − eksponerte (313) | 300 uten ankere | 300 − eksponerte (293) |
+|---|---|---|---|---|
+| koder 4 mot koder 2 | **0,899** [0,808–0,969] | **0,874** [0,756–0,962] | 0,875 [0,751–0,971] | 0,819 [0,623–0,955] |
+| koder 1 mot koder 2 *(kontroll, aldri eksponert)* | 0,812 [0,697–0,906] | 0,794 [0,662–0,900] | 0,774 [0,623–0,898] | 0,727 [0,523–0,882] |
+| koder 4 mot koder 1 | **0,781** [0,659–0,883] | **0,757** [0,614–0,871] | 0,711 [0,540–0,847] | 0,645 [0,426–0,817] |
+
+**Kontrollparet er det som gjør tallene lesbare.** κ faller for **alle tre par** når de sju radene tas
+ut — også for koder 1 mot koder 2, som aldri var eksponert. Grunnen er ikke eksponering, men at de sju
+inneholder **6 av de 27 kjente treffene**: å fjerne dem krymper den positive klassen og senker κ for
+enhver koder. Fallet per par, på 320-grunnlaget: koder 4–1 **−0,024**, koder 4–2 **−0,025**, kontrollen
+**−0,018**. **Differansen mot kontrollen er 0,006 og 0,007 — langt inne i støyen.**
+
+På 300-grunnlaget er fallene større (−0,066 · −0,056 · −0,047) fordi n blir minst der, men bildet er det
+samme: **koder 4s par faller knapt mer enn kontrollparet**, og **rekkefølgen koder 4–2 > koder 1–2 >
+koder 4–1 holder i alle fire radutvalg.**
+
+**De 27 kjente, fordelt på eksponering.** Koder 4 fant 18, mistet 9.
+
+| | n | eksponerte |
+|---|---|---|
+| funnet | 18 | **6** — PS-246, PS-257, PS-266, PS-289, PS-300, PS-319 |
+| tapt | 9 | **0** |
+
+**Alle seks eksponerte kjente treff ble funnet, og ingen av de ni tapte var eksponert.** Recall på de
+27 med alt inne er **66,7 %** [47,8–81,4]; på de **21 ueksponerte** er den **57,1 %** [36,5–75,5].
+
+**To lesninger av den asymmetrien, og begge skal stå.** Den ene er at eksponeringen hjalp. Den andre er
+at de eksponerte var de **lettest kodbare**: fire av de seks (PS-246, -266, -289, -319) kom via
+kandidatfila, som er valgt på `tvil: false`, og i en post hoc delgruppe var blind presisjon der 97,6 %
+[87,7–99,6] (ADDENDUM-23 § 7.2); presisjonen for akkurat dette utvalget er ikke målt. PS-257 og PS-300 var
+kjent på id. *(Rettet 28.09.2026, frys-lesning 2: sto at alle seks «kom i kandidatfila» på `tvil: false`,
+«der blind presisjon er målt til 98 %».)* **Dataene skiller ikke de to**, og intervallene
+[47,8–81,4] og [36,5–75,5] overlapper i hele sin lengde. Det ærlige tallet å oppgi er **begge**, med
+n = 21 som det eksponeringsfrie.
+
+**Hva noten ikke fjerner:** koder 4s kodinger av de sju radene er fortsatt i fila, uredigert, og de
+inngår i alle tall merket «alle 320». Noten gjør ikke kodingen blind i ettertid — den gjør omfanget
+målt.
+
+**Én formavvik i inndata, ført og ikke rettet:** `samme_setning` og `bedombar` er til stede på alle
+320 rader, ikke bare på treffene, med verdien `null` på de 287 ikke-treffene. Ingen beregning over
+leser dem for ikke-treff. **Fila er ikke redigert.**
+
+### Leseren er datert, og lesningen er ikke gjentakbar
+
+**Dette er den mest alvorlige begrensningen i kjeden, og den skal stå her og ikke i et vedlegg.**
+
+En agentisk økt kan ikke spilles av på nytt. Modellen bak leseren er en tjeneste som endrer seg uten et
+versjonsnummer vi kan feste; øktens kontekst bygges av leserens egne mellomresultater i en rekkefølge
+som ikke er bestemt av inndataen; og temperatur, verktøykall og øktgrenser er utenfor vår kontroll.
+**Samme regelfil, samme passasjer, samme frø og samme kommando gir derfor ikke nødvendigvis samme
+register.**
+
+Følgene er tre, og ingen av dem er retoriske:
+
+1. **κ = 0,812 er en datert måling**, ikke en egenskap ved leseren. Den gjelder koder 2s økt
+   25.09.2026 (17:14:53–17:35:26 UTC, ADDENDUM-11 § 8) på `claude-opus-5` med regelfilen `234695dd4e1777a9…`. Gjentas den i morgen, er et annet
+   tall et **nytt datapunkt**, ikke en motsigelse.
+2. **Registeret er ikke reproduserbart, bare etterprøvbart.** Radene kan leses om av hvem som helst mot
+   passasjene, og det er den formen for etterprøving som gjelder her. `gjenopptak run --from les` gir en
+   **ny** lesning, ikke den samme.
+3. **Enhver sammenligning mellom lesere bærer datoen.** Rekken 0,031 → 0,294 → 0,636 → 0,812 ble målt
+   innenfor tre dager (0,812 25.09.2026, de tre andre 27.09.2026), med samme regelfil og samme 320 passasjer. Det er det som gjør den lesbar; en
+   tilsvarende rekke målt over måneder ville ikke vært det.
+
+**Det som *er* gjentakbart:** ramme, tekstbiter, dommer (`gemma2:9b`, temp 0, frø 734248, vektsjekket
+sha256), ekstraksjon, union og register-validering. Ledd 1–6 og ledd 8–10 er determinerte. **Ledd 7 er
+det ikke**, og skillet går der.
+
 
 ## 10 Falsifisering mot siteringer
 
@@ -347,4 +570,4 @@ To lag, og de må ikke forveksles:
    For passasjer bare ekstraksjonen fanget, er `samme_setning` ukjent, og `unit` blir `passage`.
 7. **Løftbarhet er datert, ikke fast.** Heron gikk fra H1 til H8 uten at teksten endret seg.
 8. **Leseren krever et Max-abonnement.** Uten Claude Code med Opus er silen alt man får, og silen
-   alene er 14 % presis.
+   alene er 15,2 % presis *(rettet 30.09.2026: sto «14 %», som er dommerleddet alene)*.

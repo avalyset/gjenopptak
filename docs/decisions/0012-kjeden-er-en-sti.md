@@ -57,12 +57,15 @@ Målt med **samme regelfil og samme kallstruktur**, ett kall per passasje, mot k
 | Haiku 4.5 | 0,031 [−0,024–0,129] | **sil** |
 | Sonnet 5 | 0,294 [0,126–0,455] | **sil** |
 | Opus 5, ett kall per passasje | 0,636 [0,478–0,768] | grensetilfelle |
-| Opus 5, **agentisk, én sammenhengende økt** | **0,812** [0,712–0,917] | **leser** |
+| Opus 5, **agentisk, én sammenhengende økt** | **0,812** [0,697–0,906] | **leser** |
 
 Rekken er monoton, og Haiku/Opus-spennene overlapper ikke. Ett-kall-modeller under Opus er derfor
 **sil-klasse**: de kan redusere en mengde, men ikke avgjøre et register. Mellom per-kall-Opus og agentisk
-Opus overlapper intervallene i 0,712–0,768, så øktformens bidrag er **mulig og umålt** — kjeden bruker den
+Opus overlapper intervallene i 0,697–0,768, så øktformens bidrag er **mulig og umålt** — kjeden bruker den
 agentiske formen fordi den er den eneste som er målt over 0,70, ikke fordi forskjellen er bevist.
+*(Rettet 28.09.2026, frys-lesningen: intervallet for 0,812 sto som [0,712–0,917] og overlappet som
+0,712–0,768; [0,712–0,917] hører til κ = 0,826 mot koder 1s første lesning, ADDENDUM-11 § 4. Ingen
+slutning endres.)*
 
 **Leseren får aldri mer enn to filer:** regelfilen og sin egen blindfil med `id` og `tekst`. Sperrelisten
 navngir de forbudte filene i oppdraget, slik ADDENDUM-11 §2 gjorde, og genereres av kjeden.
@@ -102,7 +105,8 @@ ikke som vei».
 
 **Hvorfor det er en beslutning og ikke en innstilling.** Målingene i ADDENDUM-18, -19 og -20 gikk over
 API-et med en betalt nøkkel, og de viste at ett-kall-modeller er sil-klasse (κ 0,031 / 0,294 / 0,636 mot
-0,812 for agentisk Opus). Verktøyet trenger derfor ikke API-et til leseren, og en API-sti som ikke
+0,812 for agentisk Opus). *(Presisert 30.09.2026, frys-lesning 4: 0,636 er et grensetilfelle, som tabellen over og
+FAKTA § 2 sier; intervallene for 0,636 og 0,812 overlapper.)* Verktøyet trenger derfor ikke API-et til leseren, og en API-sti som ikke
 brukes er en sti som kan tas i bruk ved uhell — med en nøkkel i miljøet, en kostnad ingen har budsjettert,
 og en kvotegrense kjeden ikke kan se. `falsify/citations.py` kaller EPMC og Crossref; det er ikke
 Anthropic og står uendret.
@@ -135,9 +139,24 @@ Sporet har to grener med ulik oppgave, og de blandes aldri:
    tilstand.
 4. **Aldri force-push.** Hver push er en fast-forward som legger til nøyaktig én commit. Er den ikke
    fast-forward, er noe galt, og svaret er å undersøke det, ikke å tvinge.
-5. **Aldri historikk.** Arbeidshistorikken på `main` er sikret i kanon-bundlene på Vault og i
-   Zenodo-deponeringene. Den blir ikke offentlig, og det er ikke et tap: `git bundle --all` per
-   låsecommit er et strengere revisjonsspor enn en offentlig loggetikett.
+5. **Aldri historikk på `offentlig`.** Arbeidshistorikken på `main` pushes ikke. Den er sikret i
+   kanon-bundlene på Vault, og den **er publisert**: hver Zenodo-versjon siden v0.1.0 har en bundle av
+   hele git-historikken (`git bundle --all`, alle refs; `docs/ZENODO.md`, «Hva som ligger der»), under
+   depositumets CC BY 4.0. `git bundle --all` per låsecommit er et strengere revisjonsspor enn en
+   offentlig loggetikett.
+   *(Rettet 28.09.2026, frys-lesning 2: sto «Den blir ikke offentlig». Det gjelder bare GitHub-grenen;
+   historikken er publisert i git-bundlene i v0.1.0–v0.3.0.)*
+
+   **Åpent valg for eieren før publisering av v0.4.0 (28.09.2026), ikke avgjort her.** Byggeren lager
+   v0.4.0-bundlen med `git bundle --all`. Den ville for første gang publisere `main`-commits etter
+   v0.3.0-bundlen (26.09), blant dem `37d7187` (27.09), der SAK-09c har fullt navn og institusjon for
+   forfatteren av verket saken gjelder — tatt ut av treet i `0b4c979`, men ikke av historikken. Regel 7
+   gjelder slik den står bare det som pushes til `offentlig`. Om v0.4.0-bundlen skal bære historikken
+   etter v0.3.0, og om regel 7 skal gjelde bundlen, er eierens avgjørelse; alternativene står i
+   `docs/UTGIVELSE-v0.4.0-PORTSTATUS.md` § 4.
+   **Avgjort 29.09.2026 av eieren: historikkbundlen er med i v0.4.0** (`git bundle --all`), og setningen i
+   `docs/RELEASE-NOTES-v0.4.0.md` om revisjonen 28.–29.09 under navnepolicyen står. Historikken skrives ikke om;
+   regel 7 gjelder `offentlig`, ikke bundlen.
 6. **Scrubben kjøres over utgivelsestreet før hver commit**, ikke over diffen. Elleve mønstre: nøkler
    for Anthropic, OpenAI, Google, GitHub og AWS, PEM-privatnøkler, Bearer-tokens, privat e-post,
    forretnings-e-post, absolutte hjemmestier, og ordet «sealed». **Verdier skrives aldri ut** — bare
@@ -155,3 +174,6 @@ historien, og begge er dårlige.
 `offentlig` starter i **nøyaktig samme commit**, så en push av `offentlig` til fjerngrenen `main` er en
 fast-forward og bryter ingen regel over. Alternativet er å gi fjerngrenen navnet `offentlig` og sette den
 som default på GitHub. **Ikke gjort, og ingen push skjer før valget er tatt.**
+
+*Foreldet 28.09.2026: valget er tatt — `offentlig` sporer fjerngrenen `main`, og første utgivelsescommit
+`967254a` («Utgivelse v0.3», tag `v0.3`) er pushet som fast-forward over rotcommiten.*

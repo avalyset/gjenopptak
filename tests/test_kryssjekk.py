@@ -54,3 +54,19 @@ def test_bar_prosentsats_er_ikke_signatur_for_en_paastand():
     assert not any(re.search(m, uskyldig) for m in gamle), "falsk positiv på en ærlig 83,3 %"
     skyldig = "20 av 24 løftbare = 83,3 % av de leste treffene"
     assert any(re.search(m, skyldig) for m in gamle), "den ekte foreldede verdien slipper unna"
+
+
+def test_kappa_intervallet_for_0812_fanges(tmp_path):
+    """28.09.2026: 0,812 sto med intervallet til 0,826 i seks filer. Signaturen krever 0,812 på
+    samme linje, så 0,826-raden i ADDENDUM-11 er ikke et avvik."""
+    feil = skriv(tmp_path, "e.md", "| koder 2 | 0,812 | 0,712–0,917 | leser |\n")
+    assert [a[0] for a in K.sjekk([feil])] == ["κ-intervall for 0,812"]
+    riktig = skriv(tmp_path, "f.md", "| første lesning | 320 | 96,6 % | 0,826 | 0,712–0,917 |\n")
+    assert K.sjekk([riktig]) == []
+
+
+def test_alle_addenda_er_laast(tmp_path):
+    """INSTRUKSER-v1.2: hvert ADDENDUM-*.md er låst når det er committet, ikke bare 01..09."""
+    f = skriv(tmp_path, "ADDENDUM-21.md", "Koder 2 fikk κ = 0,812, intervall 0,712–0,917.\n")
+    avvik = K.sjekk([f])
+    assert avvik and avvik[0][0].startswith("LÅST")

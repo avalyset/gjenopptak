@@ -3,7 +3,7 @@
 **Opphav:** gjenvunnet fra øktutskrift
 `~/.claude/projects/-Users-eirikbottennicolaysen-avalyset/1024847e-ef08-48fa-bd0a-2b2d9235bb89/subagents/agent-abf6e3798610fb9c1.jsonl`,
 linje 13, felt `message.content[0].content` — Read-verktøyets resultat da koder 2 åpnet filen
-25.09.2026 kl. 19:35. Originalen het
+25.09.2026 kl. 17:14:55 UTC (19:14:55 CEST; utskriftens tidsstempel på linje 13). Originalen het
 `scratchpad/koderegler.md`, lå aldri i git og finnes ikke lenger på disk.
 
 **Status:** dette er **innholdet slik koder 2 leste det**, ikke originalens bytes. Read-verktøyets
@@ -12,8 +12,10 @@ linjeskift kan ikke verifiseres. Innholdet er 167 linjer, 9 805 B,
 **sha256 `234695dd4e1777a958801ddf6535e6a6444436ea1d46c3121db01585a9108449`** — regnet på innholdet nedenfor, uten denne headeren.
 
 **Koder 2 var ikke et menneske.** Den var en CC-instans (Opus 5, agentisk, seks regelkilder), kjørt
-som underøkt av den samme økten som var koder 1s orkestrator. Ingen modell-ID er ført i ADDENDUM-11;
-den opplysningen står ikke i repoet.
+som underøkt av den samme økten som var koder 1s orkestrator. ADDENDUM-11 førte opprinnelig ingen modell-ID;
+den er gjenvunnet og ført i ADDENDUM-11 § 8 (`claude-opus-5`, alle 61 API-svar).
+*(Rettet 28.09.2026, frys-lesningen: sto «kl. 19:35», som er øktens siste linje/filens mtime i CEST, ikke
+lesetidspunktet, og «ingen modell-ID … står ikke i repoet», som § 8 har foreldet.)*
 
 ## Hvorfor dette er den ekte filen, og ikke en rekonstruksjon
 

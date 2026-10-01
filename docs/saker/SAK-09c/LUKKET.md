@@ -84,8 +84,10 @@ heller.**
 | kodet klasse fra teksten | `H1/H7-uavklart` | uendret — teksten har ikke endret seg |
 | datert vurdering (ADR-0010) | — | **H8**, `loftbar: nei`, 27.09.2026 |
 
-Dette er samme form som Heron: verket gikk fra løftbar klasse til H8 **uten at teksten endret seg**,
-fordi tilgangssituasjonen ligger utenfor materialet. Her ligger den utenfor for godt.
+Dette er samme form som Heron: verket gikk fra en uavklart klasse (H1/H7-uavklart, løftbarhet
+uavklart etter ADDENDUM-05) til H8 **uten at teksten endret seg**, fordi tilgangssituasjonen ligger
+utenfor materialet. Her ligger den utenfor for godt. *(Rettet 28.09.2026, frys-lesning 2: sto «fra
+løftbar klasse»; Heron gikk fra H1, som er løftbar, denne saken fra uavklart.)*
 `cites_coverage` står som `«ikke målt»`, ikke 0 — ingen falsifisering er kjørt for denne saken.
 
 ## Hva som ikke ble gjort, og bevisst ikke ble gjort
@@ -99,11 +101,12 @@ fordi tilgangssituasjonen ligger utenfor materialet. Her ligger den utenfor for 
 
 ## Konsekvens for sporet
 
-**Ledd 2 har ingen sak på AI-aksen der inndataen er offentlig.** SAK-14 var den ene som kunne kjøres,
-og den falt på porten. SAK-09c faller før porten. Det er et eget funn om utvalget: de ugjorte
-oppgavene som en språkmodell *kunne* løse, ligger ofte i arbeider der inndataen er primærdata samlet
-under samtykke — og da er hindringen ikke teknologisk, men rettslig og etisk, og den er ikke løftbar
-uansett hvor god modellen blir.
+**Ledd 2 har to saker på AI-aksen, og i én av dem lå inndataen under samtykke.** SAK-14 hadde
+offentlig inndata (Perseus), kunne kjøres, og falt på porten. SAK-09c faller før porten. Én av to er
+ikke en rate, men den viser at de ugjorte oppgavene som en språkmodell *kunne* løse, kan ligge i
+arbeider der inndataen er primærdata samlet under samtykke — og da er hindringen ikke teknologisk, men rettslig og etisk, og den er ikke løftbar
+uansett hvor god modellen blir. *(Rettet 28.09.2026, frys-lesningen: sto «ingen sak på AI-aksen der
+inndataen er offentlig» og «ligger ofte», generalisert fra én sak og motsagt av SAK-14.)*
 
 **SAK-09b ligger i samme verk og rammes ikke av dette.** Den trenger nabomatrisene, som står i
 vedlegg A–C, og blokkmodelleringsbeskrankningene i vedlegg H — alt i den hentbare filen. Den står

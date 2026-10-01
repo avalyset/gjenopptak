@@ -14,7 +14,9 @@ utgangspunktet på den disken som fylles først.
 
 1. **Alle skrivende moduler skriver til Vault.** `krev()` og `utkatalog()` i `vault.py` er eneste
    vei til en utdatakatalog. Systemdisken brukes bare til det som kan regenereres på minutter:
-   `data/tmp-port`, `__pycache__`, og småting en kjøring selv lager om igjen.
+   `data/tmp-port`, `__pycache__`, og småting en kjøring selv lager om igjen. *(Merknad 30.09.2026, frys-lesning 4:
+   regelen ble ikke fulgt av kjeden (ADR-0012), som skrev til repoets `data/`; 151 filer der fantes ikke på Vault
+   før de ble sikret 28.09, UTGIVELSE-v0.4.0-PORTSTATUS § 6.)*
 2. **`require_vault()` ved start i hver av dem, ingen fallback.** Uten montert og skrivbart volum
    kastes `VaultUnavailable` før modulen gjør noe som helst. En katalog som er oppgitt eksplisitt,
    godtas bare når den ligger under Vault-roten — ellers ville kjøringen se ut som en sikring og

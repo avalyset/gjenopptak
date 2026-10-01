@@ -7,17 +7,24 @@ teksten endret seg.
 
 | sak | verk | klasse | passasjer | status 27.09.2026 | kriterium låst | resultat |
 |---|---|---|---|---|---|---|
-| **SAK-14** | Haouachi 2016 `W2474595476` | H3 språk | AL-0738, AL-2370 | **ikke opphevet** — 87,8 % mot terskel 90 % | [`SAK-14/KRITERIUM.md`](SAK-14/KRITERIUM.md) `5330c701` | [`SAK-14/RESULTAT.md`](SAK-14/RESULTAT.md) `5cc8128c` |
-| **SAK-09c** | Aragao 2018 `W7133020405` | H1/H7-uavklart → **H8** | AL-2606 | **lukket på `[V]`** — kildeteksten finnes ikke utenfor samtykket | *ingen — saken nådde ikke dit* | [`SAK-09c/LUKKET.md`](SAK-09c/LUKKET.md) `4e76f32f` |
-| **SAK-08** | Riris 2018 `W2784603861` | H5 → **H8** (utløser) | AL-1280 | **lukket på `[V]`** — modellkoden er ikke deponert noe sted | *ingen — saken nådde ikke dit* | [`SAK-08/LUKKET.md`](SAK-08/LUKKET.md) `229599c4` |
-| **SAK-09b** | Aragao 2018 `W7133020405` | H5 verktøygrense | AL-0852 | **ikke opphevet av det navngitte middelet** — `blockmodeling` 1.1.8 mangler mekanismen Pajek manglet | [`SAK-09b/KRITERIUM.md`](SAK-09b/KRITERIUM.md) `2fa587a0` | [`SAK-09b/RESULTAT.md`](SAK-09b/RESULTAT.md) `092d446c` |
-| **SAK-11** | Bynum m.fl. 2021 `W4206850274` | H5 → **H8** (utløser) | AL-2516 | **stoppet på steg 3** — scenariosettet er ikke publisert | *ingen — saken nådde ikke dit* | [`SAK-11/LUKKET.md`](SAK-11/LUKKET.md) `4246f62e` |
+| **SAK-14** | Haouachi 2016 `W2474595476` | H3 språk | AL-0738, AL-2370 | **ikke opphevet** — 87,8 % mot terskel 90 % | [`SAK-14/KRITERIUM.md`](SAK-14/KRITERIUM.md) `5330c701` | [`SAK-14/RESULTAT.md`](SAK-14/RESULTAT.md) `cbb92c56` |
+| **SAK-09c** | Aragao 2018 `W7133020405` | H1/H7-uavklart → **H8** | AL-2606 | **lukket på `[V]`** — kildeteksten finnes ikke utenfor samtykket | *ingen — saken nådde ikke dit* | [`SAK-09c/LUKKET.md`](SAK-09c/LUKKET.md) `8c543032` |
+| **SAK-08** | Riris 2018 `W2784603861` | H5 → **H8** (utløser) | AL-1280 | **lukket på `[V]`** — modellkoden ikke funnet i seks ruter; forlagets tilleggsmateriale uavklart (403) | *ingen — saken nådde ikke dit* | [`SAK-08/LUKKET.md`](SAK-08/LUKKET.md) `704155d2` |
+| **SAK-09b** | Aragao 2018 `W7133020405` | H5 verktøygrense | AL-0852 | **ikke opphevet av det navngitte middelet** — `blockmodeling` 1.1.8 mangler mekanismen Pajek manglet | [`SAK-09b/KRITERIUM.md`](SAK-09b/KRITERIUM.md) `2fa587a0` | [`SAK-09b/RESULTAT.md`](SAK-09b/RESULTAT.md) `0ff7a732` |
+| **SAK-11** | Bynum m.fl. 2021 `W4206850274` | H5 → **H8** (utløser) | AL-2516 | **stoppet på steg 3** — scenariosettet er ikke funnet publisert; OSTI-posten uavklart *(rettet 30.09.2026)* | *ingen — saken nådde ikke dit* | [`SAK-11/LUKKET.md`](SAK-11/LUKKET.md) `d7d652f3` |
 | SAK-13 | Biblindex 2020 `W3165757969` | H1 tid | AL-0374 | **parkert** — svakt kriterium, ugjort har ingen fasit | — | — |
 | SAK-01 | Pring 2016 `W2551114598` | H5 verktøygrense | 23 passasjer | **gjennomført 25.09 som PS-246**; utvidelsen med saltholdighet: **H7** — avhandlingen rapporterer ingen EC, eneste verdi er `0.0μS/cm` som ble *satt* | — | [triagen, datert tillegg 28.09](../SAKBEHANDLING-2026-09-27-triage.md) |
 | SAK-15 | Mythos 2018 `W2974992769` | H1/H7 → **H7** | AL-0681 | **L5 nei** — 3 siteringer, ingen daterer grop H i Knossos; 137 treff i bredere søk | — | [triagen, datert tillegg 28.09](../SAKBEHANDLING-2026-09-27-triage.md) |
 | SAK-16 | Eythra 2017 `W4317830072` | H1/H7 → **H7** | AL-0070 | **L5 nei** — 2 siteringer om annen keramikk; de to Eythra-treffene er anmeldelser av et bind fra 2016 | — | [triagen, datert tillegg 28.09](../SAKBEHANDLING-2026-09-27-triage.md) |
 | SAK-17 | Pietrele 2019 `W2936215896` | H1/H7 → **H7** | AL-1440 | **L5 nei** — 12 siteringer, ingen analyserer flere digler fra 5. årtusen ved Nedre Donau | — | [triagen, datert tillegg 28.09](../SAKBEHANDLING-2026-09-27-triage.md) |
 | SAK-02 … SAK-12 (forkastet) | — | — | 33 passasjer | **utenfor rekkevidde** — krever fysisk materiale, feltarbeid eller mennesker | — | — |
+
+*(Rettet 28.09.2026, frys-lesningen: sha-prefiksene i resultatkolonnen sto på tilstanden før redigeringen
+i `0b4c979`/`9f07987` — SAK-14 `5cc8128c`, SAK-09c `4e76f32f`, SAK-09b `092d446c`, SAK-11 `4246f62e`. De
+fire, og SAK-08 `229599c4`, er regnet om etter frys-rettelsene samme dag, som også endret SAK-14,
+SAK-09c, SAK-09b og SAK-08. Kriteriefilene er låst og uendret.)*
+*(Regnet om igjen 30.09.2026, frys-lesning 4: SAK-11 sto `bd93b73d`, tilstanden før noten om forfattertallet
+28.09; etter den og rettelsene 30.09 er den `d7d652f3`.)*
 
 ## Koblingen til kandidatregisteret
 
@@ -33,7 +40,8 @@ ende på to ulike måter, og bare den ene er en endring av klassen:
   derfor en **datert vurdering `H8`, `loftbar: nei`** i `loftbarhet` (ADR-0010) — samme form som
   Heron, som gikk fra H1 til H8 uten at teksten endret seg. Den kodede klassen fra teksten står
   urørt. **De to H8-ene er ikke like varige:** SAK-09c er sperret av et samtykke som ikke skal
-  falle, SAK-08 bare av at ingen har deponert modellen ennå. SAK-08 er derfor ført som **utløser** —
+  falle, SAK-08 bare av at modellkoden ikke er funnet i seks sjekkede ruter (se datert tillegg
+  28.09.2026 nederst). SAK-08 er derfor ført som **utløser** —
   dukker modellen opp på CoMSES, GitHub, Zenodo eller i ORCID-posten, kan saken gjenåpnes med
   kriteriet uendret.
 * **Klassen endres ikke** når et kriterium er kjørt og ikke nådde terskelen. SAK-14 falt på 87,8 %
@@ -87,21 +95,21 @@ Fem saker behandlet — hele kortlisten fra triagen — og de faller i fire ulik
 |---|---|---|
 | SAK-14 | kjørt, port med terskel | **falt på terskelen** (87,8 % mot 90 %), men ga et funn i motsatt retning: to feilhenvisninger i Dionysios |
 | SAK-09c | `[V]` falt før kriteriet | **H8, varig** — inndataen er sperret av et samtykke som ikke skal falle |
-| SAK-08 | `[V]` falt før kriteriet | **H8, utløser** — modellkoden er bare ikke deponert ennå |
+| SAK-08 | `[V]` falt før kriteriet | **H8, utløser** — modellkoden **ikke funnet i seks sjekkede ruter**; forlagets tilleggsmateriale er uavklart (HTTP 403) *(datert tillegg 28.09.2026)* |
 | SAK-09b | kjørt, port uten terskel | **falt på middelet** — det navngitte verktøyet mangler mekanismen, og løftet er konsekvensløst |
-| SAK-11 | stoppet på steg 3 | **reproduksjonen er umulig** — fordelingens parametere, seed, scenariosett og kode er alle uoppgitt; og full enumerering er målt til 5,03 mrd. beskrankninger |
+| SAK-11 | stoppet på steg 3 | **reproduksjonen er umulig** — fordelingens parametere, seed, scenariosett og kode er alle uoppgitt; og full enumerering er anslått, ved lineær skalering fra artikkelens tabell 2, til ≈ 5,0 · 10⁹ beskrankninger *(rettet 28.09.2026: sto «målt til 5,03 mrd.»)* |
 
 **Ingen av de fem ble opphevet.** Fire av fem ga likevel et forskningsresultat, og alle fire kom på
 steder kriteriene ikke pekte: feilhenvisninger funnet ved å lese originalen (SAK-14), at inndataen til
-AI-aksens saker ofte er samtykkesperret primærdata (SAK-09c), at en verktøygrense kan sperre en
+AI-aksens saker kan være samtykkesperret primærdata (SAK-09c, én sak; *rettet 28.09.2026 fra «ofte»*), at en verktøygrense kan sperre en
 representasjon uten å sperre et resultat (SAK-09b), og at artikkelen selv kan ha målt at det ugjorte
 sperret ingen resultat (SAK-11: 100 av 22 481 940 scenarioer = 0,000445 %, som bekrefter artikkelens egen
 påstand om «less than 0.001 %»). **Det er formen ledd 2 har: porten avgjør om hindringen er opphevet,
 ikke om arbeidet var verdt å gjøre.**
 
 **Og ett mønster går igjen i fire av fem:** det som stanser saken, er sjelden hindringen selv. Det er
-at inndataen ikke er publisert — profiler holdt tilbake av samtykke (SAK-09c), modellkode aldri
-deponert (SAK-08), scenariosett og fordelingsparametere aldri oppgitt (SAK-11) — eller at det
+at inndataen ikke er publisert — profiler holdt tilbake av samtykke (SAK-09c), modellkoden ikke
+funnet i seks sjekkede ruter (SAK-08; datert tillegg 28.09.2026), scenariosett og fordelingsparametere aldri oppgitt (SAK-11) — eller at det
 navngitte middelet ikke gjør det triagen antok (SAK-09b). **Bare SAK-14 kom helt fram til en terskel,
 og den falt med 2,2 prosentpoeng.** Det er den viktigste forventningen å justere for fase 2d: porten
 er ikke det som siler, tilgangen er.
@@ -118,5 +126,14 @@ feltet arbeider videre i nærheten** — det er et eget funn om ledd 2, og det g
 
 PS-246-utvidelsen fikk det skarpeste svaret: avhandlingen *har* EC-instrumentering (TDR), men EC-en er
 aldri rapportert som data — den er et mellomledd på vei til vanninnhold — og den eneste EC-verdien i
-581 864 tegn er `0.0μS/cm`, verdien som ble satt. Dessuten er bulk-TDR-EC den gale størrelsen:
+581 864 bytes (579 109 tegn) *(rettet 30.09.2026)* er `0.0μS/cm`, verdien som ble satt. Dessuten er bulk-TDR-EC den gale størrelsen:
 Saxton–Rawls krever `ECe` i dS/m fra mettet pastautdrag. **Termen finnes, inndataen gjør ikke.**
+
+## Datert tillegg 28.09.2026 — SAK-08-ordlyden
+
+`SAK-08/LUKKET.md` ble rettet 28.09 til at modellkoden **ikke funnet i seks sjekkede ruter**; forlagets tilleggsmateriale er uavklart (HTTP 403), og at
+triagens OSF-rute ikke er sjekket. Denne fila bar fortsatt den eldre formen tre steder, som sier mer
+enn sjekken bærer: «ingen har deponert modellen ennå» (utløseravsnittet), «modellkoden er bare ikke
+deponert ennå» (utfallstabellen) og «modellkode aldri deponert» (mønsteret). Alle tre er endret til
+ordlyden i LUKKET og peker hit. At modellkoden ikke er funnet i de sjekkede rutene, er målt; at den
+ikke finnes, er det ikke. Klassen (H8, utløser) og utfallet er uendret.

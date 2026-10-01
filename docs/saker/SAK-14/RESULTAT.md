@@ -29,9 +29,13 @@ kjøres videre.
 
 ## Steg 1 — alle steder der en gresk kilde siteres
 
-Kriteriets presisering 1: et sted teller når det bærer en henvisning på formen
-`<FORKORTELSE>., <VERK> <bok>, <kapittel>[, <seksjon>]` der kildeforfatteren skrev på gresk, og listen
-over greske forfattere er avhandlingens egne forkortelser.
+Kriteriets presisering 1, ordrett fra `KRITERIUM.md`: et sted teller når det bærer en henvisning på
+formen `<FORKORTELSE>., <VERK> <bok>, <kapittel>, <seksjon>` der forfatteren skrev på gresk, og listen
+over greske forfattere hentes fra avhandlingens egne forkortelser. Grammatikken som ble kjørt, er
+videre — valgfri bok (Plutarks biografier) og valgfri seksjon, pluss Stephanus- og Bekker-former — og
+**utvidelsen skjedde etter første parse, altså etter låsing**; den føres som avvik ved siden av
+kildeutvidelsen nedenfor. *(Rettet 28.09.2026, frys-lesningen: grammatikken sto gjengitt som om den var
+kriteriet.)*
 
 **90 steder, 76 unike referanser.**
 
@@ -49,8 +53,25 @@ over greske forfattere er avhandlingens egne forkortelser.
 
 Det første parseforsøket ga **81**; den forfatterspesifikke grammatikken ga **90**. Forskjellen er
 at Plutarks biografier ikke har bok, bare kapittel og seksjon, og at et sted uten seksjon likevel
-er et sted. Den videre nevneren er **90**, og det er den strengere av de to: de ti stedene som ikke
-kunne oppløses, utgjør en større andel av 90 enn av 81.
+er et sted. Den videre nevneren er **90**. *(Rettet 28.09.2026: her sto at 90 er «den strengere» fordi
+«de ti stedene» som ikke kunne oppløses, er en større andel av 90 enn av 81. De er elleve (90 − 79), og
+et fast antall er en **mindre** andel av en større nevner, så argumentet var regnet baklengs.)*
+
+**Tallet under alle tre avgrensningene**, regnet fra `saker/SAK-14/tabell.json`, `steder.json` og
+`steder-v2.json` på Vault (status `opplost`, Perseus + Scaife):
+
+| nevner | oppløst | andel | Wilson 95 % |
+|---|---|---|---|
+| 90, grammatikken som ble kjørt | 79 | **87,8 %** | 79,4–93,0 |
+| 81, første parse | 70 (71 hvis det ene stedet uten posisjonstreff, `HAL. AR`, er oppløst) | **86,4 %** (87,7 %) | 77,3–92,2 |
+| 60, bare formen presisering 1 ordrett krever (bok, kapittel, seksjon) — **følsomhet, post hoc, nevner valgt etter utfall; ikke port** | 55, alle Perseus | 91,7 % | 81,9–96,4 |
+
+**Nevneren er 90, og utfallet står: ikke opphevet, 87,8 % mot 90 %.** Avgjort av eieren 28.09.2026.
+Raden med nevner 60 ligger over terskelen, men den er **post hoc: nevneren ble valgt etter at utfallet
+var kjent.** Den føres derfor som **følsomhet**, ikke som port, og endrer ikke utfallet. At kriteriet ikke
+sa om presisering 1 avgrenser *hvilke steder som teller* eller bare *hvilken form en henvisning har*, er
+en svakhet i kriteriet; å avgjøre den i den retningen som krysser terskelen, etter at tallet er sett,
+ville vært en terskelflytting.
 
 **Bare 11 av de 90 stedene bærer avhandlingens egen franske gjengivelse** (12,2 %,
 Wilson 95 % [7,0–20,6]). Det er en grense i kriteriet mitt, ikke i materialet, og den er ført
@@ -226,8 +247,9 @@ alle 36 feil var samme regel (versaler setter diakritika mellom `*` og bokstaven
 * **Én svakhet i kriteriet mitt, ført her og ikke bortforklart.** Port (3) krever gresk tekst
   *med de bærende termene identifisert*, og presisering 3 definerer den bærende termen mot «det
   franske uttrykket avhandlingen bygger sin påstand på i den setningen». Avhandlingen gjengir
-  gresk ordrett bare på 11 av 90 steder, så det andre leddet i porten kunne ikke måles for de
-  øvrige 79. Porten falt uansett på det første leddet, så svakheten endret ikke utfallet — men
+  sin franske oversettelse bare på 11 av 90 steder, så det andre leddet i porten kunne ikke måles
+  for de øvrige 79. *(Rettet 28.09.2026: sto «gjengir gresk ordrett»; avhandlingen har bare 12 greske
+  ordformer i alt, KRITERIUM.md.)* Porten falt uansett på det første leddet, så svakheten endret ikke utfallet — men
   kriteriet var **ikke fullt operabelt som skrevet**, og det er en lærdom for de neste sakene:
   en port med to ledd må si hva som skjer når det andre leddet ikke kan måles.
 

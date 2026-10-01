@@ -1,4 +1,6 @@
-# SAK-11 — stoppet før kriteriet. Scenariosettet finnes ikke, og det var en `[V]` triagen ikke navnga.
+# SAK-11 — stoppet før kriteriet. Scenariosettet er ikke funnet, og det var en `[V]` triagen ikke navnga.
+
+*(Rettet 30.09.2026, frys-lesning 4: overskriften sa «finnes ikke»; OSTI-posten er ikke avklart, se (c).)*
 
 **28.09.2026. Ingen kriteriefil låst, ingen terskel beregnet.** Saken stanser på oppdragets steg 3 —
 *«Reproduser kildens egne tall først. Klarer du ikke det, STOPP saken og før hvorfor»* — og grunnen
@@ -9,6 +11,9 @@ er ført her.
 Laird, «Proactive Operations and Investment Planning via Stochastic Optimization to Enhance Power
 Systems Extreme Weather Resilience», *Journal of Infrastructure Systems* **27**(2), 2021.
 DOI `10.1061/(asce)is.1943-555x.0000603`, Sandia-rapport SAND2018-9647J. Åpen gjennom OSTI.
+
+*(Datert note 28.09.2026, faktasjekk av manus v2.2: verket har **sju** forfattere, ikke seks. Crossref
+fører den sjuende, J.-P. Watson, etter Laird; lista over er ufullstendig. Ingen tall i saken endres.)*
 
 ## Det ugjorte, ordrett fra artikkelen
 
@@ -34,7 +39,8 @@ C(42,7) = 27,0 mill., så tallet festes til nøyaktig 41 linjer.
 
 Triagen skrev: «Ressurs: case30 er offentlig (MATPOWER) **[V]**, formuleringen står i artikkelen.»
 Begge holder. Men kriteriets steg (1) er *«reproduser artikkelens utvalgsresultat»*, og det krever en
-tredje ressurs som triagen ikke førte opp: **de 100 scenarioene**. Den finnes ikke. Tre uavhengige
+tredje ressurs som triagen ikke førte opp: **de 100 scenarioene**. Den er ikke funnet *(rettet 30.09.2026: sto «finnes
+ikke»)*. Tre uavhengige
 grunner, hver av dem tilstrekkelig:
 
 **(a) Fordelingen er navngitt, men ikke parametrisert.** Artikkelen sier at antallet linjeutfall per
@@ -46,7 +52,8 @@ forekommer **0 ganger** i artikkelen. Scenarioene kan derfor ikke genereres på 
 100 scenarioer i **figur 6**, en kurveplott. Det finnes **ingen tabell** med tallene bak, og figurens
 tekstlag er OCR-grøt. Det er ingenting å reprodusere *mot*.
 
-**(c) Ingen kode og ingen data er deponert.** Artikkelen har **ingen datatilgjengelighetserklæring**
+**(c) Ingen kode og ingen data er funnet deponert** *(rettet 30.09.2026, frys-lesning 4: sto «er deponert»; OSTI-posten
+er ikke avklart, se under)*. Artikkelen har **ingen datatilgjengelighetserklæring**
 (0 treff), nevner ingen repositorium (0 treff på github/gitlab/zenodo/osf/figshare), og **Crossref
 registrerer ingen relasjoner** for DOI-en — ingen komponent, intet datasett. GitHub-søk på
 forfatterlaget og på emnet ga **0 treff**. Modellen er bygget i Pyomo og løst med **CPLEX**, en

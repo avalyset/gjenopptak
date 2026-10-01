@@ -52,7 +52,9 @@ De fire eksisterende feltene bruker: arkeologi `T10087 T10421` · energimodeller
 
 `gulv` er et **minsteantall** verk fra feltet i treffstratumet når presisjonssettet trekkes. Det er en
 **måleskranke, ikke en vekting**. Tekstvitenskap har `gulv: 25`, og konsekvensen er målt: proporsjonal
-trekking ville gitt feltet 5 av de 150 leste treffene, ikke 25. Presisjonen blir dermed **utvalgets**,
+trekking ville gitt feltet om lag 12 av de 150 leste treffene, ikke 25 (179 av 2 173 flaggede,
+`ekstraksjon/2026-09-26/b2-nevner.json`; 5 ved delkjøringen i LAERDOM § 15, etter 18 964 av 22 243
+dømte). Presisjonen blir dermed **utvalgets**,
 ikke materialets. Vektet mot feltfordelingen er forskjellen liten (16,69 % mot 16,67 %), men den skal
 oppgis. **Sett `gulv: 0` med mindre du har en grunn du kan skrive ned.**
 
@@ -92,9 +94,11 @@ og energimodellering overlapper ikke i nærheten av hverandre.
 
 ### Hindringsklassene varierer også
 
-Andelen **H7** — «dataene fantes ikke», som er **ikke-løftbar** — går fra 46 % i energimodellering til
-96 % i klinisk epidemiologi. Et felt der nesten alt er H7, gir en lang kandidatliste og nesten ingen
-løftbare kandidater. Samlet er **17,8 %** [14,5–21,7] av treffene i løftbar klasse H1–H6.
+Andelen **H7** — «dataene fantes ikke», som er **ikke-løftbar** — gikk fra 46 % i energimodellering til
+96 % i klinisk epidemiologi i delkjøringen (374 treff, ADDENDUM-22 § 9.3); per felt for den fullførte kjøringen
+er ikke regnet. *(Merket 30.09.2026, frys-lesning 4.)* Et felt der nesten alt er H7, gir en lang kandidatliste og nesten ingen
+løftbare kandidater. Samlet er **19,0 %** [15,4–23,1] av de avklarte treffene i løftbar klasse H1–H6 (77 av 406), og
+6,0 % av alle treff er uavklarte (26 av 432; ADDENDUM-05 § 4).
 
 **Det er den viktigste forventningen å justere:** et felt med mange treff er ikke et felt med mange
 muligheter.
@@ -108,12 +112,17 @@ siste, med intervallet, og si hvilket du bruker.
 ### Hva som følger hver rad
 
 Hver kandidatrad bærer sin egen usikkerhet: silleddets **målte** presisjon med intervall, leserens
-`tvil`-flagg med presisjonen som gjelder den verdien (97,6 % mot 75,9 %), verksnivåets materialtilgang
+`tvil`-flagg med presisjonen målt for den verdien (post hoc, ADDENDUM-23 § 7.2: 41/42 = 97,6 %
+[87,7–99,6] mot 44/58 = 75,9 % [63,5–85,0], målt i de fire eksisterende feltene), verksnivåets materialtilgang
 og **hva den ikke ser**, falsifiseringens dekningsgrad eller `"ikke målt"`, og løftbarhet **med dato**.
-Se [`UTGANG.md`](UTGANG.md) for én rad forklart felt for felt.
+Se [`UTGANG.md`](UTGANG.md) for én rad forklart felt for felt. *(Rettet 28.09.2026: `tvil`-tallene sto uten
+intervall og uten «post hoc».)*
 
 ### Det feltguiden ikke kan love
 
 Presisjonen per **klasse** er ikke målt — bare per silledd. Recall for et nytt felt er ikke målt i det
 hele tatt: de 27 kjente treffene ligger i de fire eksisterende feltene, og en ny ramme har ingen fasit
 før noen leser blindt i den. **Et nytt felt gir en kandidatliste, ikke en målt liste**, til det er gjort.
+*(Tillegg 30.09.2026: fase 3 (ADDENDUM-25) viser hvordan det gjøres — et referansesett lest og sikret før
+silen, og to porter låst før trekkingen. For arkeologi er recall og presisjon nå målt prospektivt
+(`docs/RESULTAT-ADDENDUM-25.md` § 1); for de tre andre feltene og for nye felt gjelder avsnittet over.)*

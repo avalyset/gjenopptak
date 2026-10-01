@@ -135,6 +135,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"bytes      : {bundle.bytes:,}")
     print(f"sha256     : {bundle.sha256}")
     print(f"commits    : {bundle.commits}   HEAD {bundle.head[:12]}")
+    print(f"ots        : {bundle.ots or '—'}")
     if bundle.covers:
         print(f"dekker     : {', '.join(bundle.covers)}")
     if locked:

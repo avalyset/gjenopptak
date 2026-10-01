@@ -420,6 +420,7 @@ class BundleResult:
     head: str
     bundle_class: str = "kanon"
     covers: tuple[str, ...] = ()      # hvilke låste filer commiten førte inn
+    ots: str | None = None            # kvitteringens sti, eller feilmeldingen (T2)
 
     @property
     def authoritative(self) -> bool:
@@ -473,11 +474,19 @@ def write_bundle(repo: Path, *, root: Path = VAULT_ROOT, date: str | None = None
     _git(repo, "bundle", "create", str(path), "--all")
     _git(repo, "bundle", "verify", str(path))      # git sin egen integritetssjekk
     head = _git(repo, "rev-parse", rev).strip()
+
+    # T2: OpenTimestamps på bundlen. IKKE en forutsetning — en lås som ikke kan føres fordi
+    # kalenderne er nede, mister revisjonssporet, mens en lås uten tidsstempel bare mister
+    # tredjepartsbekreftelsen, og den kan settes i ettertid på samme fil.
+    from gjenopptak.tidsstempel import stamp
+    st = stamp(path, ut_dir=spor / "ots")
+    ots = str(st.kvittering) if st.ok else f"IKKE STEMPLET: {st.feil}"
+
     return BundleResult(
         path=path, bytes=path.stat().st_size, sha256=sha256_file(path),
         commits=int(_git(repo, "rev-list", "--count", "--all").strip()),
         written_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        head=head, bundle_class=bundle_class, covers=covers,
+        head=head, bundle_class=bundle_class, covers=covers, ots=ots,
     )
 
 

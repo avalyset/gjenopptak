@@ -11,33 +11,40 @@ The primary result is the distribution of obstacle types, not the tool used to f
 epidemiology, textual scholarship — parsed into 66,833 sentences and 22,243 passages. A local model
 (gemma2:9b, temperature 0, fixed seed, weight hash logged per judgment) classified every passage
 against a typology locked before data collection. A stratified sample of 320 passages was then read
-blind by the coder, with the key opened only after all verdicts were written.
+blind by LLM coders — coder 1, then coder 2 (ADDENDUM-11) and coder 4 (a different model family,
+`docs/METODE.md`) — with the key opened only after all verdicts were written. No human annotator has
+read the sample.
 
-| | |
-|---|---|
-| Prevalence, corrected (M1) | **0.671** |
-| Judgeability (M2) | **88.0 %** |
-| Obstacle distribution, 25 true hits | **H7 17, H5 3, H8 2, H2 2, H9 1** |
-| Liftable share (classes H1–H6) | **5 of 25** |
-| Judge precision | 16.7 % [11.6–23.4] |
-| Implied judge recall | ≈ 46 % |
+| | coder 1 | coder 2 |
+|---|---|---|
+| Prevalence, corrected (M1) | **0.671** | **0.604** |
+| Judgeability (M2) — carries coder identity, not one number (ADDENDUM-11 §5) | 88.0 % | 31.6 % |
+| Obstacle distribution, true hits | **H7 17, H5 3, H8 2, H2 2, H9 1** (25) | **H7 12, H1/H7-unresolved 2, H9 2, H5 1, H2 1, H8 1** (19) |
+| Liftable share (H1–H6) of resolved hits · unresolved share of all hits (ADDENDUM-05 §4) | **5 of 25** · 0 of 25 | **2 of 17** · 2 of 19 |
+| Judge precision | 16.7 % [11.6–23.4] | 12.7 % [8.3–18.9] |
+| Implied judge recall (after ADDENDUM-10) | ≈ 47.5 % | ≈ 40.7 % |
 
-Seventeen of 25 surviving true hits are H7: the question was parked because the data did not exist.
+Seventeen of 25 surviving true hits are H7 for coder 1, twelve of 19 for coder 2: the question was parked because the data did not exist.
 Full numbers with per-number sources are in `docs/RESULTAT-PORT-v1.md`; the reasoning chain, loop by
 loop, is in `docs/LAERDOM.md`.
 
 ## What is not shown
 
-* **Not that the detector works.** Precision is 16.7 % and the implied recall about 46 %. It is
+* **Not that the detector works.** Precision is 16.7 % (coder 1) and the implied recall about 47.5 %. It is
   reported as an instrument with measured error, and every prevalence figure is corrected for it.
 * **Not a prevalence for science as a whole.** Four fields, chosen on purpose, with an open-access
   and retrievability filter that skews the frame toward preprint and MDPI-like channels
   (`docs/LAERDOM.md` §3).
-* **Not inter-coder agreement.** One coder read the sample; κ against an independent annotator has
-  not been measured.
-* **Not that AI can unpark these questions.** One case was carried out in full (`docs/PS-246-RESULTAT.md`),
-  using equations published in 2006. It demonstrates that the chain find → classify → falsify →
-  execute can run end to end. It says nothing about how often it does.
+* **Not agreement with human reading.** Three LLM coders have read the sample: coder 1 against coder 2
+  κ = 0.812 [0.697–0.906] (2026-09-25, ADDENDUM-11 §4); coder 4, a different model family, 0.899
+  against coder 2 and 0.781 against coder 1 (2026-09-28, `docs/METODE.md`); 7 of the 320 rows had been exposed
+  to coder 4 before coding, and without them the values are 0.874 and 0.757. No human annotator has read
+  any of it, so κ against human reading has not been measured.
+* **Not that AI can unpark these questions.** Six cases were taken up: PS-246, carried out in full
+  (`docs/PS-246-RESULTAT.md`) using equations published in 2006, and five more in phase 2
+  (`docs/saker/REGISTER-SAKER.md`). Three reached the threshold condition, and **none lifted its
+  obstacle** (ADR-0013). PS-246 demonstrates that the chain find → classify → falsify → execute can run
+  end to end. It says nothing about how often it does.
 
 ## Reproducing the port from the frozen lists
 
@@ -185,7 +192,7 @@ gjenopptak run --verk verk.txt --navn min-kjoring --from dommer --to union
 ```
 
 The reader step has two modes. `--leser cli` starts the session headlessly with `claude -p`; it needs
-`claude login` to have been run once, and says so plainly if the session has expired. `--leser subagent`
+`claude auth login` to have been run once, and says so plainly if the session has expired. `--leser subagent`
 is for running the chain from inside a Claude Code session: it lays out the assignment and the output
 path and waits, so the orchestrating session spawns the reader with its own subagent tool. **Sessions
 are serial in both modes** — seven parallel Opus instances hit the provider's session limit at 87 %
@@ -198,18 +205,26 @@ Steps 3, 4 and 7 accept a cache, so a re-run does not repeat work already done:
 
 `8-register.jsonl` has one row per confirmed hit. Each row carries its own uncertainty: the sieve
 source and that source's measured precision (`begge` 34.5 %, `dommer` 14.3 %, `ekstraksjon` 7.2 %),
-the reader's `tvil` flag with the precision that applies to it (97.6 % without doubt, 75.9 % with),
+the reader's `tvil` flag with the precision that applies to it (97.6 % without doubt, 75.9 % with — the
+post hoc gate on the candidate list, ADDENDUM-23 §7.2, carried as constants on every row; phase 3 measured 97.4 %
+and 77.4 % prospectively, `docs/RESULTAT-ADDENDUM-25.md` §1.1),
 the non-prose mark, and liftability with the date it was assessed (ADR-0010).
 
-**Two registers exist, and they are not versions of each other.** `register/claims.jsonl` on the
+**Three registers exist, and they are not versions of each other.** `register/claims.jsonl` on the
 volume is the original: 30 rows built from coder 1's gold set, `schema_version` `claims-2`, untouched.
 `kandidat432/8-register.jsonl` is the candidate list the chain produced: 432 rows from the reader's
-verdicts over the sieve union, same schema plus the `tvil`, `sil` and `leser` fields. The first is a
-reference set; the second is a candidate list that passed a post-hoc gate. Cite them separately.
+verdicts over the sieve union, same schema plus the `tvil`, `sil` and `leser` fields. `fase3-kjede/8-register.jsonl`
+is the phase 3 list (ADDENDUM-25): 673 rows from 100 new archaeology works, **the only list named a work list** —
+`arbeidsliste (prospektiv port)` — because it passed a gate fixed before the draw (85 of 100 [76.7–90.7] against
+0.70), with the sieve's first measured recall (95 of 104 = 91.3 % [84.4–95.4], against an LLM reference reading of
+20 works; `docs/RESULTAT-ADDENDUM-25.md`). The first is a reference set, the second a candidate list that passed
+a post-hoc gate, the third a work list for one field. Cite them separately. *(Updated 30.09.2026: two registers,
+before phase 3 was measured.)*
 
-The 50 rows with a liftable or unresolved class and no doubt flag — the combination where blind
-precision measured 98 % — are written out for case work in
-`docs/SAKBEHANDLING-2026-09-27-kandidater.md`.
+The 50 rows with a liftable or unresolved class and no doubt flag are written out for case work in
+`docs/SAKBEHANDLING-2026-09-27-kandidater.md`. Their precision has not been measured as a group; blind
+precision without the doubt flag was 41 of 42 = 97.6 % [87.7–99.6] in a post-hoc subgroup over all
+classes (ADDENDUM-23 §7.2).
 
 `8-register-header.json` names the gate. **Without a passed gate it says `ubekreftet
 kandidatliste`, and that is not a bug.** A list is only a work list after a prospective gate on new
@@ -219,18 +234,21 @@ caveats: the gold set's stable core is 3 of 27, and the N3 boundary carries code
 
 ## History, and what to cite
 
-**This repository starts at a single root commit.** The full development history — 143 commits, each
+**This repository starts at a single root commit.** The full development history — every commit, each
 locked file committed alone with its own sha256 — is **not** here. It is in the git bundles deposited on
 Zenodo: `git bundle --all`, one per release, listed with sha256 in `MANIFEST-VAULT.md` on the external
-volume. Clone the bundle from the Zenodo record to get the history:
+volume, with the commit count per bundle. Clone the bundle from the Zenodo record to get the history:
 
 ```
 git clone gjenopptak-<date>-<sha>.bundle gjenopptak-full
 ```
 
 **Reproducibility is anchored in the DOI and the ADR number, not in commit hashes.** A commit sha in
-this repository does not correspond to anything in the deposits, and no document cites one. What the
-documents cite instead:
+this repository is not an anchor for anything in the deposits, although the history bundle in v0.4.0 does
+contain every commit, including the public branch. Two are cited, and only to name the public branch itself: the root commit `5fcb353` and the release commit `967254a` (v0.3), in ADR-0012,
+`docs/INSTRUKSER-v1.2.md`, `docs/B5-PORTSTATUS.md`, `docs/MANUSKRIPT-FAKTA-2026-09-28.md` and one MASTER
+patch in `docs/patch/` — never as the source of a number. (Corrected 2026-09-28: said that no document cites one.) What the documents cite
+instead:
 
 * **the concept DOI `10.5281/zenodo.22959326`** for the record as a whole, and a version DOI for a
   specific state — `10.5281/zenodo.22976464` is v0.3.0;
@@ -267,14 +285,15 @@ This repository publishes **states, not history**. The rule is fixed (ADR-0012, 
 
 **Consequence for readers:** you cannot see commit-by-commit history here, and that is deliberate. What
 you can do is cite an exact state — a tag, a MASTER version, and a Zenodo DOI that all name the same
-tree.
+tree. **Releases:** `v0.3` = MASTER v0.3 = Zenodo v0.3.0 (2026-09-26/28); `v0.4` = MASTER v0.4 = Zenodo v0.4.0
+(2026-10-01, `docs/ZENODO.md`).
 
 ## Licensing
 
 | What | License | File |
 |---|---|---|
 | Source code in `src/` and `tests/` | Apache-2.0 | `LICENSE` |
-| `PREREG-v1.md`, `ADDENDUM-01..10`, `docs/**`, the register and the data | CC BY 4.0 | `LICENSE-DATA` |
+| `PREREG-v1.md`, `ADDENDUM-*.md`, `docs/**`, the register and the data | CC BY 4.0 | `LICENSE-DATA` |
 
 Quoted passages from published works remain under their rights holders' terms; the CC BY grant
 covers this project's own coding, measurement and prose.
@@ -288,6 +307,18 @@ decisions and results only. Paths written as `data/...` in the protocol and the 
 that material: it now lives on the external volume under `raw/`, `frames/`, `utvalg/`, `logs/` and
 `register/`, and every file is listed by sha256 in `MANIFEST-VAULT.md`.
 
+**The blind files are deposited as an index, not as text.** `blindfiler-indeks.zip` gives, for every
+passage a coder read blind, its `id`, the work id, the sentence span (`start_index`, `end_index`), the
+sha256 of the passage text, and the sha256 of the whole blind file. No passage text is in the deposit.
+To regenerate a blind file: fetch the work's full text by its work id, parse it with
+`gjenopptak.parse` (`sentences_from_jats` or `pdfroute.sentences_from_pdf`), join sentences
+`start_index`–`end_index` with single spaces, and check the result against `tekst_sha256`. A mismatch
+means the source or the parser has changed, not that the index is wrong. **Rows whose id is not a work id
+(`PMC…`, `DOAJ…`) are anchors** taken from the recall sets (ADDENDUM-06, -07), not from the 100 works; their
+sentences are those in `logs/recall-sett-2-setninger.jsonl` and
+`logs/pipeline-test/sentences-REPARSE-ADDENDUM07.jsonl` on the external volume, joined the same way. Checked
+2026-09-28: 6 of 6 sampled work rows and 16 of 16 anchor rows reproduce `tekst_sha256`.
+
 The register (`register/claims.jsonl`) follows ADR-0010: each entry carries dated liftability
 assessments, appended and never rewritten, so a class that changes over time keeps its history.
 
@@ -300,8 +331,8 @@ branch is how three mirrored files stood with a superseded author name for a day
 
 ```
 PREREG-v1.md            protocol, locked before data collection
-ADDENDUM-01..10.md      corrections and extensions, each committed alone with its own sha256
-docs/decisions/         architecture decision records (ADR-0001..0011). **Numbers are unique
+ADDENDUM-01..25.md      corrections and extensions, each committed alone with its own sha256
+docs/decisions/         architecture decision records (ADR-0001..0014; 0005/0006 burned). **Numbers are unique
                         per repository, checked against all refs** — not against HEAD, not against
                         the current branch (repo discipline G1). 0005 and 0006 were burned here
                         under an earlier, mistaken convention that allocated numbers across
@@ -317,14 +348,22 @@ tests/                  348 tests (1 network test deselected by default), includ
 
 ## Statements superseded in locked files
 
-`PREREG-v1.md` and `ADDENDUM-01..09` are locked with known sha256 and are never edited. A statement
+`PREREG-v1.md` and every `ADDENDUM-*.md` are locked once committed (01..09 are also checked against
+known sha256). **Two exceptions exist:** ADDENDUM-10 (§ 7) and ADDENDUM-11 (§ 8) received dated additions on
+27.09.2026 after they were locked and deposited in v0.3.0 — 45 and 40 inserted lines, none removed. That breaks
+the rule, and it is recorded as such (`docs/KORRIGENDUM-2026-09-28-frys-v0.4.0.md`, `docs/UTGIVELSE-v0.4.0-PORTSTATUS.md`
+§ 1). No other locked file has been edited. *(Corrected 30.09.2026, freeze reading 4: said «and are never edited».)* A statement
 in them that a later measurement superseded was not wrong when written; it is recorded as superseded,
 in a dated file alongside:
 
 * `docs/INNHENTET-2026-09-26-en-koder.md` — «Én koder» in PREREG-v1 §9 (locked 2026-09-12) was
   superseded on 2026-09-25 by the independent recoding in ADDENDUM-11 (κ = 0.81 [0.70–0.91]). The
   same phrase in ADDENDUM-06 §1.6 remains true, but describes the recall fasit only.
+* `docs/KORRIGENDUM-2026-09-28-frys-v0.4.0.md` — every error the freeze reading before v0.4.0 found in
+  a locked file (PREREG-v1 and all addenda), with what is right, the source, and whether a conclusion
+  changes.
 
 ## Citation
 
-See `CITATION.cff`. The DOI field is deliberately empty until the deposited version has one.
+See `CITATION.cff`. It carries the concept DOI `10.5281/zenodo.22959326`; the version DOI for v0.4.0 is
+added when that version is deposited.

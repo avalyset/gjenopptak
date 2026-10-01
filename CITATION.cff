@@ -5,7 +5,10 @@ abstract: >-
   A preregistered study of how often researchers record work they did not get
   done, and which obstacles they name. Four purposively chosen fields, 100
   open-access works, 22,243 passages judged by a local model and a stratified
-  sample read blind against a typology locked before data collection.
+  sample read blind against a typology locked before data collection. A
+  prospective phase on 100 further archaeology works (ADDENDUM-25) passed a
+  blind precision gate fixed before the draw and gave the first measured
+  recall of the sieve.
 type: software
 authors:
   - family-names: "Botten Nicolaysen"
@@ -14,10 +17,12 @@ authors:
     affiliation: "EcoDeco AS"
 repository-code: "https://github.com/avalyset/gjenopptak"
 url: "https://github.com/avalyset/gjenopptak"
-license: Apache-2.0
+license:
+  - Apache-2.0
+  - CC-BY-4.0
 license-url: "https://www.apache.org/licenses/LICENSE-2.0"
-version: "0.3.0"
-date-released: "2026-09-26"
+version: "0.4.0"
+date-released: "2026-10-01"
 keywords:
   - metascience
   - preregistration
@@ -30,6 +35,9 @@ identifiers:
   - type: doi
     value: "10.5281/zenodo.22959326"
     description: "Concept DOI — all versions"
+  - type: doi
+    value: "10.5281/zenodo.23073893"
+    description: "Version DOI — v0.4.0, deposited 2026-10-01 (phase 2 and phase 3: the prospective gate passed, 85 of 100; first measured sieve recall; manuscript draft v2.8)"
   - type: doi
     value: "10.5281/zenodo.22976464"
     description: "Version DOI — v0.3.0, deposited 2026-09-26 (corrects eleven figures in the result note that ADDENDUM-10 and -11 had superseded)"
@@ -47,5 +55,7 @@ references:
     title: "Gjenopptak data, register and frozen lists"
     notes: >-
       Data, frozen frame lists, samples and judgment files are held outside git
-      on an external volume, listed with sha256 in MANIFEST-VAULT.md. They are
-      licensed CC BY 4.0; see LICENSE-DATA.
+      on an external volume, listed with sha256 in MANIFEST-VAULT.md. Our own
+      classifications, verdicts and measurements are licensed CC BY 4.0;
+      verbatim quotations, full texts and passage windows from third-party works
+      are not, see LICENSE-DATA and docs/LISENS-PER-VERK.md.

@@ -6,7 +6,8 @@
 >
 > **Leseregel:** hvert tall i dette dokumentet er gjeldende der det står. Tall fra før ADDENDUM-10
 > er merket «før ADDENDUM-10» i samme setning eller rad, aldri stående alene. Tall som bærer
-> koderidentitet — presisjon, M2, løftbar andel, klassefordeling — er oppgitt for **begge** kodere.
+> koderidentitet — presisjon, M2, løftbar andel, klassefordeling — er oppgitt for **begge** kodere
+> (koder 1 og 2; koder 4, 28.09.2026, står i forbehold 1).
 > Sammenstillingene ligger i avsnittene **«Etter ADDENDUM-10»** og **«Uavhengig omkoding»** nederst.
 >
 > Rettet 2026-09-26: seksjonene over bar tall fra før ADDENDUM-10 uten at det gikk fram av
@@ -15,11 +16,16 @@
 Alle tall er målt, ikke anslått. Kilden står ved hvert tall. Ingen tall i dette dokumentet er nye:
 de er hentet fra `data/port/presisjon-resultater.json`, `data/falsifisering-2026-09-21.json` og
 `docs/LAERDOM.md`, som igjen bygger på de låste PREREG- og ADDENDUM-filene.
+*(Tilføyd 28.09.2026: `data/` er ikke deponert. Vault-kopiene, byte-like med repoets:
+`presisjonssett-2026-09-20/presisjon-resultater.json`, sha256 `be5d5e66…`, ført i undermanifestet
+`presisjonssett-2026-09-20/MANIFEST.md`; `falsifisering-2026-09-21/falsifisering-2026-09-21.json`,
+sha256 `11aeb789…`, og `logs/port/spesifikasjon.json`, sha256 `2d96c08f…`, begge med rad i
+`MANIFEST-VAULT.md`.)*
 
 **Materialet:** 100 verk, 25 per felt (energimodellering, arkeologi, klinisk epidemiologi,
 tekstvitenskap), 66 833 setninger → 22 243 passasjer à ±2 setninger. Dommer A (gemma2:9b, temp 0,
 frø 734248, vekt-sha256 `ff1d1fc7…`) dømte alle 22 243 og fant 2 173 treff.
-*Kilde: `data/port/spesifikasjon.json`, LAERDOM §12–13.*
+*Kilde: `data/port/spesifikasjon.json` (Vault `logs/port/spesifikasjon.json`, sha256 `2d96c08f…`), LAERDOM §12–13.*
 
 ## Hovedfunnet
 
@@ -28,8 +34,10 @@ frø 734248, vekt-sha256 `ff1d1fc7…`) dømte alle 22 243 og fant 2 173 treff.
 **Koder 2: 12 av 19 (63 %)** — resten H1/H7-uavklart 2, H9 2, H5 1, H2 1, H8 1.
 *Før ADDENDUM-10 sto koder 1 som 17 av 24 (71 %) med H5 2.*
 *Kilde: `koder2-sammenlikning.json` → `hovedtall`; `presisjon-resultater.json` for tallene før
-ADDENDUM-10; LAERDOM §17, §20–21.* Det er ikke regnekraft, ikke lesekapasitet og ikke språk som stanser arbeidet i dette
-materialet — det er kilder som aldri ble skapt, ikke overlevde, eller ikke ble målt.
+ADDENDUM-10; LAERDOM §17, §20–21.* Det er sjelden regnekraft (H5: 3 av 25 hos koder 1), og aldri lesekapasitet eller språk,
+som stanser arbeidet i de 25 — flertallet stanses av kilder som aldri ble skapt, ikke overlevde, eller
+ikke ble målt. *(Rettet 28.09.2026: sto «ikke regnekraft … som stanser arbeidet i dette materialet», som
+motsa koder 1s tre H5-treff.)*
 
 ## M1 — prevalens
 
@@ -76,8 +84,10 @@ tvinge én lesning; tallet bærer koderidentitet eller ingenting. *Kilde: `koder
   rått. Vektet med materialets fordeling: 2,0 %. *Samme kilde → `presisjon.ikke_treff`.*
 * Omregnet, **før ADDENDUM-10 og ikke regnet om etterpå**: ≈348 ekte treff [239–493] blant de
   dømte, mot ≈401 tapte [110–1405] blant de 20 070 ikke-treffene → **implisert recall ≈ 46 %**.
-  Med presisjonen etter ADDENDUM-10 (16,7 %) blir punktanslaget ≈363 i stedet for ≈348; intervallet
-  er ikke regnet om, og recall-størrelsen ≈46 % er den manuskriptet oppgir. *Kilde: LAERDOM §16.*
+  Med presisjonen etter ADDENDUM-10 (25/150 = 16,7 %) blir punktanslaget 25/150 × 2 173 ≈ 362 og
+  **implisert recall ≈ 47,5 %** (362/(362 + 400), `docs/METODE.md` § 1), som er tallet faktafila og
+  manuskript v2 bruker; ≈46 % er tallet før ADDENDUM-10. *Kilde: LAERDOM §16, METODE § 1.* *(Rettet
+  28.09.2026: sto «≈363» og «≈46 % er den manuskriptet oppgir».)*
 * **Ankerne viser ingen drift:** 12 av 12 kjente treff og 8 av 8 kjente ikke-treff ble lest likt som
   fasiten skrevet før dommeren fantes; eksakt klasseenighet 75 % (9/12). De tre avvikene går mot
   H7 (to) og H1 (ett) — lesningen skyver i samme retning som dommeren når klassen settes.
@@ -88,11 +98,19 @@ tvinge én lesning; tallet bærer koderidentitet eller ingenting. *Kilde: `koder
 **Koder 1: 5 av 25 ekte treff (20,0 %) er i en løftbar klasse (H1–H6)** etter ADR-0004-tabellen: to
 H2 og tre H5. 20 av 25 (80,0 %) er H7–H9. *Før ADDENDUM-10: 4 av 24 = 16,7 %, to H2 og to H5, og
 20 av 24 = 83,3 % H7–H9.*
-**Koder 2: 2 av 19 (10,5 %).** Ankerne gir **17–25 %** avhengig av om det ene H1/H7-uavklarte regnes
-med (2 eller 3 av 12) — samme størrelsesorden som koder 1.
-*Kilde: `koder2-sammenlikning.json` → `hovedtall`; `presisjon-resultater.json`, LAERDOM §17.*
+**Koder 2: løftbar 2 av 17 avklarte = 11,8 %** [3,3–34,3], **uavklart 2 av 19 = 10,5 %** [2,9–31,4]
+(ADDENDUM-05 § 4: løftbar andel har avklarte treff som nevner, og oppgis sammen med uavklart andel).
+Koder 1 har ingen uavklarte, så 5 av 25 er uendret. Ankerne (koder 1s lesning av de 12 kjente treffene)
+gir løftbar **2 av 11 avklarte = 18,2 %**, uavklart 1 av 12 — samme størrelsesorden som koder 1.
+*(Rettet 28.09.2026: sto «Koder 2: 2 av 19 (10,5 %)» og ankerne «17–25 %», begge med alle treff som
+nevner; 10,5 % er den uavklarte andelen.)*
+*Kilde: for koder 2 `data/port-presisjonssett-verdikter-koder2.jsonl`, de 150 med `utvalgstype` «treff»
+(H7 12, H1/H7-uavklart 2, H9 2, H5 1, H2 1, H8 1); for koder 1 og ankerne `koder2-sammenlikning.json` →
+`hovedtall` og `presisjon-resultater.json`, LAERDOM §17. (Rettet 28.09.2026: `loftbar`-feltet for koder 2 i
+`koder2-sammenlikning.json` bruker den gamle nevneren, alle 19 treff; gjeldende er 2/17 avklarte, jf.
+KORRIGENDUM-2026-09-28 § B.)*
 
-**Beste AI-kandidat er funnet, vurdert og parkert på tilgang:** Heron-kollasjonen i W3000588547 (93 sider i tre British Library-håndskrifter) er den sterkeste av de fire løftbare, men hindringen har skiftet klasse siden publisering — H1 i 2019, H8 fra oktober 2023 da bildene falt ut av åpen kanal (ADR-0010, LAERDOM §18).
+**Tekstvitenskapens positive H1-kontroll er vurdert og parkert på tilgang:** Heron-kollasjonen i W3000588547 (93 sider i tre British Library-håndskrifter) er kontrollen, utenfor de 100 verkene og utenfor nevneren (ADDENDUM-08 § 1), ikke et av de løftbare treffene i utvalget; hindringen har skiftet klasse siden publisering — H1 i 2019, H8 fra oktober 2023 da bildene falt ut av åpen kanal (ADR-0010, LAERDOM §18). *(Rettet 28.09.2026: sto «Beste AI-kandidat … den sterkeste av de fire løftbare»; kontrollen er ikke blant de 100.)*
 
 **Letekostnad, koder 1: ~30 dømte treff per løftbart ekte treff** (150 leste gav 5). Skalert til
 materialet svarer det til om lag **72** løftbare ekte treff blant de 2 173 dømte. *Før ADDENDUM-10:
@@ -114,21 +132,27 @@ ett `fulltext.search` på kjernebegrepene i det ugjorte, 36 kreditter i alt. Pr�
 | PS-119 | H5 | W2551114598 | 1 | 100 % | 0 | overlever |
 | PS-246 | H5 | W2551114598 | 1 | 100 % | 0 | overlever |
 
-*Kilde: `data/falsifisering-2026-09-21.json`.*
+*Kilde: `data/falsifisering-2026-09-21.json` (Vault `falsifisering-2026-09-21/`, sha256 `11aeb789…`).*
 
 **Forbehold:** to av tre verk har 0 og 1 siterende arbeid. «Overlever» betyr her **ingen har
 svart**, ikke at ingen kunne ha svart. Bare PS-202 har et siteringsgrunnlag som gjør et nullresultat
-interessant, og der er fulltekstdekningen 58 % — fire av tolv siterende er usynlige for søket.
+interessant, og der er fulltekstdekningen 58 % — fem av tolv siterende er usynlige for søket (7 av 12 med fulltekst).
+*(Rettet 28.09.2026: sto «fire av tolv».)*
 
 ## Forbehold ved hele målingen
 
-1. **To kodere, begge LLM-baserte; ingen menneskelig annotør.** *Rettet 2026-09-26: dette punktet
-   sa «Én koder» og var innhentet av ADDENDUM-11.* De 320 passasjene er kodet to ganger — først av
-   instansen som også bygget dommeren og ledeteksten, så av en separat instans med tom kontekst.
-   κ = 0,81 [0,70–0,91] på treffbeslutningen, og hovedfunnet står i begge lesninger. To forbehold
-   står igjen: **ingen menneskelig annotør har kodet materialet**, så κ mot menneskelig lesning er
-   fortsatt umålt, og begge kodere deler modellfamilie og regelverk. Enigheten er dessuten ujevn
-   mellom felt: κ = 1,00 i klinisk epidemiologi mot **0,39 i energimodellering**.
+1. **Tre kodere, alle LLM-baserte; ingen menneskelig annotør.** *Rettet 2026-09-26: dette punktet
+   sa «Én koder» og var innhentet av ADDENDUM-11. Rettet 28.09.2026: sto «To kodere»; koder 4 kom til
+   samme dag.* De 320 passasjene er kodet to ganger av Opus — først av instansen som også bygget
+   dommeren og ledeteksten, så av en separat instans med tom kontekst — med κ = 0,81 [0,70–0,91] på
+   treffbeslutningen, og hovedfunnet står i begge lesninger. **Fra 28.09.2026 er de kodet en tredje
+   gang**, av koder 4 (Fable 5.1, en annen modellfamilie, samme regelfil og blindfil som koder 2): κ
+   **0,899** [0,808–0,969] mot koder 2 og **0,781** [0,659–0,883] mot koder 1; 7 av 320 rader var
+   eksponert for koder 4, og følsomheten er oppgitt (`docs/METODE.md`, «Koder 4»). To forbehold står
+   igjen: **ingen menneskelig annotør har kodet materialet**, så κ mot menneskelig lesning er fortsatt
+   umålt, og koder 1 og 2 deler modellfamilie og regelverk; koder 4 er en annen modellfamilie.
+   Enigheten mellom koder 1 og 2 er dessuten ujevn mellom felt: κ = 1,00 i klinisk epidemiologi mot
+   **0,39 i energimodellering**.
 2. **Formålsvalgt utvalg.** Fire felt valgt for å spenne humaniora mot biomedisin, ikke trukket fra
    vitenskapen som helhet. Tallene gjelder disse fire feltene. *PREREG §4.*
 3. **Hentbar-OA-seleksjon.** Rammen krever `is_oa:true` og at fulltekst faktisk lar seg hente.
@@ -209,8 +233,10 @@ så rettingen er ikke for bred.
   tilgang til tre håndskrifter i et annet bibliotek. **Utfallet er riktig av feil grunn.** Denne
   blindsonen kan ikke lappes med flere mønstre, fordi opplysningen ikke står i dokumentet.
 * **Feilen er ensidig.** Et manglende mønster kan bare gjøre et verk *for* lukket, aldri for åpent.
-  Rangeringen **underrapporterer gjennomførbarhet**. Den er brukbar til å **velge bort** — et verk som
-  scorer ÅPEN, var åpent i 2 av 2 blindtilfeller — men **ikke til å avskrive**.
+  Rangeringen **underrapporterer gjennomførbarhet**. Den er brukbar til å **velge ut** — et verk som
+  scorer ÅPEN, var åpent i 2 av 2 blindtilfeller — men **ikke til å avskrive**. *(Rettet 28.09.2026: sto
+  «velge bort», samme feil som ADDENDUM-13 l. 84; feilen er ensidig mot LUKKET, så det er ÅPEN-scoren
+  som er pålitelig. Jf. KORRIGENDUM-2026-09-28 § D.)*
 
 ## Hva som står åpent
 
@@ -270,7 +296,7 @@ laget, og ingen uenighet er brutt av en tredje stemme.
 | M1-streng korrigert | 0,667 | 0,599 |
 | M1-rå ≥1 / ≥2 / ≥3 | 0,930 / 0,850 / 0,830 | uendret (rører ikke dommeren) |
 | **M2 på leste ekte treff** | **22/25 = 88,0 %** | **6/19 = 31,6 %** |
-| løftbar andel (H1–H6) | 5/25 = 20,0 % | 2/19 = 10,5 % |
+| løftbar andel (H1–H6), av avklarte · uavklart, av alle | 5/25 = 20,0 % · 0/25 | 2/17 = 11,8 % · 2/19 = 10,5 % *(rettet 28.09.2026: sto 2/19 som løftbar)* |
 | klassefordeling | H7 17, H5 3, H8 2, H2 2, H9 1 | H7 12, H1/H7-uavklart 2, H9 2, H5 1, H2 1, H8 1 |
 | H7-andel av ekte treff | 68 % | 63 % |
 | bom blant INGEN / N3 | 2,0 % / 2,0 % | 2,0 % / 2,0 % |

@@ -171,8 +171,12 @@ samme og mer.
 * **Én ting kunne ikke reproduseres, og den er ført som åpen:** avhandlingen sier at brukeren kan
   «assign a priority or a weight for each block type», og oppgir ikke verdiene. Uten dem kan
   *optimaliseringen* ikke reproduseres — bare feilen for en gitt partisjon. Derfor er blokktypene
-  låst per posisjon til avhandlingens egen bildematrise i alle søk, og det er en **betingelse på
-  resultatet**, ført her og ikke gjemt. Med fri typevalg blir målet degenerert: både min
+  låst per posisjon til avhandlingens egen bildematrise i alle **egne** søk, og det er en **betingelse på
+  resultatet**, ført her og ikke gjemt. **Portkjøringen i R gjorde det ikke:** den brukte
+  `blocks = c("nul","com","reg","rre")` fritt per blokk og ga «11 løsninger med minimal feil = 0» —
+  nettopp det degenererte regimet avsnittet under beskriver. At partisjonene der ikke ble like, er derfor
+  et utfall under fritt typevalg, og om det tåler den degenerasjonen, er ikke prøvd. *(Rettet 28.09.2026,
+  frys-lesningen: sto «i alle søk».)* Med fri typevalg blir målet degenerert: både min
   implementasjon og R-pakken når total feil 0 fra nesten hvilken som helst start, fordi `rre` alltid
   kan velges. **Et fritt typevalg gjør generalisert blokkmodellering meningsløs**, og det er den
   viktigste metodiske lærdommen fra kjøringen.

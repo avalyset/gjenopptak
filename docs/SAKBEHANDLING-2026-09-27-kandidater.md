@@ -1,6 +1,6 @@
 # Kandidater til saksbehandling — 27.09.2026
 
-**50 kandidater** fra kandidatlista på 432 (register v2, `kandidat432/8-register.jsonl`). Utvalgskriteriet er **løftbar eller uavklart klasse** (H1–H6 eller `H1/H7-uavklart`) **og `tvil: false`** hos leseren — den kombinasjonen der blind presisjon er målt til **98 %** (ADDENDUM-23 §7.2). Sortert felt → klasse.
+**50 kandidater** fra kandidatlista på 432 (register v2, `kandidat432/8-register.jsonl`). Utvalgskriteriet er **løftbar eller uavklart klasse** (H1–H6 eller `H1/H7-uavklart`) **og `tvil: false`** hos leseren — der blind presisjon i en **post hoc delgruppe over alle klasser** (koder c-treff med `tvil: false`) var **41 av 42 = 97,6 %** [87,7–99,6] (ADDENDUM-23 §7.2); **presisjonen for akkurat dette utvalget er ikke målt**. Sortert felt → klasse. *(Rettet 28.09.2026: sto «den kombinasjonen der blind presisjon er målt til 98 %».)*
 
 **Dette er ikke en arbeidsliste.** Lista har bestått en post hoc port, ikke en prospektiv (ADDENDUM-23 §5). Den preregistrerte porten falt med 21 av 27.
 
@@ -50,7 +50,7 @@
 
 > However, discrimination between these two botanical sources in the archaeological coating was not possible based on the distributions of cinnamate and benzoate derivatives, especially since the distribution of these derivatives may have been altered upon ageing. This would be in agreement with the detection of numerous cinnamate and benzoate derivatives (presence of characteristic fragments at m/z 105 or 131) specifically occurring among the lipids from the archaeological samples. However, these compounds could not be firmly identified based on their mass spectra and it is proposed that they correspond to alteration or condensation products of cinnamates and benzoates. Subsequently the chemotaxonomic potential of the triterpenes from the skull sub-samples NH2968 and NH2969 was investigated35. L. orientalis could be easily excluded as a source since the archaeological samples do not contain oleanonic acid, the predominant triterpene of L. orientalis according to our analysis of the fresh resin sample and the literature36.
 
-**Koderens begrunnelse:** Forfatterne kunne ikke skille de to botaniske kildene eller identifisere forbindelsene sikkert, fordi fordelingene er endret ved aldring i det skadde arkeologiske materialet.
+**Koderens begrunnelse:** Studien skiller ikke de to botaniske kildene og identifiserer ikke forbindelsene sikkert, fordi fordelingene er endret ved aldring i det skadde arkeologiske materialet. *(Omformulert til verket 29.09.2026, navnepolicyen i `0b4c979`; registerets `notes`-felt for AL-0021 er uendret.)*
 
 **AL-0119** · `W3217588367` · 2017 · setning 1197–1201 · sil: dommer
 
@@ -338,7 +338,7 @@
 
 > Modelling Soil Water Characteristics values of particle density for these soils. Using these measured values, Equations 6.8 and 6.9 return θ33(DF) as lower than θs(DF), which would allow FC to be reached. This correction would translate to the weighted averages of FC and VWC allowing δmin to be 0mm. Although the cause of θs being lower than θ33 has been found to relate to the use of a standard particle density which is lower than measured values, it is not possible to use measured values for particle density in the simulation. Reconstruction of computational processes in the SPAW model would be required.
 
-**Koderens begrunnelse:** Forfatterne kan ikke bruke målte partikkeltettheter i simuleringen fordi SPAW-modellen ikke tar imot parameteren uten ombygging av beregningsprosessene.
+**Koderens begrunnelse:** Simuleringen i avhandlingen bruker ikke målte partikkeltettheter, fordi SPAW-modellen ikke tar imot parameteren uten ombygging av beregningsprosessene. *(Omformulert til verket 29.09.2026, navnepolicyen i `0b4c979`; registerets `notes`-felt for AL-2541 er uendret.)*
 
 **AL-2549** · `W2551114598` · 2016 · setning 2490–2494 · sil: begge
 
@@ -364,7 +364,7 @@
 
 > Modelling Soil Water Characteristics to indicate the mechanisms of cropmark appearance. background SMD and cropmark appearance required a lower accuracy of data, and the results were representative of TDR SMD. The correction factor was found to vary greatly between the three growing seasons modelled, and with only three datasets it was not possible to determine the cause of the variation. Therefore, although modelled SMD can be used to indicate trends in the SMD data, without firstly reprogramming of the SPAW model to allow for high density soils and further analysis it is not possible to accurately reproduce SMD values. Although it was not possible to find a single correction factor to correct for the inconsistencies, the model output (without correction) was compared with the output using inputs from database sources.
 
-**Koderens begrunnelse:** Forfatterne kan ikke gjengi SMD-verdier nøyaktig uten først å omprogrammere SPAW-modellen for høy tetthet, og de får heller ikke bestemt årsaken til variasjonen med bare tre datasett.
+**Koderens begrunnelse:** Avhandlingen gjengir ikke SMD-verdiene nøyaktig uten at SPAW-modellen først omprogrammeres for høy tetthet, og årsaken til variasjonen lar seg ikke bestemme med bare tre datasett. *(Omformulert til verket 29.09.2026, navnepolicyen i `0b4c979`; registerets `notes`-felt for AL-2594 er uendret.)*
 
 **AL-2598** · `W2551114598` · 2016 · setning 2712–2716 · sil: begge
 
@@ -457,7 +457,7 @@
 
 > The fabric’s composition–determined in the SEM by scanning a window at 100X –is that of clay with a high content of aluminium oxide (Blejeşti 1-1/12). However, the SiO2/Al2O3 ratio (43.0/36.7) seems to be too different from what is customary in prehistoric ceramics, in which the aluminium oxide content is much lower [31]. At first glance it seems that clay with good refractory properties was selected for the elaboration of this crucible. When we have more analysis of the fabric of other similar crucibles we can assess whether we are facing a singular case or a trend with technological significance. Some cavities of the most glazed surface layer are filled by crystalline litharge formations, which suggest that there was a post-depositional oxidative process that in turn generated some micro-geodes (Fig 22).
 
-**Koderens begrunnelse:** Forfatterne kan ikke avgjøre om digelen er et enkelttilfelle eller en trend før flere liknende digler er analysert, men passasjen sier ikke om det som mangler er analysearbeidet eller selve sammenlikningsmaterialet.
+**Koderens begrunnelse:** Studien avgjør ikke om digelen er et enkelttilfelle eller en trend før flere liknende digler er analysert, men passasjen sier ikke om det som mangler er analysearbeidet eller selve sammenlikningsmaterialet. *(Omformulert til verket 29.09.2026, navnepolicyen i `0b4c979`; registerets `notes`-felt for AL-1440 er uendret.)*
 
 **AL-1609** · `W2551114598` · 2016 · setning 3339–3343 · sil: dommer
 
@@ -554,7 +554,7 @@
 
 > Incremental reduction in expected load shed for each additional hardened line (left) and each additional line with increased capacity (right) for case2383wp. the cost of increasing the transmission capacity of each of these lines, this could be combined with RDF and THF strategies for improved resilience. 4.1 Out-of-Sample Cross Validation Even for a small test network such as case30, including all possible scenarios in the stochastic programming formulation is intractable. On average, the scenarios for case30 contained 7 transmission line outages. Over 22 million scenarios would be necessary to consider every combination of 7 outages.
 
-**Koderens begrunnelse:** Forfatterne kunne ikke ta med alle scenarioer i sin egen stokastiske formulering fordi det er beregningsmessig umulig (over 22 millioner scenarioer).
+**Koderens begrunnelse:** Artikkelens stokastiske formulering tar ikke med alle scenarioer, fordi det er beregningsmessig umulig (over 22 millioner scenarioer). *(Omformulert til verket 29.09.2026, navnepolicyen i `0b4c979`; registerets `notes`-felt for AL-2516 er uendret.)*
 
 ### H1/H7-uavklart
 
@@ -657,7 +657,7 @@
 
 > LIV. I, 9, 9. 57 DION. HAL., AR II, 30, 4 : « Les étrangers accoururent en foule à cette fête en compagnie de leurs femmes et de leurs enfants ». Pour les textes grecs, nous ne donnerons que la traduction des textes grecs en raison de notre méconnaissance du grec.
 
-**Koderens begrunnelse:** Forfatterne gir bare oversettelse av de greske tekstene, uttrykkelig fordi de selv ikke kan gresk.
+**Koderens begrunnelse:** Avhandlingen gjengir de greske tekstene bare i oversettelse og oppgir selv manglende greskkunnskap som grunn. *(Omformulert til verket 28.09.2026, navnepolicyen i `0b4c979`; registerets `notes`-felt for AL-0738 er uendret.)*
 
 **AL-2370** · `W2474595476` · 2016 · setning 471–475 · sil: dommer
 
@@ -670,7 +670,7 @@
 
 > HAL., AR II, 30, 4 : « Les étrangers accoururent en foule à cette fête en compagnie de leurs femmes et de leurs enfants ». Pour les textes grecs, nous ne donnerons que la traduction des textes grecs en raison de notre méconnaissance du grec. 56 étaient des Sabines. Ainsi, l’unicité ethnique qui existe dans le récit du Padouan est absente de la version de Denys.
 
-**Koderens begrunnelse:** Forfatteren gjengir de greske tekstene bare i oversettelse, uttrykkelig fordi hun ikke kan gresk.
+**Koderens begrunnelse:** Avhandlingen gjengir de greske tekstene bare i oversettelse og oppgir selv manglende greskkunnskap som grunn. *(Omformulert til verket 28.09.2026, navnepolicyen i `0b4c979`; registerets `notes`-felt for AL-2370 er uendret.)*
 
 ### H1/H7-uavklart
 

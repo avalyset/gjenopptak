@@ -70,7 +70,7 @@ contains it.
 ## 3 Method
 
 **Preregistration.** The protocol was written and locked before data collection (`PREREG-v1.md`,
-sha256 `05988b23…`) and corrected through ten addenda, each committed separately with its own
+sha256 `05988b23…`) and corrected through dated addenda (ADDENDUM-01–25 at the time of deposit v0.4.0), each committed separately with its own
 sha256. Addenda written after data were seen say so in their own text; ADDENDUM-10 §0 is explicit
 about this, and reports how much it moved the numbers (§7).
 
@@ -129,7 +129,7 @@ reproducibility of the rules across independent readings, not agreement with a h
 | Anchors (drift check) | 12/12 known hits, 8/8 known non-hits, 75 % exact class | `data/port/presisjon-resultater.json` |
 | **Inter-coder agreement, hit decision** | **κ = 0.81 [0.70–0.91]**, raw 96.2 % | `ADDENDUM-11.md` §4 |
 | Inter-coder agreement, class | κ = 0.73 [0.48–0.94] on 30 items | same |
-| Second coder: precision / M1 corrected / liftable | 12.7 % [8.3–18.9] / 0.604 / 2 of 19 | same §5 |
+| Second coder: precision / M1 corrected / liftable | 12.7 % [8.3–18.9] / 0.604 / 2 of 17 resolved = 11.8 % [3.3–34.3]; unresolved 2 of 19 | same §5; liftable share per `docs/KORRIGENDUM-2026-09-28-frys-v0.4.0.md` § B |
 
 **The distribution of obstacle classes is the finding.** Seventeen of the 25 true hits that survived
 reading (68 %) fall in class H7, *the data did not exist*: never recorded, not preserved, or never
@@ -178,10 +178,13 @@ themselves. Prevalence figures for computation-heavy fields inherit that blur.
 
 **The judge is a weak instrument in both directions.** Precision is 16.7 %, and the miss rate among
 non-hits is 2.0 %, which across 20,070 non-hit passages implies roughly as many missed true hits as
-found ones (`LAERDOM §16`). In an earlier blind evaluation on 110 passages, the same prompt reached
-81.8 % recall and 95.7 % precision with exact class agreement of 45.5 % (`LAERDOM §6`); performance
+found ones (`LAERDOM §16`). In an earlier blind evaluation on a curated set of 110 passages — 55 known hits
+and 55 negatives — the same prompt found 45 of the 55 known hits (81.8 %), and 45 of its 47 flags were
+correct (95.7 %), with exact class agreement of 45.5 % (`LAERDOM §6`). These are shares of a curated set,
+not recall and precision in the material; performance
 on the full corpus was substantially worse, and that discrepancy is reported rather than resolved. The humanities/biomedicine
-split was 72.0 % recall in the humanities against 90.0 % in biomedicine (`LAERDOM §9`).
+split, on the same kind of curated set, was 72.0 % of known hits found in the humanities against 90.0 %
+in biomedicine (`LAERDOM §9`).
 
 **Frame skew.** Retrievability, not open-access status, selects the frame. ScienceDirect fell from
 1,994 to 30 works, IOP from 1,221 to 4, while arXiv rose from 4.7 % to 14.5 % of the frame and MDPI
@@ -192,7 +195,7 @@ channels, and every prevalence figure inherits that displacement.
 
 PS-246, a true hit in class H5: a 2016 thesis on cropmarks could not enter its **measured matric
 density** into the Saxton–Rawls soil-water equations, because the SPAW tool fixes particle density at
-2.65 Mg/m³; field capacity came out above saturation, and the author applied a correction factor of
+2.65 Mg/m³; field capacity came out above saturation, and the thesis applied a correction factor of
 2.22 instead (`docs/PS-246-KRITERIUM.md`).
 
 The success criterion was locked before computation (sha256 `137bde50…`, commit `59d4221`). The
@@ -209,8 +212,8 @@ reproduced exactly — before the thesis data were touched (`tests/test_saxton_r
 
 **Neither an AI axis nor a time axis.** Saxton and Rawls (2006) appeared ten years before the
 thesis, and the equations were available throughout. What was missing was time and a tool that accepted
-the measured value. The author had also stated the expected outcome without carrying out the computation; once carried
-out, it holds for two of the four horizons they named. The decisive limitation
+the measured value. The thesis also states the expected outcome without the computation; carried
+out, it holds for two of the four horizons it names. The decisive limitation
 was not the equations but legibility: the measured particle densities exist only as figures without a
 text layer, and that reading error alone determines the sign for both marginal horizons.
 
@@ -263,11 +266,12 @@ different links in the chain point the same way: whether a parked question can b
 by the infrastructure around publication, not by the content of the field. A blind test of the work
 classifier on five drawn works — verdicts written before the scores were opened — was right in four,
 and the one miss had a measured systematic cause: the caption patterns were English-only, which put
-seven works in the closed bucket for language alone. The error is one-sided: a missing pattern can
+six works in the closed bucket for language alone (a seventh with non-English captions is correctly
+closed; `ADDENDUM-13 §5`). The error is one-sided: a missing pattern can
 only make a work look more closed than it is.
 
-**Liftability is dated.** The strongest liftable candidate — three British Library manuscripts, 93
-manuscript pages, left uncollated in a 2019 thesis — was H1 (human reading at scale) when the thesis
+**Liftability is dated.** The study's positive control for H1 — a 2019 thesis outside the 100 sampled
+works, whose collation of three British Library manuscripts (93 manuscript pages) was left undone — was H1 (human reading at scale) when the thesis
 was written and has been H8 (access) since October 2023, because the library's digitised images have
 not returned to open channels (`docs/HERON-KOLLASJON-VURDERING-v1.md`; ADR-0010). A liftability table is dated at
 the moment it is written, and a register that cannot record that has recorded something false.

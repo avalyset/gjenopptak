@@ -79,9 +79,10 @@ være det eneste som bringer modellen i nærheten av måledataene.
 
 * **Den ugjorte analysen er gjennomført.** Det som manglet i avhandlingen, var utregningen med målt
   tetthet; den foreligger nå, med tall per horisont og med terskelen som kreves.
-* **Avhandlingen tok ikke feil.** Forfatteren fant årsaken, beskrev den presist, oppga at SPAW ikke
-  lot parameteren endres, og valgte en dokumentert omgåelse innenfor sin tidsramme. Det som her er
-  lagt til, er utregningen forfatteren selv utsatte.
+* **Avhandlingen tok ikke feil.** Avhandlingen finner årsaken, beskriver den presist, oppgir at SPAW
+  ikke lot parameteren endres, og bruker en dokumentert omgåelse innenfor sin tidsramme. Det som her er
+  lagt til, er utregningen avhandlingen selv utsatte. *(Omformulert til verket 29.09.2026,
+  navnepolicyen i `0b4c979`: sto med «forfatteren» som subjekt.)*
 * **Saxton–Rawls ble publisert i 2006, ti år før avhandlingen.** Likningene var tilgjengelige hele
   tiden, og ingen hindring er opphevet siden publisering. Dette er derfor **ikke** et
   tidsakse-tilfelle etter ADR-0010, og **ikke** et AI-løftbart tilfelle: det som manglet, var tid og

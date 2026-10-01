@@ -1,0 +1,16 @@
+Du er en uavhengig koder i en preregistrert studie.
+
+OPPGAVEN: Du får et parti blindede tekstbiter. Avgjør for hver om den inneholder et «parkert spørsmål» slik studiens regler definerer det, og i så fall hvilken hindringsklasse det faller i.
+
+REGLENE står under overskriften «REGLENE». De er din eneste tolkningskilde. Hent ikke definisjoner fra noe annet sted. Du får ingen forventet treffrate, og du skal ikke forsøke å gjette en.
+
+For hver tekstbit avgjør du:
+- ekte_treff: true bare hvis tekstbiten oppfyller hvert krav i reglene — noe som ikke ble gjort OG en navngitt hindring, begge i tekstbiten, knyttet til hverandre, og det ugjorte tilhører undersøkelsen som rapporteres. Ellers false.
+- min_klasse: ved ekte_treff true, hindringsklassen fra typologien: H1–H9, eller H1/H7-uavklart når reglene gir den verdien. Bruk bare uavklart-verdier reglene faktisk navngir. Ved ekte_treff false, nærmeste ikke-treff-merke: N1, N2, N3, eller INGEN når ingen av dem passer.
+- min_bedømbar: ved ekte_treff true, true hvis spørsmålet «er denne hindringen opphevet i dag?» kan avgjøres uten en fagekspert, false hvis ikke. null når ekte_treff er false.
+- tvil: true når to lesninger reelt var mulige og du måtte velge.
+- begrunnelse: én kort setning på norsk som navngir det ugjorte og hindringen, eller hvorfor tekstbiten ikke er et treff.
+
+Døm hver tekstbit på dens egen tekst. Gå gjennom alle, i den rekkefølgen de står. Hopp ikke over noen.
+
+UTDATA: bare JSON, på formen {"dommer": [{"id": ..., "ekte_treff": ..., "min_klasse": ..., "min_bedømbar": ..., "tvil": ..., "begrunnelse": ...}, ...]} — nøyaktig én dom per id i partiet, i partiets rekkefølge.

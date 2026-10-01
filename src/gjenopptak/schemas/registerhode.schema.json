@@ -12,7 +12,8 @@
     "n_rader",
     "n_dømt",
     "forbehold",
-    "adr"
+    "adr",
+    "navnepolicy"
   ],
   "properties": {
     "kjøring": {
@@ -39,7 +40,9 @@
       "required": [
         "stabil_kjerne",
         "n3_spredning",
-        "ikke_prosa"
+        "ikke_prosa",
+        "leser_datert",
+        "silrecall"
       ],
       "properties": {
         "stabil_kjerne": {
@@ -53,6 +56,17 @@
         "ikke_prosa": {
           "type": "string",
           "description": "merket, aldri fjernet"
+        },
+        "leser_datert": {
+          "type": "string",
+          "description": "Leseren er datert og lesningen er ikke gjentakbar. En agentisk økt kan ikke spilles av på nytt: modellen er en tjeneste uten versjonsnummer vi kan feste, og øktens kontekst bygges av leserens egne mellomresultater. Samme regelfil, samme passasjer, samme frø og samme kommando gir ikke nødvendigvis samme register. Ledd 1–6 og 8–10 er determinerte; ledd 7 er det ikke (METODE §9)."
+        },
+        "silrecall": {
+          "type": "string",
+          "description": "Silens recall er «ikke målt», og det er tilstanden, ikke en formulering. Presisjon er målt per silkilde; recall kan ikke måles av dette materialet fordi teller og nevner begge er dommerbetinget. Et tall skal ikke oppgis, verken som anslag eller intervall (METODE §8).",
+          "enum": [
+            "ikke målt"
+          ]
         }
       }
     },
@@ -65,6 +79,13 @@
     "register_innhold_sha256": {
       "type": "string",
       "description": "uten daterte felter; den sha en røyktest kan bruke"
+    },
+    "navnepolicy": {
+      "type": "string",
+      "description": "Navnepolicy: verk, ikke person. En rad viser til et verk ved `doc_id`; vurderinger i prosa adresseres til verket (W-id, avhandlingen, artikkelen), aldri til forfatteren. Navn beholdes i siteringsform slik at verket kan finnes. Fullt navn, institusjon og filnavn hører ikke i prosa.",
+      "enum": [
+        "verk, ikke person"
+      ]
     }
   },
   "additionalProperties": false

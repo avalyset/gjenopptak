@@ -40,3 +40,11 @@ kan angres om originalen er kastet.
   og mer arbeid i klassifiseringen. Det er akseptert.
 - Setninger uten seksjonsetikett er gyldige og går videre med tom `section_raw`. De telles for seg,
   slik at «ukjent seksjon» ikke skjules i en samlekategori.
+
+## Tillegg 2026-09-28: belegget for seksjonsplasseringen
+
+Setningen om at energikontrollens avgjørende setning står i en resultatseksjon, er **uverifisert**:
+ADDENDUM-02, -03, -04 og -08 fører seksjonen som «fortsatt uverifisert», og teksten er ikke hentbar på
+den offentlige ruten (ADDENDUM-08 § 3.2). Eksempelet med belegg er arkeologikontrollen
+(10.1038/s41467-019-11357-9), der den parkerte setningen står i en resultatseksjon om AMS-datering og er
+hentet som JATS (ADDENDUM-02 § 2.2). Beslutningen hviler på det eksempelet.

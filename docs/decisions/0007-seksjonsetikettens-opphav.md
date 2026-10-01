@@ -17,7 +17,8 @@ ADDENDUM-01 §5 viste at forutsetningen ikke holder i to av fire felt. Europe PM
 som leverer forlagets egen JATS, ga null treff i historisk tekstvitenskap (0 av 25
 kontrollerte) og null i energisystemmodellering (0 av 48). Begge nullresultatene
 ble armert med en kjent Europe PMC-artikkel som traff i samme forespørselssett, så
-de er reelle: JATS-ruten finnes ikke i de feltene.
+de er reelle: JATS-ruten finnes ikke i de feltene. *(Rettet 30.09.2026, frys-lesning 4: nullene er utvalgsnull,
+ikke påvist fravær — KORRIGENDUM-2026-09-28 § D.)*
 
 Der må teksten hentes som PDF og parses med GROBID. En GROBID-seksjon er ikke
 kildens merking. Den er en parsers slutning fra sidelayout, skriftstørrelse og

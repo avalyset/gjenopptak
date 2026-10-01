@@ -1,13 +1,20 @@
-# SAK-08 — lukket på `[V]`. Klasse **H8**: modellkoden er ikke deponert noe sted.
+# SAK-08 — lukket på `[V]`. Klasse **H8**: modellkoden er ikke funnet i seks sjekkede ruter; forlagets tilleggsmateriale er uavklart (HTTP 403).
+
+*(Overskriften rettet 28.09.2026, frys-lesningen: sto «modellkoden er ikke deponert noe sted», som
+teksten selv sier ikke er målt for forlagets rute.)*
+
+*(Rettet 28.09.2026, frys-lesning 2: verket står i siteringsform, og fullt navn, institusjonsnavn,
+PDF-filnavn, ORCID-iD og GitHub-kontonavn er tatt ut av prosaen, etter navnepolicyen, jf. commit
+`0b4c979`. Rutetabellen fører nå at triagens OSF-rute ikke er sjekket.)*
 
 **27.09.2026. Ingen terskel beregnet, ingen kriteriefil låst** — `[V]`-sjekken avgjorde saken først,
 slik triagen forutsatte: «Uten kode: H8/H7, lukket.»
 
 **Sak:** `W2784603861`, passasje AL-1280, feltet arkeologi, klasse **H5 regnekraft**.
-**Verket:** Philip Riris, «Assessing the impact and legacy of swidden farming in neotropical
-interfluvial environments through exploratory modelling of post-contact land use change»,
-*The Holocene* **28**(6), 945–954, 2018. DOI `10.1177/0959683617752857`. Grønn OA: den aksepterte
-versjonen ligger åpent i Bournemouth University Research Online.
+**Verket:** `W2784603861`, artikkel 2018 (Riris 2018), «Assessing the impact and legacy of swidden
+farming in neotropical interfluvial environments through exploratory modelling of post-contact land use
+change», *The Holocene* **28**(6), 945–954. DOI `10.1177/0959683617752857`. Grønn OA: den aksepterte
+versjonen ligger åpent i det institusjonelle arkivet (eprints-post `33470`).
 
 ## Det ugjorte, ordrett fra artikkelen
 
@@ -29,16 +36,20 @@ cellulær automat i **NetLogo 6.0.1** over en terrengmodell på **609 × 426 cel
 
 ## `[V]`-sjekken: kode og data for modellen. **Faller.**
 
-Slått opp **27.09.2026**. Triagen navnga fire ruter; jeg sjekket dem og to til.
+Slått opp **27.09.2026**. Triagen navnga fire ruter — artikkelens datatilgang, det institusjonelle
+arkivet, OSF og GitHub. Jeg sjekket tre av dem og tre til; **OSF er ikke sjekket som depot**, bare som
+tekststreng i artikkelen. *(Rettet 28.09.2026: sto «jeg sjekket dem og to til»; tabellen hadde CoMSES der
+triagen hadde OSF.)*
 
 | rute | utfall |
 |---|---|
 | artikkelens egen datatilgang (akseptert versjon, 59 634 tegn) | **ingen** datatilgjengelighetserklæring. 0 treff på «data availab*», 0 på «model code», 0 på github/osf.io/comses/zenodo/figshare/dryad. `NetLogo` nevnes 3 ganger, alle som programvarereferanse (Wilensky 1999), aldri som deponert fil |
-| Bournemouth eprints, post `33470` | **én fil**: `/33470/7/Riris_2018_accepted.pdf`. Ingen tilleggsmateriale, ingen `.nlogo` |
-| CoMSES Computational Model Library | **ingen modell** av Riris. Søket ga seks urelaterte kodebaser |
-| GitHub | ingen forfatterkonto med repoer (`priris`, `philipriris` finnes ikke; `riris` har 0 repoer). Emnesøk på `Piaroa` og `Cuao` gir bare urelaterte treff |
+| det institusjonelle arkivet (eprints), post `33470` | **én fil**: den aksepterte versjonens PDF. Ingen tilleggsmateriale, ingen `.nlogo` |
+| OSF | **ikke sjekket** som depot. Bare tekststrengen «osf.io» er søkt i artikkelen (0 treff, raden over) |
+| GitHub | **ingen kodedepot funnet** for verket, verken ved kontosøk eller ved emnesøk på `Piaroa` og `Cuao`, som gir bare urelaterte treff |
+| **CoMSES Computational Model Library, i tillegg** | **ingen modell** av Riris. Søket ga seks urelaterte kodebaser |
 | **Crossref, i tillegg** | DOI-en har **ingen registrerte relasjoner** — ingen komponent-DOI, ingen datasett-relasjon, intet tilleggsmateriale |
-| **ORCID, i tillegg** | `0000-0003-4244-7495` (Philip Riris), 18 verk, **ingen `DATA_SET` og ingen `SOFTWARE`**. Artikkelen er registrert som `journal-article` alene |
+| **ORCID, i tillegg** | forfatterens ORCID-post, 18 verk, **ingen `DATA_SET` og ingen `SOFTWARE`**. Artikkelen er registrert som `journal-article` alene |
 
 ### Den ene ruten jeg ikke fikk lest, ført som uavklart
 
@@ -46,7 +57,7 @@ Forlagets egen side, `journals.sagepub.com/doi/10.1177/0959683617752857` og `/do
 **HTTP 403** med en botport («Just a moment…»). **Jeg omgikk den ikke.** Om den publiserte versjonen
 har tilleggsmateriale, er derfor ikke avklart av meg. Det svekker `[V]`-konklusjonen på ett punkt, og
 det står her i stedet for å bli utelatt. To ting taler for at det ikke finnes: Crossref registrerer
-ingen komponenter for DOI-en, og OpenAlex kjenner ingen annen lokasjon enn Bournemouth-PDF-en
+ingen komponenter for DOI-en, og OpenAlex kjenner ingen annen lokasjon enn arkivets PDF
 (`best_oa_location`, `oa_status: green`, fra rammelisten, ingen nye kreditter brukt).
 
 ## Saken feiler også sin egen forutsetning — uavhengig av 403-en

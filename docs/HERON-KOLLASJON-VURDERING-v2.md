@@ -5,8 +5,8 @@ superseded. v1 konkluderte på BLs status alene. v2 legger til kartleggingen ute
 førte som åpen post, og **snur begrunnelsen: hindringen er ikke at materialet mangler, men at de
 filene som finnes, er utenfor rekkevidde.**
 
-Verket: W3000588547 = 10.5525/gla.thesis.76774, **Francesco Grillo**, *Hero of Alexandria's
-Automata: a critical edition and translation*, PhD, Glasgow 2019. Klassen sto H1 i 2019 (tidsrammen),
+Verket: W3000588547 = 10.5525/gla.thesis.76774, doktoravhandling 2019 (Grillo 2019), *Hero of
+Alexandria's Automata: a critical edition and translation*. Klassen sto H1 i 2019 (tidsrammen),
 H8 fra oktober 2023 (tilgang). Ingen bilder lastet ned. Ingen bestilling gjort.
 
 ## 1 Håndskriftene, nå med Pinakes-identitet
@@ -149,7 +149,7 @@ britiske bibliotek som kan ha bestilt BL-film. **Ingen søk gjort.** At HMMLs pa
 europeiske samlinger framfor BL, er en antakelse, ikke en måling. Cambridge (CUDL) har et eget
 Heron-håndskrift, Trinity O.4.9 — et annet vitne, ikke et surrogat av våre.
 
-## 11 Grillo/Ruffell-sporet: noen har hatt filene
+## 11 Avhandlingens bildetilgang: konsultert, trolig på nett
 
 Avhandlingens egen formulering skiller skarpt mellom leverte reproduksjoner og konsulterte bilder:
 
@@ -159,7 +159,7 @@ Avhandlingens egen formulering skiller skarpt mellom leverte reproduksjoner og k
 > manuscripts came to my attention too late to be examined and collated for the purposes of the
 > constitutio textus and the stemmatic analysis.»
 
-**Takkeseksjonen lister tolv bibliotek som ga ham reproduksjoner, og British Library er ikke blant
+**Takkeseksjonen lister tolv bibliotek som leverte reproduksjoner, og British Library er ikke blant
 dem** (0 forekomster av «British Library» i takkeblokken): Biblioteca Angelica Roma, BNC Firenze,
 BNE Madrid, Marciana Venezia, BNU Torino, **Bodleian Oxford**, Det Kongelige Bibliotek København,
 HAB Wolfenbüttel, ÖNB Wien, El Escorial, UB Amsterdam, Ambrosiana Milano — pluss tilgang på lesesal
@@ -170,37 +170,45 @@ Digitised Manuscripts, konsultert på nett** mens viseren var oppe. Ordvalget i 
 nettopp mellom «provided me with reproductions» og «able to consult images», og BL mangler i
 leverandørlisten. Dette er ikke belagt av et dokument som sier det rett ut.
 
-**Fotnote 83, ordrett:**
+**Fotnote 83, parafrasert:** avhandlingen (fotnote 83) tilskriver utsettelsen av kollasjonen råd fra
+veiledningen, ikke materialets tilstand.
 
-> «These three manuscripts first came to my attention after my primary supervisor learned about them
-> (see Ruffell 2016). Because of the tight timescale for the completion of the thesis, and because
-> other in situ collations had yet to be carried out, it was decided to postpone collating Bd, Ha and
-> Hb until I should be able to revise the thesis for publication (Prof. Costas Panayotakis, personal
-> communication, June 14, 2017).»
+*(Omformulert 29.09.2026 etter eierens avgjørelse: det ordrette sitatet av fotnote 83 er erstattet med
+parafrase, uten navn, dato eller ordlyd fra den personlige meddelelsen fotnoten viser til. Henvisningen
+til avhandlingen og fotnotenummeret står.)*
 
-Personene: forfatter **Francesco Grillo**; hovedveileder **prof. Isabel Ruffell**; prosjektet «Hero
-of Alexandria and his theatrical automata» med **dr. Euan McGookin**, 2014–2017; **prof. Costas
-Panayotakis** tok beslutningen om å utsette.
+Rammen, i roller: avhandlingen ble skrevet under en hovedveileder og i tilknytning til prosjektet «Hero
+of Alexandria and his theatrical automata», 2014–2017.
 
 ## 12 Konklusjon
 
 **H8 står per 2026-09-26.** Men begrunnelsen er ny, og skarpere enn i v1:
 
-**Hindringen er tilgang til filer som finnes, ikke fravær av materiale.** Alle tre er komplett
-digitalisert — ARCA fører BLs digitalisering som «intégral … FAIT», Wayback beviser at flisene lå
-ute, og avhandlingens forfatter har sett bildene. Ingen uavhengig film eksisterer noe sted som lot
-seg sjekke, men det er ikke lenger det avgjørende: det avgjørende er at ferdige filer ligger hos BL
-og hos minst én forsker.
+**Hindringen er tilgang til filer som finnes, ikke fravær av materiale.** Bd og Hb er ført som
+komplett digitalisert i ARCA («intégral … FAIT»); for Ha, som ikke har ARCA-post (§ 4), viser Wayback at
+digitaliseringen fantes, og omfanget er ukjent. Avhandlingen oppgir at bildene ble konsultert. Ingen uavhengig film eksisterer noe sted som lot
+seg sjekke, men det er ikke lenger det avgjørende: det avgjørende er at ferdige filer ligger hos BL. Om
+noen forsker har egne kopier, er ukjent — § 11 er en slutning om at bildene var BLs egne, konsultert på nett.
 
 **Ruter, i rekkefølge etter pris:**
 
-1. **Forespørsel til Grillo/Ruffell.** Koster ingenting. Avhandlingen sier selv at kollasjonen skal
-   gjøres «when I revise the thesis for publication», så interessen er sammenfallende.
+1. **Forespørsel til verkets opphav.** Koster ingenting. Avhandlingen utsetter selv kollasjonen
+   «until I should be able to revise the thesis for publication» (fotnote 83), så interessen er sammenfallende.
 2. **De tre utestede plansjesporene:** RGK 1c, Cataldi Palau 2000, Giacomelli 2019. Gir i beste fall
    én foli hver — nok til håndidentifikasjon, ikke til kollasjon.
 3. **Bestilt digitalisering hos BL.** «Imaging services and digitisation» er oppført som tilgjengelig.
-   Omfang: ~93 folier / **~186 sider**. Sikker, men koster.
+   Omfang: ~47 folier / **93 sider** (38 + 17 + 38, § 1). Sikker, men koster.
 4. **Lesesal med Reader Pass.** Postene finnes i interimkatalogen; bestillingsskjemaet er live.
 
 **For registeret:** utløseren bør ikke lenger være «bildene tilbake i åpen kanal» — det er bare én
 av fire ruter, og ikke den billigste.
+
+*Rettet 28.09.2026 (frys-lesningen før v0.4.0), § 11–12: utsettelsen er ikke lenger tilskrevet en navngitt
+person; «alle tre komplett digitalisert» gjelder bare Bd og Hb; «filer hos minst én forsker» er en slutning;
+sitatet er gjort ordrett; bestillingsomfanget var fordoblet (sto ~93 folier / ~186 sider).*
+
+*Rettet 28.09.2026 (frys-lesning 2), navnepolicyen, jf. commit `0b4c979`: verket står i siteringsform
+uten fullt navn og institusjon; personlisten i § 11 er gjort om til roller; overskriften til § 11 festet
+påstanden «noen har hatt filene», som § 11 selv ikke belegger, til to navngitte personer; rute 1 navnga
+de samme to. Fotnote 83 står ordrett med navnene den selv bærer.* *(Foreldet 29.09.2026: fotnote 83 er erstattet
+med parafrase uten navn, dato eller ordlyd, § 11 og NAVNEKONTROLL-2026-09-29.)*

@@ -5,9 +5,13 @@
 «Finnes ressursen i dag» er merket **[V]** der det må slås opp av CC før kriteriet låses — ingen
 av dem er antatt sanne her.
 
+*(Rettet 28.09.2026, frys-lesning 2: overskriftene for SAK-09c og SAK-09b og ruten for SAK-08 bar
+institusjonsnavn; verket står nå i siteringsform og arkivet som «det institusjonelle arkivet», etter
+navnepolicyen, jf. commit `0b4c979`.)*
+
 ## Strukturelt funn
 
-50 passasjer er **17 saker**. 23 passasjer er ett ugjort (Pring 2016, SPAW/partikkeltetthet);
+50 passasjer er **19 saker** (SAK-01 til SAK-17, med SAK-09 delt i 09a/d, 09b og 09c). *(Rettet 28.09.2026: sto «17 saker», som teller SAK-09 som én; enheten er verk × hindring.)* 23 passasjer er ett ugjort (Pring 2016, SPAW/partikkeltetthet);
 fire er samme setning i to overlappende vindu. Enheten for sakbehandling er **verk × hindring**.
 Registeret bør bære en sak-id som grupperer passasjer (B3-tillegg: `sak`-felt, gruppert på
 verk + hindringens kjerneord; ingen ny måling).
@@ -27,7 +31,7 @@ avviker fra den franske gjengivelsen på den aksen avhandlingen argumenterer (kj
 status) — rapportert som N uten terskel, negativt utfall likt. Kostnad: lav. Ingen fysisk ressurs.
 **Første sak å kjøre.**
 
-### SAK-09c · Toronto-avhandling 2018 (W7133020405) · H1/H7-uavklart · **AI-aksen**
+### SAK-09c · Aragao 2018 (W7133020405) · H1/H7-uavklart · **AI-aksen**
 AL-2606. Ugjort: automatisk generering av avhandlingens begrepsnettverk fra casestudie-tekstene;
 avhandlingen skriver at teknologien «kanskje alt finnes» men at oppgaven ikke er triviell med få
 tekstressurser og umoden AI (2018). Hva opphever: LLM-ekstraksjon av begreper og relasjoner.
@@ -40,12 +44,12 @@ skrevet før kjøring); fast ledetekst med sha; opphevet hvis node-recall ≥ 0,
 ### SAK-08 · Riris 2018 (W2784603861) · H5 regnekraft
 AL-1280. Ugjort: kjøringene delt i to sett fordi kontinuerlig målte kjøringer tok uoverkommelig
 lang tid. Hva opphever: regnekraft og tid. Ressurs: kode og data for modellen **[V]** — sjekk
-artikkelens datatilgang, Bournemouth eprints, OSF, GitHub. Kriterium: (1) reproduser artikkelens
+artikkelens datatilgang, det institusjonelle arkivet (eprints), OSF, GitHub. Kriterium: (1) reproduser artikkelens
 rapporterte tall for de to separate settene før noe nytt kjøres (PS-246-mønsteret); (2) kjør alle
 som ett sammenhengende sett; opphevet hvis fullført på Macen innen 24 t; resultat: om
 konklusjonene endres, rapportert uansett retning. Uten kode: H8/H7, lukket.
 
-### SAK-09b · Toronto-avhandling 2018 · H5 verktøygrense
+### SAK-09b · Aragao 2018 (W7133020405) · H5 verktøygrense
 AL-0852. Ugjort: Pajek kan ikke tvinge like partisjoner for mellomnivåets noder i to-modus
 blokkmodellering. Hva opphever: annet verktøy med forhåndsgitt blokkstruktur (R-pakken
 `blockmodeling`, generalisert to-modus) **[V]** — merk: fantes trolig i 2018, så dette er
@@ -166,7 +170,7 @@ electrical conductivity and electrical permittivity of the soil».
 
 **Nei, og det er det som gjelder:** EC-en er **ikke rapportert som data**. Den er et mellomledd —
 «post-processing of the data returns a volumetric water content». Søk i hele avhandlingen
-(581 864 tegn): **`dS/m` 0 treff, `ECe` 0 treff, «saturated paste» 0 treff, «soluble salts» 0 treff**,
+(581 864 bytes, 579 109 tegn *(rettet 30.09.2026: sto «581 864 tegn»)*): **`dS/m` 0 treff, `ECe` 0 treff, «saturated paste» 0 treff, «soluble salts» 0 treff**,
 og den **eneste** EC-verdien som forekommer, er `0.0μS/cm` — verdien som ble *satt*, ikke målt:
 
 > «Though the soil water characteristic module allows assessment of osmotic SWCC with electrical
@@ -184,3 +188,11 @@ Fire av fire nei, og ingen av dem fordi feltet er dødt — Pietrele er sitert 1
 81 treff. **Det ugjorte i disse fire sakene er ikke noe andre har tatt opp**, selv der feltet er
 aktivt. Det er et eget funn om ledd 2: en hindring blir ikke opphevet av at feltet arbeider videre i
 nærheten. Alle fire står nå med utløser, og utløseren for SAK-17 er den mest sannsynlige å slå til.
+
+## Datert tillegg 28.09.2026 — SAK-08-utfallet, i LUKKET-ordlyden
+
+Planen over sier «Uten kode: H8/H7, lukket». Sjekken av `[V]` fant ikke at koden mangler — den fant at
+modellkoden **ikke funnet i seks sjekkede ruter**; forlagets tilleggsmateriale er uavklart (HTTP 403), og at triagens OSF-rute ikke ble sjekket
+(`saker/SAK-08/LUKKET.md`). Saken er lukket på H8 med utløser, men utfallet skal omtales som **ikke funnet i
+seks sjekkede ruter**, ikke som «uten kode» eller «ikke deponert».
+

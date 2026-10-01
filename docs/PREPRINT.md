@@ -28,6 +28,10 @@ endring i PDF-en eller i preprintens felt er derfor nødvendig. Merk at 22975301
 publisering — DataCite-registreringen henger etter — så den versjons-DOI-en bør ikke oppgis videre
 før et ferskt oppslag gir 302.
 
+**Datert tillegg 28.09.2026:** gjeldende versjon er nå **0.3.0**, versjons-DOI **10.5281/zenodo.22976464**
+(publisert 26.09, `docs/ZENODO.md`). Avsnittet over gjelder tilstanden før den. Konsept-DOI-en er uendret,
+og det som er ført på preprinten, trenger fortsatt ingen endring.
+
 ## Åpne poster
 
 1. **ORCID er koblet til kontoen — rettelse 2026-09-26.** Den forrige oppføringen her sa at ORCID

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/avalyset/gjenopptak/schemas/kandidat.schema.json",
   "title": "Kandidatrad — registerformat claims-2 med usikkerheten på raden",
-  "description": "Én rad = ett bekreftet treff. Byggeplanen B3: hver rad bærer sin egen usikkerhet, så tallet kan ikke leses uten forbeholdene som gjelder akkurat den raden. Feltene fra claims-2 er uendret; sil, leser, verksniva og cites_coverage er lagt til.",
+  "description": "Én rad = ett bekreftet treff. Byggeplanen B3: hver rad bærer sin egen usikkerhet, så tallet kan ikke leses uten forbeholdene som gjelder akkurat den raden. Feltene fra claims-2 er uendret; sil, leser, verksniva og cites_coverage er lagt til. NAVNEPOLICY: raden viser til et VERK ved `doc_id`, ikke til en person. Vurderinger i dokumenter som bygger på raden, adresseres til verket — W-id, avhandlingen, artikkelen — aldri til forfatteren. Navn beholdes i siteringsform slik at verket kan finnes; fullt navn, institusjon og filnavn hører ikke i prosa.",
   "type": "object",
   "required": [
     "schema_version",
@@ -38,7 +38,7 @@
     },
     "doc_id": {
       "type": "string",
-      "description": "OpenAlex work id"
+      "description": "OpenAlex work id. Dette er radens ENESTE identifikator for opphavet, og den er med vilje et verk og ikke en person: en vurdering skal kunne knyttes til et dokument uten å bli en påstand om et menneske."
     },
     "field_key": {
       "type": "string"

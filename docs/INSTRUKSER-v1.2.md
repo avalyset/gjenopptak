@@ -31,10 +31,10 @@ men er filarbeid uten måling. De hører i en instruksfil, ikke i et strategidok
 |---|---|---|
 | **MASTER** | `/Volumes/Vault/gjenopptak-kilder/master/arkiv/`, navngitt av `POINTER.txt` | **committes aldri til git** |
 | versjonsbump | `~/bin/bump-master.sh bump gjenopptak --minor` | leser versjonen fra headeren, aldri fra kalleren; gjør alle tre stegene i én operasjon og selvverifiserer |
-| repo | `~/dev/gjenopptak`, offentlig på `https://github.com/avalyset/gjenopptak` | én rotcommit `5fcb353`; full historikk ligger i Zenodo-bundlene, ikke offentlig |
+| repo | `~/dev/gjenopptak`, offentlig på `https://github.com/avalyset/gjenopptak` | offentlig gren = rotcommit `5fcb353` + én utgivelsescommit per MASTER-versjon (`967254a` = v0.3); `main` pushes aldri (ADR-0012, datert tillegg); full historikk ligger i Zenodo-bundlene |
 | materiale | `/Volumes/Vault/gjenopptak-kilder/` | 25 GB, 20 000+ filer; **`data/` er gitignorert** (ADR-0001) |
 | manifest | `Vault: MANIFEST-VAULT.md` | sti, bytes, sha256, tidspunkt og opphav per sikret fil; **3 010 rader** per 28.09 |
-| kanon-bundler | `Vault: repo/kanon/` | `git bundle --all` per låsecommit, **38 bundler** |
+| kanon-bundler | `Vault: repo/kanon/` | `git bundle --all` per låsecommit; antallet står i katalogen (41 per 28.09.2026) |
 | Zenodo | konsept-DOI `10.5281/zenodo.22959326` | **siter konsept-DOI-en**, ikke en versjons-DOI |
 | patcher til MASTER | `docs/patch/` | skrives som fil, påføres ved bump — aldri rett inn i MASTER mellom bumper |
 
@@ -102,17 +102,17 @@ Flyttet hit fra MASTER § 9 den 28.09.2026. Ingen av dem er en måling; alle er 
 2. **«Én koder» i `PREREG-v1.md` § 4 og `ADDENDUM-06.md`**, innhentet av ADDENDUM-11. Begge filene er
    låst. Rettelsen bor i `docs/INNHENTET-2026-09-26-en-koder.md`, pekt til fra README. **Skal aldri
    redigeres inn i de låste filene.** Samme frase i ADDENDUM-06 § 1.6 er fortsatt sann, men gjelder bare
-   recall-fasiten.
+   recall-fasiten. Samme innhenting gjelder ADDENDUM-02 § 5 og ADDENDUM-08 (INNHENTET § 3, 28.09.2026); øvrige
+   funn i låste filer fra frys-lesningen står i `docs/KORRIGENDUM-2026-09-28-frys-v0.4.0.md`.
 3. **Forretningsadressen i `ADDENDUM-03.md` linje 197** — OpenAlex' polite-pool-konvensjon ført som
    `mailto=`-parameter i en måletabell. Låst fil. Skal den bort, hører det i et datert korrigendum, ikke
    i en redigering. Ingen hemmelighet; adressen er prosjektets kontaktpunkt.
-4. **`CITATION.cff` sier 0.3.0**, mens kjeden, ADR-0012, B1–B7 og registerformatet er nyere. **Bumpes
-   sammen med neste Zenodo-versjon, ikke før** — en release uten bump siterer feil tilstand, men en bump
-   uten release gjør det samme.
+4. ~~**`CITATION.cff` sier 0.3.0**~~ — **utført:** `CITATION.cff` er bumpet til 0.4.0 (28.09.2026) sammen
+   med v0.4.0-utgivelsen. Regelen står for neste gang: bumpes sammen med Zenodo-versjonen, ikke før.
 
 **Det som *ikke* er hygiene, og derfor står igjen i MASTER § 9:** eierens valg om den private e-posten i
-de fire Zenodo-postene, de tre utløserne fra fase 2, ADDENDUM-21 arm A, at ingen ekstern har lest koden,
-og at ti commits ikke er pushet. Alle fem krever en beslutning eller en hendelse, ikke en filendring.
+de fire Zenodo-postene, de tre utløserne fra fase 2, ADDENDUM-21 arm A, og at ingen ekstern har lest
+koden. Alle fire krever en beslutning eller en hendelse, ikke en filendring.
 
 ## 5 Der det har gått galt før
 

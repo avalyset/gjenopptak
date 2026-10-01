@@ -1,21 +1,23 @@
 # Zenodo-deponeringen
 
-**Deponert:** 2026-09-25. **Gjeldende versjon:** 0.3.0 (2026-09-26).
+**Deponert:** 2026-09-25. **Gjeldende versjon:** 0.4.0 (2026-10-01). *(Sto til v0.4.0: «0.3.0 (2026-09-26)».)*
 
 | | |
 |---|---|
 | **Konsept-DOI** (siter denne) | **10.5281/zenodo.22959326** |
-| **Versjons-DOI** (v0.3.0, gjeldende) | **10.5281/zenodo.22976464** |
+| **Versjons-DOI** (v0.4.0, gjeldende) | **10.5281/zenodo.23073893** |
+| Versjons-DOI (v0.3.0) | 10.5281/zenodo.22976464 |
 | Versjons-DOI (v0.2.1) | 10.5281/zenodo.22975301 |
 | Versjons-DOI (v0.2.0) | 10.5281/zenodo.22965761 |
 | Versjons-DOI (v0.1.0) | 10.5281/zenodo.22959327 |
-| Post | https://zenodo.org/records/22976464 |
+| Post | https://zenodo.org/records/23073893 (v0.3.0: https://zenodo.org/records/22976464) |
 | Lisens på depositumet | CC BY 4.0 (koden inni er Apache-2.0, jf. `LICENSE`) |
-| Filer | 38 (v0.2.0: 38, v0.1.0: 35) |
+| Filer | 98 (v0.3.0: 38, v0.2.0: 38, v0.1.0: 35) |
 
 ## Hva som ligger der
 
-Protokollen (PREREG-v1) og de ti addendaene, de ti beslutningsnotatene, lærdomsloggen,
+Protokollen (PREREG-v1) med addendaene og beslutningsnotatene slik de sto ved hver versjon (v0.1.0:
+ADDENDUM-01–10; ADR-numrene 0005 og 0006 er brent og har aldri eksistert), lærdomsloggen,
 resultatnotatet, manuskriptutkastet, kriteriet og resultatet for det ene gjennomførte tilfellet
 (PS-246), vurderingene av løftbare kandidater, registeret (`claims.jsonl`), README og lisensfilene,
 kildekoden som tarball, `MANIFEST-VAULT.md` med sha256 for alt datamateriale, og **en bundle av hele
@@ -26,8 +28,8 @@ eksternt volum, oppført med sha256 i manifestet som er med.
 
 ## Tidsstemplingen
 
-Preregistreringen ble låst **internt** før data, 12. september 2026, og rettet gjennom ti addenda
-som hver er commitet alene med egen sha256. Den ble **ikke tidsstemplet hos tredjepart før denne
+Preregistreringen ble låst **internt** før data, 12. september 2026, og rettet gjennom daterte addenda
+(ti ved v0.1.0, ADDENDUM-01–25 per 28.09.2026) som hver er commitet alene med egen sha256. Den ble **ikke tidsstemplet hos tredjepart før denne
 deponeringen**. De interne låsedatoene er belagt av git-historikken alene — den ligger i depositumet
 som bundle, slik at rekkefølgen kan etterprøves, men en uavhengig garanti for at protokollen kom før
 dataene, finnes først fra 25. september 2026.
@@ -101,7 +103,7 @@ koderidentitet står nå med begge kodere. Ingen måling er gjort om; ingen verd
 | M2 | 87,5 % (21/24) | 88,0 % (22/25) · 31,6 % (6/19) |
 | presisjon | 16,0 % (24/150) | 16,7 % (25/150) · 12,7 % (19/150) |
 | presisjon energimodellering | 5,3 % | 7,0 % · 1,8 % |
-| løftbar andel | 4 av 24 = 16,7 % | 5 av 25 = 20,0 % · 2 av 19 = 10,5 % |
+| løftbar andel | 4 av 24 = 16,7 % | 5 av 25 = 20,0 % · 2 av 19 = 10,5 % *(koder 2 rettet 28.09.2026: løftbar 2 av 17 avklarte = 11,8 %, uavklart 2 av 19 = 10,5 %)* |
 | H7–H9-andel | 20 av 24 = 83,3 % | 20 av 25 = 80,0 % |
 | letekostnad | ~37 dømte treff per løftbart | ~30 · ~75 |
 | skalert løftbare | ~58 | ~72 · ~29 |
@@ -121,3 +123,24 @@ verdier over 13 filer.** Bakgrunnen står i LAERDOM § 24.
 
 **DOI-oppslag:** `10.5281/zenodo.22976464` svarte **HTTP 404** rett etter publisering, som ved
 v0.1.0 og v0.2.1. Konsept-DOI-en svarte **302**. Vent på 302 før versjons-DOI-en oppgis videre.
+
+## Versjon 0.4.0 (2026-10-01)
+
+**Versjons-DOI:** **10.5281/zenodo.23073893**. **Post:** https://zenodo.org/records/23073893 (98 filer). Konsept-DOI-en
+**10.5281/zenodo.22959326** er uendret og er den som siteres.
+
+**Hva som er nytt:** fase 2 (seks saker, ingen opphevet hindring), fase 3 (ADDENDUM-25: prospektiv port på 100 nye
+arkeologiverk, port (1) bestått med 85 av 100 [76,7–90,7], lista heter «arbeidsliste (prospektiv port)», og første
+målte silrecall, 95 av 104), ADDENDUM-12–25, ADR-0011–0014, METODE, manuskriptutkast v2.8 med sju
+faktasjekkrapporter, regelfilen bak κ = 0,812, leseroppdragene med sperreliste, blindfilene som indeks, nøklene til
+de ferdige målingene (nøkkelregelen i portstatusen § 6), ots-kvitteringer og en git-bundle av hele historikken.
+Hva som er utelatt og hvorfor: `docs/RELEASE-NOTES-v0.4.0.md`. Filkart mot v0.3.0 og portene:
+`docs/UTGIVELSE-v0.4.0-PORTSTATUS.md`.
+
+**DOI-oppslag:** ved hver tidligere versjon svarte en fersk versjons-DOI **HTTP 404** i timene etter publisering.
+Den oppgis ikke videre før et oppslag gir **302**. **v0.4.0 svarte 302 med en gang** (01.10.2026), og konsept-DOI-en
+likeså. Versjons-DOI-en ble reservert i utkastet før publisering.
+
+**Zenodo tillater høyst 100 filer per post.** v0.4.0 har 98: sakfilene, faktasjekkrapportene og leseroppdragene
+ligger i hver sin zip (`RELEASE-NOTES-v0.4.0.md`).
+

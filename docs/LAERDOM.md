@@ -16,7 +16,7 @@ Den eldre lærdommen om sikringssteg står for seg i `docs/laerdom-sikring.md`.
 
 ## 1 Markørfilteret finner ikke det ugjorte når det står som tilstand (2026-09-12)
 
-* **Målt:** recall og presisjon for markørfilteret (L2) mot manuell fasit.
+* **Målt:** recall og presisjon for markørfilteret (L2) mot en fasit kodet ved lesning, uten markørliste, av en LLM-koder *(rettet 28.09.2026: sto «manuell fasit»; koderen var en Claude-økt, ingen menneskelig annotør, INNHENTET-2026-09-26 § 4)*.
   * v1 er målt på sett 1: 30 dokumenter og 28 treff.
   * v2 er målt på sett 1 og deretter på sett 2: 40 dokumenter og 27 treff. v2 ble frosset før sett 2 ble hentet.
 * **Tall:**
@@ -158,7 +158,7 @@ Den eldre lærdommen om sikringssteg står for seg i `docs/laerdom-sikring.md`.
 
 | nr | komponent | grønt signal | faktisk tilstand | fanget av | fil |
 |---|---|---|---|---|---|
-| 1 | markørfilter v1 | rørledningstesten ga 217 kandidater | recall 0/28 mot fasiten | manuell fasit, lest uten filteret | ADDENDUM-06 §1.2, §3 |
+| 1 | markørfilter v1 | rørledningstesten ga 217 kandidater | recall 0/28 mot fasiten | fasit kodet ved lesning uten filteret, av en LLM-koder *(rettet 28.09.2026: sto «manuell fasit»)* | ADDENDUM-06 §1.2, §3 |
 | 2 | markørfilter v2 | 28/28 på sett 1 | 7/27 på sett 2 | ny fasit fra dokumenter ingen markør er hentet fra | ADDENDUM-06 §1.4; ADDENDUM-07 §5 |
 | 3 | lenketellingen R3 som hentbarhet | PDF-lenke registrert for 50–73 % | lesbar tekst for 17–47 %; overdrevet 1,5–3,8× | faktisk nedlasting av 30 verk per felt | ADDENDUM-03 §2, §4 |
 | 4 | JATS-parseren | setninger returnert uten feil; 147 675 lagret | 143 av 341 filer avkortet; 39 519 setninger manglet | ny parse av de samme bytene ga 537 og 20 setninger | ADDENDUM-07 §2.2 |
@@ -167,7 +167,7 @@ Den eldre lærdommen om sikringssteg står for seg i `docs/laerdom-sikring.md`.
 | 7 | siteringsoppslaget i L4 | kallene gikk uten feil | null siteringer for alle 20 verk: Crossref-`select` ga 400, og `MED/{PMCID}` gir stille 0 | armering mot 10.7554/elife.09560 (391 i Crossref, 194 i Europe PMC) | commit `066b92e`; `src/gjenopptak/falsify/citations.py` |
 | 8 | repo-sikringen | bundle skrevet, suksess meldt | den ekte bundelen overskrevet (sha256 `468ddbca…` → `327fb3ce…`) | kjøring mot ekte arkivtilstand, med sha256 før og etter | `docs/laerdom-sikring.md` |
 
-* **Slutning:** fellesnevneren er at hvert tilfelle ble **fanget av en uavhengig måling mot ekte tilstand, aldri av selvsjekk.** Uavhengige målinger her er manuell fasit, et usett sett, faktisk nedlasting, ny parse av de samme bytene, lesing mot posten, innholdskontroll, armering mot et kjent verk og sha256 av det ekte arkivet. Ingen av komponentene oppdaget sin egen feil.
+* **Slutning:** fellesnevneren er at hvert tilfelle ble **fanget av en uavhengig måling mot ekte tilstand, aldri av selvsjekk.** Uavhengige målinger her er fasit kodet ved lesning (av en LLM-koder, ikke for hånd — rettet 28.09.2026, INNHENTET-2026-09-26 § 4), et usett sett, faktisk nedlasting, ny parse av de samme bytene, lesing mot posten, innholdskontroll, armering mot et kjent verk og sha256 av det ekte arkivet. Ingen av komponentene oppdaget sin egen feil.
 * **Gjort:** hver sak fikk sin egen motvekt:
   * ny fasit før et filtertall regnes som måling (ADDENDUM-07 §7);
   * hentbarhet definert ved faktisk henting (ADDENDUM-04 §1);
@@ -313,7 +313,8 @@ Den eldre lærdommen om sikringssteg står for seg i `docs/laerdom-sikring.md`.
 ## 17 Løftbar andel og første falsifisering (2026-09-21)
 
 > **Foreldet av ADDENDUM-10 (se § 20).** Gjeldende løftbar andel: 5 av 25 = 20,0 % (koder 1),
-> 2 av 19 = 10,5 % (koder 2). Falsifiseringen dekker fire av de fem — PS-031 kom til med
+> 2 av 17 avklarte = 11,8 %, uavklart 2 av 19 = 10,5 % (koder 2; *rettet 28.09.2026, sto «2 av 19 =
+> 10,5 %» som løftbar andel, ADDENDUM-05 § 4*). Falsifiseringen dekker fire av de fem — PS-031 kom til med
 > ADDENDUM-10 og er ikke prøvd. Kilde: `docs/RESULTAT-PORT-v1.md`.
 
 * **Løftbar andel:** bare **4 av 24 ekte treff (16,7 %) er i en løftbar klasse (H1–H6)** etter ADR-0004-tabellen; 20 av 24 (83,3 %) er H7–H9. Ankerne ligger likt (2 av 12). Verktøyet kan altså love noe for om lag en sjettedel av det porten faktisk finner.
@@ -321,7 +322,7 @@ Den eldre lærdommen om sikringssteg står for seg i `docs/laerdom-sikring.md`.
 
 ## 18 Den beste kandidaten faller på materialet, ikke på metoden (2026-09-25)
 
-* **Målt:** om det beste løftbare treffet i materialet lar seg forsøke. W3000588547 (Glasgow 2019, kritisk utgave av Herons *Automata*) lot tre håndskrifter stå ukollasjonert og oppga tidsrammen som hindring — H1, løftbar. Sigla-listen er lest fra avhandlingen, tilgjengelighet og modeller er slått opp.
+* **Målt:** om det beste løftbare treffet i materialet lar seg forsøke. W3000588547 (2019, kritisk utgave av Herons *Automata*) lot tre håndskrifter stå ukollasjonert og oppga tidsrammen som hindring — H1, løftbar. Sigla-listen er lest fra avhandlingen, tilgjengelighet og modeller er slått opp.
 * **Tall:**
   * De tre er **Burney MS 108** (ff. 81v–100r), **Harley MS 5589** (ff. 19r–27r) og **Harley MS 5605** (ff. 50v–69r) — alle i British Library, til sammen **93 manuskriptsider**, fordelt på β- og γ-grenen av stemmaet.
   * Alle tre står som digitalisert i BLs katalog, men med **«Images currently unavailable»**: bildene har ikke vært i åpen kanal siden cyberangrepet i oktober 2023, snart tre år.
@@ -330,20 +331,20 @@ Den eldre lærdommen om sikringssteg står for seg i `docs/laerdom-sikring.md`.
 * **Slutning:**
   * **Forsøket faller på materialet, ikke på metoden.** Det er ikke lesekapasiteten som stanser kollasjonen i 2026; det er at bildene ikke finnes i åpen kanal. En kollasjon krever ordnøyaktige lesninger, og 27 % CER gir ikke det — men det spørsmålet blir aldri aktuelt uten bilder.
   * **Hindringen har skiftet klasse siden publisering: H1 i 2019, H8 fra oktober 2023.** Begge kodingene er riktige for hvert sitt tidspunkt. Det er grunnlaget for ADR-0010: løftbarhet er datert, og hver oppføring bærer vurderingsdato.
-  * Kandidaten avvises ikke — den **parkeres med en utløser**: BL-bildene tilbake i åpen kanal. Omfanget er lite, det finnes en moderne kritisk utgave å kollasjonere mot, stemmaposisjonene er kjent, og forfatteren har selv skrevet at kollasjonen skal gjøres før publisering.
+  * Kandidaten avvises ikke — den **parkeres med en utløser**: BL-bildene tilbake i åpen kanal. Omfanget er lite, det finnes en moderne kritisk utgave å kollasjonere mot, stemmaposisjonene er kjent, og avhandlingen skriver selv at kollasjonen skal gjøres før publisering. *(Rettet 28.09.2026: institusjonen tatt ut av verksangivelsen, og utsagnet adressert til verket; navnepolicyen, jf. commit `0b4c979`.)*
 * **Gjort:** `docs/HERON-KOLLASJON-VURDERING-v1.md` skrevet; ADR-0010 vedtatt; ADR-0004 merket som endret; én linje føyd til `docs/RESULTAT-PORT-v1.md`.
 * **Filer:** `docs/HERON-KOLLASJON-VURDERING-v1.md`, `docs/decisions/0010-loftbarhet-er-datert.md`, `docs/decisions/0004-loftbarhet-fra-tabell.md`, `docs/RESULTAT-PORT-v1.md`.
 
-## 19 Den ugjorte analysen ble gjennomført — og forfatterens anslag holdt for to av fire (2026-09-25)
+## 19 Den ugjorte analysen ble gjennomført — og avhandlingens anslag holdt for to av fire (2026-09-25)
 
 * **Målt:** PS-246, et ekte treff i klasse H5: avhandlingen W2551114598 lot være å bruke målt matrisk tetthet i Saxton–Rawls, fordi SPAW låser partikkeltettheten til 2,65 Mg/m³ og markkapasiteten dermed kom ut over metningen. Kriteriet ble låst før beregning (`docs/PS-246-KRITERIUM.md`, commit `59d4221`).
 * **Tall:**
   * Implementasjonen ble verifisert mot artikkelens egen tabell 3 **før** avhandlingens data ble rørt: **alle tolv teksturklasser reprodusert eksakt** (WP, FC, SAT, ρN).
-  * Med SPAWs faste 2,65 og avhandlingens egne inndata gir beregningen FC > θS for **nøyaktig de fire horisontene forfatteren navngir** — og for åtte av 29 horisonter i alt. Inkonsistensen er dermed reprodusert, ikke bare gjenfortalt.
+  * Med SPAWs faste 2,65 og avhandlingens egne inndata gir beregningen FC > θS for **nøyaktig de fire horisontene avhandlingen navngir** — og for åtte av 29 horisonter i alt. Inkonsistensen er dermed reprodusert, ikke bare gjenfortalt.
   * Med målt partikkeltetthet, lest av figur 5.2 med **±0,02 Mg/m³**: Clay 1 **+0,1 %v** og Clay 2 (øvre) **+0,3 %v** flipper til fysisk mulig, begge innenfor lesefeilen. Clay 2 (nedre) gjør det ikke — den krever **2,98 Mg/m³**. Ditchfill 1 heller ikke: avlest 2,62 mot terskel 2,70.
   * **Kriteriet er ikke oppfylt** for de målte seksjonene som gruppe: to av fire, begge marginale.
 * **Slutning:**
-  * **Å gjennomføre er ikke det samme som å slutte seg til.** Forfatteren skrev at målte verdier «would allow FC to be reached». Utregningen viser at det holder for to av de fire horisontene forfatteren selv navnga. Påstanden var rimelig og delvis riktig; bare utregningen kunne skille.
+  * **Å gjennomføre er ikke det samme som å slutte seg til.** Avhandlingen skriver at målte verdier «would allow FC to be reached». Utregningen viser at det holder for to av de fire horisontene avhandlingen selv navngir. Påstanden i avhandlingen var rimelig og delvis riktig; bare utregningen kunne skille. *(Rettet 28.09.2026: sto «forfatteren»/«forfatterens», også i overskriften; vurderingen adressert til verket etter navnepolicyen, jf. `0b4c979`.)*
   * **Det avgjørende leddet lå ikke i likningene, men i lesbarheten.** Tabell 5.1 og figur 5.2–5.4 er bilder uten tekstlag, så partikkeltetthetene måtte leses av en kurve. Den lesefeilen alene bestemmer fortegnet for to av fire horisonter. Et datavedlegg ville avgjort saken; en PDF-figur gjør det ikke.
   * **Korreksjonsfaktoren og tetthetsfiksen virker på hver sin side av modellen.** 2,22 ganger modellert SMD etter kjøring, og avhandlingen måtte bruke 0,50 i et annet tilfelle. En faktor som skifter med tilfellet, kompenserer for utfallet; tetthetsfiksen fjerner årsaken — men bare der partikkeltettheten er høy nok.
   * **Ingen AI-akse og ingen tidsakse.** Saxton & Rawls er fra 2006, ti år før avhandlingen. Det som manglet, var tid og et verktøy som tok imot målt tetthet. Kjeden funn → klassifisering → falsifisering → gjennomføring er demonstrert på ett tilfelle; hvor ofte den går hele veien, er ikke målt.
@@ -389,7 +390,7 @@ Den eldre lærdommen om sikringssteg står for seg i `docs/laerdom-sikring.md`.
 * **Målt:** testsuiten feilet én gang på `test_armering_den_gamle_algoritmen_mister_kroppen` (JATS-parsing), og var grønn i tre påfølgende kjøringer etterpå og grønn når testen kjøres alene.
 * **Tall:** 1 feil av 4 fulle kjøringer, 0 feil av 1 isolert kjøring. Suiten kjører med `pytest-randomly`, altså ny rekkefølge hver gang.
 * **Slutning:**
-  * **Feilen er testforurensning, ikke et funn i materialet** — men den hører hjemme i samme familie som de ti tilfellene i seksjon 10: en komponent som melder grønt uten at grønt betyr det samme hver gang.
+  * **Feilen er testforurensning, ikke et funn i materialet** — men den hører hjemme i samme familie som de åtte tilfellene i seksjon 10 *(rettet 30.09.2026: sto «ti»)*: en komponent som melder grønt uten at grønt betyr det samme hver gang.
   * En suite med tilfeldig rekkefølge og delt tilstand gir et *stokastisk* kvalitetssignal. «336 grønne» er da ikke én påstand, men én trekning. Det er greit så lenge det sies, og villedende så lenge det ikke gjør det.
   * Tiltaket er ikke å slå av tilfeldig rekkefølge. Det er å finne den delte tilstanden — å skru av randomiseringen ville skjult nøyaktig det signalet som avdekket den.
 * **Gjort:** feilen er ført her i stedet for å bli rapportert bort. Den delte tilstanden er ikke funnet ennå; testen er ikke markert eller deaktivert.
@@ -668,9 +669,9 @@ overlevde. **Flaks er ikke en sikringsrutine.**
 
 ## 32 Leverandørens øktgrense er en ressurs som må budsjetteres som tokens (2026-09-27)
 
-* **Målt:** jeg startet sju Opus-instanser samtidig for å kode 2 488 passasjer parallelt i stedet for
-  sekvensielt. Alle sju falt på **HTTP 429, «You've hit your session limit»**, etter til sammen 87,2 %
-  dekning. Tre av åtte økter ble komplette; fem ble avbrutt midt i.
+* **Målt:** jeg startet sju Opus-instanser samtidig for å kode 2 844 passasjer parallelt i stedet for
+  sekvensielt *(rettet 28.09.2026: sto «2 488»; ADDENDUM-22 § 9.1: 2 481 av 2 844 = 87,2 %)*. Fem av dem falt på **HTTP 429, «You've hit your session limit»** *(rettet 28.09.2026: sto
+  «Alle sju»; ADDENDUM-22 § 9.1 fører fem avbrutte økter)*, etter til sammen 87,2 % dekning. Tre av åtte økter ble komplette; fem ble avbrutt midt i.
 * **Og en feil til, i samme grep:** tre instanser rapporterte **filkollisjoner i delt kladdekatalog**, og
   én at visningen av postene 14–40 kom fra en **annen økts blindfil**. Kontrollen viste null fremmede
   id-er i utdata, og justeringstesten (95–98 % av ikke-prosa kodet `INGEN`, null korte tallrester som
@@ -770,7 +771,8 @@ overlevde. **Flaks er ikke en sikringsrutine.**
 * **Målt:** SAK-14s port krevde at «≥ 90 % av stedene får gresk tekst **med de bærende termene
   identifisert**». Presisering 3 definerte den bærende termen mot «det franske uttrykket
   avhandlingen bygger sin påstand på i den setningen».
-* **Tall:** avhandlingen gjengir gresk ordrett bare på **11 av 90 steder** (12,2 % [7,0–20,6]). For
+* **Tall:** avhandlingen gjengir sin franske oversettelse bare på **11 av 90 steder** (12,2 % [7,0–20,6])
+  *(rettet 28.09.2026: sto «gjengir gresk ordrett»; avhandlingen har 12 greske ordformer i alt)*. For
   de øvrige 79 fantes det ikke noe fransk uttrykk å måle termen mot, og **det andre leddet i porten
   var umålbart for 88 % av nevneren**.
 * **Slutning:** porten falt på det *første* leddet (87,8 % < 90 %), så svakheten endret ikke
@@ -788,7 +790,7 @@ overlevde. **Flaks er ikke en sikringsrutine.**
   blant `{null, com, reg, rre, cre}`, nådde **både** min egen implementasjon og R-pakken
   `blockmodeling` 1.1.8 **total feil 0** — R fant **11 løsninger med feil 0** fra 50 tilfeldige
   starter.
-* **Tall:** forfatterens publiserte løsning har feil **14**. Med fritt typevalg falt den til **3** for
+* **Tall:** avhandlingens publiserte løsning har feil **14**. Med fritt typevalg falt den til **3** for
   samme partisjon, og til **0** for nesten hvilken som helst partisjon. Grunnen er `rre`: en
   radregulær blokk har null feil så snart hver rad har minst én 1-er, og det kan nesten alltid
   oppnås ved å flytte én node.
@@ -797,8 +799,9 @@ overlevde. **Flaks er ikke en sikringsrutine.**
   **Regelen: en reprodusert blokkmodell må oppgi den forhåndsgitte strukturen, ellers er tallet ikke
   etterprøvbart.** Avhandlingen her oppgir at vekter *kan* settes, men ikke hvilke, så
   optimaliseringen kan ikke reproduseres — bare feilen for en gitt partisjon.
-* **Gjort:** typene låst per posisjon til forfatterens egen bildematrise i alle søk, og betingelsen
-  ført i `RESULTAT.md` som en betingelse på resultatet.
+* **Gjort:** typene låst per posisjon til avhandlingens egen bildematrise i alle søk, og betingelsen
+  ført i `RESULTAT.md` som en betingelse på resultatet. *(Rettet 28.09.2026: sto «forfatterens» her og
+  i «Tall»; navnepolicyen, jf. `0b4c979`.)*
 * **Filer:** `saker/SAK-09b/kjoring.py` (fritt valg, degenerert), `kjoring2.py`/`kjoring3.py` (låst),
   `r-kjoring.R`, `docs/saker/SAK-09b/RESULTAT.md`.
 
@@ -820,18 +823,187 @@ overlevde. **Flaks er ikke en sikringsrutine.**
 ## 40 En verktøygrense kan sperre en representasjon uten å sperre et resultat (2026-09-27)
 
 * **Målt:** AL-0852 sier at Pajek ikke kan tvinge mellomnivåets rad- og kolonnepartisjon like i den
-  begrensede matrisen 𝑀, og at forfatteren derfor brukte en augmentert én-modus-matrise i stedet.
-  `blockmodeling` 1.1.8 — det navngitte alternativet, publisert i 2018 **før** innleveringen — har
+  begrensede matrisen 𝑀, og at avhandlingen derfor brukte en augmentert én-modus-matrise i stedet.
+  `blockmodeling` — det navngitte alternativet, i versjon 0.3.1 publisert i 2018 **før** innleveringen *(rettet
+  30.09.2026: sto «1.1.8 … publisert i 2018»; 1.1.8 er fra 2025, SAK-09b-KRITERIUM)* — har
   **heller ikke** mekanismen: `fixClusters` fryser klynger, `exchageClusters` styrer flytting,
   `sameIM` gjelder bildet på tvers av relasjoner. Ingen binder en radpartisjon til en kolonnepartisjon.
 * **Tall:** utvunget ble de to partisjonene like **0 av 120** ganger i min implementasjon, og ulike i
-  R også. Men forfatterens omgåelse **er** en tvungen løsning — den augmenterte matrisen har bare én
+  R også. Men avhandlingens omgåelse **er** en tvungen løsning — den augmenterte matrisen har bare én
   partisjon av de 34 nodene — og den har feil **14**, mot 18 for beste tvungne søk fra 120 tilfeldige
-  starter. Et tvungent søk **startet fra** forfatterens partisjon finner ingen forbedring.
-* **Slutning:** det ugjorte var ikke ugjort av mangel på verktøy. Det var **unødvendig**: omgåelsen
-  oppnådde det samme og mer. **Regelen: før et ugjort arbeid klassifiseres som en verktøygrense, sjekk
-  om forfatterens egen omgåelse allerede oppfyller kravet det ugjorte skulle oppfylle.** En hindring
+  starter. Et tvungent søk **startet fra** avhandlingens partisjon finner ingen forbedring.
+* **Slutning:** det ugjorte var ikke ugjort av mangel på verktøy. Verktøygrensen **sperret ingen resultat**:
+  omgåelsen oppnådde det samme og mer. **Regelen: før et ugjort arbeid klassifiseres som en verktøygrense, sjekk
+  om verkets egen omgåelse allerede oppfyller kravet det ugjorte skulle oppfylle.** En hindring
   som er løftbar men konsekvensløs, er et annet funn enn en hindring som ikke er løftbar, og de skal
-  ikke føres likt.
+  ikke føres likt. *(Rettet 28.09.2026: sto «forfatteren»/«forfatterens» fire steder og «unødvendig»;
+  navnepolicyen, samme ordlyd som `0b4c979` ga SAK-09b-dokumentene.)*
 * **Filer:** `docs/saker/SAK-09b/RESULTAT.md`, `saker/SAK-09b/kjoring3.json`,
   `docs/saker/REGISTER-SAKER.md`.
+
+## 41 Per-linje-lesning fant 29 blokkerende feil i et sett kryssjekken kalte grønt (2026-09-28)
+
+* **Målt:** frys-lesning av hver linje i de 82 dokumentene v0.4.0 skal bære (76 i repoet, 6 inndatafiler på
+  Vault; 12 408 linjer), fordelt på fire lesere, mot kategoriene i `docs/UTGIVELSE-v0.4.0-PORTSTATUS.md` § 3.
+  Samtidig: sha-oppslag av alle heksreferanser mot alt som finnes, og innholdssammenligning av repoets
+  `data/` mot Vault.
+* **Tall:** **210 funn, 29 blokkerende**, 79 «bør rettes», 102 «merk». `gjenopptak.kryssjekk` over samme
+  sett: **0** umerkede foreldede verdier. 172 heksreferanser, 27 uten treff. **151 av 318** filer i `data/`
+  fantes ikke på Vault, deriblant inndata til kandidatlista på 432 og til SAK-14s 87,8 %.
+* **Slutning:** kryssjekken fanger bare størrelser den kjenner, og den **arver feil i sine egne kanoniske
+  verdier**: løftbar andel står der med feil nevner, og «antall kodere: to» ble foreldet samme morgen som
+  koder 4 kom inn. Det mest spredte funnet — κ = 0,812 med intervallet til κ = 0,826 i fem filer — er en
+  avskriftsfeil som ingen maskinell sjekk kunne ha fanget, fordi begge intervallene er ekte tall fra samme
+  tabell. **En sjekk mot en liste kan ikke erstatte lesning mot kilden**; jf. [[§24]] og [[§29]].
+* **Gjort:** portstatus skrevet; hele funnregisteret sikret på Vault
+  (`zenodo/v0.4.0-bygg/frys-lesning-funn-2026-09-28.jsonl`); de 151 lokale filene, sju blindfiler, tre
+  gjenvunne oppdrag med sperreliste og preprint-PDF-en sikret med sha i manifestet. **Ikke gjort:** de 29
+  blokkerende er ikke rettet; ots-kvitteringene er ikke oppgradert (venter på bekreftelser); v0.4.0 er ikke
+  publisert og ikke lagt som utkast hos Zenodo.
+* **Filer:** `docs/UTGIVELSE-v0.4.0-PORTSTATUS.md`, `src/gjenopptak/utgivelse.py`, Vault
+  `zenodo/v0.4.0-bygg/`, `lokal-sikret-2026-09-28/`, `oppdrag-gjenvunnet/`.
+
+## 42 Agentisk modus ga ikke en lokal 7B-modell leserklasse (2026-09-28)
+
+* **Målt:** `qwen2.5:7b` som agentisk leser — regelfilen `234695dd…` og 20 tekstbiter i samme kontekst, 16
+  partier over portens 320, temp 0, frø 734248 — mot koder 1, preregistrert i ADDENDUM-24 før kanarien.
+* **Tall:** **κ = 0,248 [0,113–0,376]**, terskel 0,70. 61 treff mot koder 1s 39; 18 felles, 43 bare lokal,
+  21 bare koder 1. 320 av 320 gyldige, 0 avkuttet. Mot koder 2 og 4: 0,239 begge. Leseren brukte aldri
+  `INGEN` (0 mot 213–265 hos koderne). 30,9 min, 123 k tokens inn, lokalt.
+* **Slutning:** κ 0,248, i samme område som gemma2:9b i ett kall (0,289 — annen modell, annet materiale:
+  100 blindede tekstbiter fra 2d mot en blind leser, `ekstraksjon/2026-09-26/d1-2x2.json`). **Modusens
+  bidrag er ikke målt:** `qwen2.5:7b` er aldri kjørt i ett-kall-modus. Det skiller ikke «modusen hjelper
+  ikke» fra «modellen er for svak», som addendumet sa før kjøring. Det som kan sies: **`qwen2.5:7b` i denne
+  modusen er sil-klasse**, og leserleddet forblir en CC-instans. `llama3.1:8b` (131k kontekst) er installert
+  og ikke prøvd. *(Rettet 28.09.2026: overskriften sto «Modusen som løftet Opus, løftet ikke en lokal
+  7B-modell», og slutningen «ingen målbar gevinst av modusen» og «en godkjent lokal leser finnes ikke på
+  denne maskinen i dag». Øktformens bidrag for Opus er «mulig og umålt» (METODE § 9, ADDENDUM-24 § 1), og
+  sammenligningen med 0,289 krysser modell, materiale og referanse.)*
+* **Gjort:** ført som sil-klasse i METODE; `RESULTAT-ADDENDUM-24.md`; utdata og sha på Vault.
+  **Ikke gjort:** ingen annen modell eller instruks prøvd (dødsbetingelse, ADDENDUM-24 § 6).
+* **Filer:** `ADDENDUM-24.md`, `docs/RESULTAT-ADDENDUM-24.md`, `src/gjenopptak/kjede/leser.py`,
+  `src/gjenopptak/classify/leser_port.py`, Vault `leser-lokal-ADDENDUM-24/`.
+
+## 43 Én skrivende CC-økt per repo om gangen (2026-09-28)
+
+* **Målt:** to Claude Code-økter skrev i repoet samtidig i dag — én om koder 4, én om v0.4.0 og fase 3.
+* **Tall:** HEAD flyttet seg **to ganger under arbeid** i den andre økten (`6666d4f` → `dfccd02` kl. 09:55 og
+  → `49e0c7a` kl. 10:03). Frys-leserne leste et tre som endret seg under dem: én leste METODE med 487 linjer og
+  endte på 545; tre av fire meldte om commits og filer som dukket opp mens de leste. `data/` fikk
+  `tmp-koder4*.py`, `tmp-eksp.py` og `tmp-folsomhet.*` fra den første økten, og en G3-skanning samme
+  formiddag telte dem med i «lokale filer som ikke finnes på Vault». Én frys-leser fant en blokkerende feil i
+  en tabell den andre økten hadde committet samme morgen (METODE, koder 4-sammenligningen, `dfccd02`).
+* **Slutning:** ingenting gikk tapt, men bare fordi hver commit tok eksplisitte stier og byggeren nektet å
+  kjøre på et urent tre. En sjekk av «hva er nytt siden sist» er ugyldig når noen andre skriver samtidig:
+  en frys-lesning av et tre i bevegelse leser ikke det som deponeres, og en port som leser HEAD, kan lese en
+  annen HEAD enn den som ble kontrollert.
+* **Regel:** **én skrivende økt per repo om gangen.** En lesende økt kan gå parallelt. Skal to økter arbeide
+  samtidig, arbeider den andre i eget worktree eller egen gren og slås sammen etterpå. Før en frys-lesning
+  eller en låsecommit: sjekk at HEAD er den samme ved start og slutt.
+* **Gjort:** regelen står her. **Ikke gjort:** ingen teknisk sperre (lås-fil eller hook); regelen er prosa, og
+  LAERDOM § 31 sier hva det betyr.
+* **Filer:** commits `dfccd02`, `49e0c7a`, `docs/UTGIVELSE-v0.4.0-PORTSTATUS.md`.
+
+## 44 Et avbrudd i fase 3: fire ting som ville gått stille galt (2026-09-29)
+
+* **Målt:** fase 3-kjeden og ollama døde 29.09 ~21:09 midt i ekstraksjonsleddet, da Claude Code-økten de var
+  startet fra, ble avsluttet. Tilstanden ble lest før noe ble gjenopptatt.
+* **Tall:** dommerleddet var ferdig (21 361 av 21 361, 17:01); ekstraksjonen hadde skrevet **1 357 vinduer fra 81
+  av 100 verk**. Første gjenopptak stoppet i kanarien på «connection refused» (ollama nede); andre gikk.
+* **Slutning, fire deler:**
+  * **(a) En bakgrunnsjobb som ikke er frikoblet fra CC-økta, dør med økta.** `run_in_background` og `&` i et
+    verktøykall holder prosessen i øktens prosessgruppe. **Start alltid med `setsid` + `nohup` + `caffeinate`**
+    (på macOS: `perl -MPOSIX=setsid -e 'setsid(); exec @ARGV' /usr/bin/caffeinate -is …`).
+  * **(b) ollama kan stoppe uten kjeden,** og kjeden oppdager det først i kanarien, etter at alle andre
+    forutsetninger er sjekket. Gjenopptaksrutinen krever nå at ollama svarer på `/api/tags` før start.
+  * **(c) Vakten mot doble kjøringer kjente ikke igjen rutinens egne kjøringer.** Den søkte etter «kjede.cli run»,
+    men rutinen starter `kjede.cli --konfig … run`. Funnet ved et tilfelle den skulle ha slått ut på — `pgrep` var
+    tom mens kjøringen gikk — ikke ved en test. Testen dekker nå nettopp det tilfellet.
+  * **(d) Et delresultat gjenbrukes aldri stille.** Det låste ekstraksjonsleddet fortsetter ikke et påbegynt ledd:
+    finnes utfila, merker det seg ferdig. **81 av 100 verk ville gitt feil recall** uten at noe meldte feil.
+    Delresultatet ble sikret og tatt ut, og leddet kjøres helt på nytt; de 1 357 vinduene blir en
+    determinismesjekk (RESULTAT-ADDENDUM-25 § 0.5).
+* **Gjort:** kjeden og ollama kjører frikoblet; `kjede/gjenoppta.py` har ollama-vilkåret og den rettede vakten, med
+  tester som feiler når ollama er nede og når rutinens egen kjøring går; delresultatet på Vault med sha.
+  **Ikke gjort:** ekstraksjonsleddets manglende gjenopptak er ikke rettet i koden — den er låst av ADDENDUM-25 § 9.
+* **Filer:** `src/gjenopptak/kjede/gjenoppta.py`, `tests/test_gjenoppta.py`, `docs/RESULTAT-ADDENDUM-25.md` § 0.5,
+  Vault `fase3/avbrudd-2026-09-29/`.
+
+## 45 «Ferdig» uten utdata er klasse A — sett to ganger på én dag (2026-09-30)
+
+* **Målt:** det låste leserleddet førte seg ferdig to ganger uten å ha levert: 05:26 med **0 av 4 107** dømt
+  (sandkassen stengte instansene ute, RESULTAT-ADDENDUM-25 § 0.6), og 07:50 med **716 av 4 107** (økt 3 stoppet på
+  30 av 343 ved øktgrensen, økt 4–12 avvist straks). Begge ganger kjørte verksnivå, falsifisering og register videre
+  på det som lå der.
+* **Tall:** 12 av 12 økter «AVVIK» første gang, 10 av 12 andre gang (3: 30/343; 4–12: 0/342). Registeret stoppet
+  andre gang på sitt eget skjema — en tredje feil av samme art: et ledd som aldri ble prøvd mot kontrakten etter
+  at kontrakten ble strammet (§ 0.7).
+* **Slutning:**
+  * **Et ledd som fører seg ferdig uten fullt antall utdata, er klasse A**: det gir et tall som ser målt ut.
+    Mekanismen er den samme begge ganger — `kj.før("les", …)` kalles uansett status per økt — og ekstraksjonens
+    «utfila finnes, altså ferdig» (§ 44 d) er samme klasse.
+  * **Ledd-ferdig skal nøkles på inndata-sha**, ikke på et flagg eller et tidsstempel: et ledd er ferdig når
+    utdataene finnes i fullt antall *og* inndataenes sha er den det ble regnet på. Den låste kjeden gjør ingen av
+    delene, og etterkontrollen i gjenopptaksrutinen bruker tidsstempel som svak erstatning.
+  * En kontroll som ikke er prøvd på tilfellet den skal fange, er ikke en kontroll: testen er økt 3 med 30 av 343.
+* **Gjort:** `gjenoppta.py` etterkontrollerer hvert ledd og stopper med rc 3 og navnet på det som mangler;
+  leddene etter `les` kjøres alltid om; en delvis økt nekter start og fullføres med `--fullfor-okt N` i én ny
+  instans, med de dømte byte-kontrollert urørt.
+  **Ikke gjort:** leddene selv er ikke rettet — de er låst til fase 3 er ferdig. Inndata-sha-nøkkelen hører i
+  kjeden (`Kjøring.gjort`), ikke i gjenopptaksrutinen. *(30.09.2026: registerleddet er rettet som eneste
+  kodeendring etter låsen, RESULTAT-ADDENDUM-25 § 0.8; `steg_les` og ekstraksjonen er ikke rettet.)*
+* **Filer:** `src/gjenopptak/kjede/gjenoppta.py`, `tests/test_gjenoppta.py`, `docs/RESULTAT-ADDENDUM-25.md` § 0.7.
+
+## 46 Fase 3 målt: prospektiv port bestått, første silrecall (2026-09-30)
+
+* **Målt:** ADDENDUM-25 § 5 på 100 nye arkeologiverk. Port (1) blind presisjon på 100 av leserens 673 treff i én
+  separat instans; port (2) recall mot 104 referansetreff lest perm til perm i 20 av verkene før silen kjørte.
+* **Tall:** presisjon **85/100 = 85,0 % [76,7–90,7]** → «arbeidsliste (prospektiv port)». Recall: beholdt av
+  silen **95/104 = 91,3 % [84,4–95,4]**, bekreftet av leseren **85/104 = 81,7 % [73,2–88,0]**. Presisjon etter
+  leserens tvil: 97,4 % uten tvil, 77,4 % med. Treff per verk 6,73 mot 10,96 i de 25 første arkeologiverkene.
+* **Slutning:** porten ble bestått på nytt materiale med regelfil, kjede og terskel låst før data — det er det
+  en prospektiv port er. Av de 19 referansetreffene som ikke ble bekreftet, falt 9 i silen og 10 hos leseren;
+  tapet fordeler seg omtrent likt på de to leddene. «Bekreftet» er enighet mellom to lesninger av samme
+  modellfamilie, ikke mot et menneske; «beholdt» er det renere tallet. Tettheten per verk i fase 3 er lavere
+  enn i de 25 første arkeologiverkene; om det er utvalg eller felt, sier ikke målingen.
+  **Kryssjekken fanget en nevnerfeil i utfallet før commit:** første utkast regnet løftbar andel av alle treff
+  (15,0 %) og sammenlignet med kandidatlistas foreldede 17,8 %; ADDENDUM-05 § 4 krever avklarte treff (16,1 %
+  mot 19,0 %). Rapportmodulen regner nå gjennom `liftability`, ikke selv.
+* **Gjort:** portene målt med den låste `fase3.py`; tilleggstallene i § 6–7 med `classify/fase3_rapport.py`
+  (bare lesing, tester); modell-ID verifisert fra øktutskriftene; 107 manifestrader.
+  **Ikke gjort:** registerhodet (låst ledd bryter eget skjema, § 0.7); OpenAlex før-verdi finnes ikke.
+  *(30.09.2026: registerhodet er skrevet av det rettede leddet, RESULTAT-ADDENDUM-25 § 0.8 og § 1.7.)*
+* **Filer:** `docs/RESULTAT-ADDENDUM-25.md` § 1, `src/gjenopptak/classify/fase3_rapport.py`,
+  `tests/test_fase3_rapport.py`, Vault `fase3/maaling-fase3.json`, `fase3/rapport-fase3.json`, `fase3/utskrifter/`.
+
+## 47 Den fjerde lesningen av samme depositum fant seks blokkerende (2026-09-30)
+
+* **Målt:** frys-lesning (a)–(f) av hver linje i det endelige v0.4.0-bygget — 96 dokumenter, 16 008 linjer, fem
+  lesere — pluss scrub over alle refs og G3 på innhold, etter tre tidligere runder på det samme settet.
+* **Tall:** 175 funn, 5 blokkerende; G3 la til ett. Av de blokkerende var tre i portstatusen selv — skrevet for et
+  bygg to byggerunder tidligere — og ett en ordrett passasjetekst i en deponert JSON-fil som lisensauditen aldri så.
+  Det faglig tyngste bør-rettes-funnet: recall-intervallet i fase 3 antok uavhengige treff, mens 51 av 104 lå i ett
+  verk (uten det: 84,9 % mot 91,3 %).
+* **Slutning:**
+  * **Et dokument som beskriver bygget, er foreldet ved hver ny bygging.** Portstatusen må skrives etter den siste
+    byggingen og kontrolleres mot katalogen, ikke mot minnet om forrige runde.
+  * **Lisensauditen dekket dokumentene, ikke datafilene.** Tekstforbudet håndheves bare om noen skanner innholdet i
+    hver JSON-fil som deponeres; nå gjør G3 det.
+  * **Et intervall er en modellpåstand.** Wilson over treff forutsetter uavhengighet; referansesettet er klynget på
+    verk, og det skal stå ved tallet.
+  * **Min feil:** oppdraget ga ikke hver leser egen kladdekatalog (§ 32). To lesere skrev over hverandres
+    hjelpeskript i den delte kladden; kontrollen etterpå viste at ingen funn havnet hos feil leser, men det var flaks.
+* **Gjort:** alle blokkerende og alle bør-rettes i rettbare filer rettet med datert markør; låste i KORRIGENDUM I–K;
+  manus som kjent rest; klyngene i rapportmodulen; manifestet à jour.
+* **Filer:** `docs/UTGIVELSE-v0.4.0-PORTSTATUS.md` § 3.4, § 4, § 6; `docs/KORRIGENDUM-2026-09-28-frys-v0.4.0.md`
+  runde 4; Vault `zenodo/v0.4.0-bygg/frys4/`.
+
+## 48 Zenodo tar høyst 100 filer per post — oppdaget ved opplasting (2026-10-01)
+
+* **Målt:** opplastingen av v0.4.0 til et ny-versjonsutkast stoppet på fil 101 av 116: «Uploading selected files
+  will result in exceeding the max amount per record». Ingenting var publisert; utkastet ble rettet før publisering.
+* **Slutning:** fire frys-lesninger, scrub og G3 leste innholdet, men ingen port spurte om **plattformens
+  grenser**. En port som bare ser på det som skal ut, ser ikke det mottakeren nekter.
+* **Gjort:** byggeren nekter mer enn 100 filer (`utgivelse.MAKS_FILER`, test), og tre grupper som alle er nye i
+  v0.4.0 — sakene, faktasjekkrapportene og leseroppdragene — deponeres som zip med innholdet ført per fil.
+* **Filer:** `src/gjenopptak/utgivelse.py`, `tests/test_utgivelse.py`, `docs/RELEASE-NOTES-v0.4.0.md`.

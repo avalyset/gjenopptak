@@ -16,6 +16,7 @@ import sys
 from pathlib import Path
 
 from . import ledd as L
+from . import referanseport as RP
 from .felt import last_felt, navn_liste, ramme_status
 from .konfig import KonfigFeil, last
 from .kvote import API_FORBUDT, Behov, behov_for_leser, harness_kvote, port
@@ -90,8 +91,19 @@ def kjør(a: argparse.Namespace) -> int:
             print(f"  {x}", file=sys.stderr)
         return 2
     verk, felt = _verksliste(a, k)
-    kj = L.Kjøring(k=k, navn=a.navn, verk=verk, felt=felt)
+    kj = L.Kjøring(k=k, navn=a.navn, verk=verk, felt=felt,
+                   utvalg=Path(a.utvalg) if a.utvalg else None)
     spenn = _spenn(a)
+    # ADR-0014, tillegg 28.09.2026: et materiale med erklært referansesett får ikke sil eller leser
+    # før settet er komplett og nøkkelens sha står i manifestet. Porten har ikke noe flagg av.
+    if kj.utvalg is not None and not a.torr and any(n in RP.SPERRET for n in spenn):
+        try:
+            rp = RP.sjekk(kj.utvalg, k.vault_mål / "MANIFEST-VAULT.md")
+        except RP.ReferansePortFeil as e:
+            print(f"REFERANSEPORTEN NEKTER: {e}", file=sys.stderr)
+            return 2
+        if rp:
+            print(f"referanseporten: {rp['verk']} verk komplett, nøkkel {rp['nøkkel_sha256'][:16]}… i manifestet")
     print(f"kjøring {kj.navn}: {len(verk)} verk"
           f"{f' (felt {felt})' if felt else ''} · ledd {spenn[0]} → {spenn[-1]}")
     print(f"konfig {k.fil} · rot {k.rot} · vault {k.vault_mål}")
@@ -178,6 +190,7 @@ def main(argv: list[str] | None = None) -> int:
     g.add_argument("--verk", help="fil med én W-id per linje")
     g.add_argument("--felt", help="feltnavn; leses fra felt/<navn>.yaml (B2)")
     r.add_argument("--navn", default="kjoring", help="navn på kjøringen (katalog under [kjede] arbeid)")
+    r.add_argument("--utvalg", help="utvalgsfil for verk utenfor portens 100 (fase 3, ADDENDUM-25)")
     r.add_argument("--from", dest="fra", help=f"første ledd ({', '.join(L.LEDD)})")
     r.add_argument("--to", dest="til", help="siste ledd")
     r.add_argument("--torr", action="store_true", help="tørrkjøring: rapporter kostnad, gjør ingenting")

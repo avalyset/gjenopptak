@@ -64,6 +64,9 @@ class Kjøring:
     navn: str
     verk: list[str] = field(default_factory=list)
     felt: str | None = None
+    #: Utvalgsfil for verk utenfor portens 100 (fase 3, ADDENDUM-25). Rader med ``work_id``,
+    #: ``felt``, ``fil`` (relativ til Vault-målet), ``sha256``, ``port_ledd``, ``doi``.
+    utvalg: Path | None = None
 
     @property
     def dir(self) -> Path:
@@ -119,9 +122,30 @@ def steg_hent(kj: Kjøring) -> dict:
     v = require_vault(kj.k.vault_rot)
     spes = json.loads(kj.k.sti("tekstbiter", "fasit_spesifikasjon").read_text(encoding="utf-8"))
     kjent = {r["work_id"]: r for r in spes["verk"]}
+    # Fase 3: verk utenfor porten kommer fra en utvalgsfil med samme felter og en fil-sti
+    # relativ til Vault-målet. Et verk i begge er en feil — da er det ikke nytt materiale.
+    ekstra: dict[str, dict] = {}
+    if kj.utvalg is not None:
+        for r in _les_jsonl(kj.utvalg):
+            if r["work_id"] in kjent:
+                raise LeddFeil(f"{r['work_id']} står både i porten og i {kj.utvalg}")
+            ekstra[r["work_id"]] = r
     rader, mangler = [], []
     for wid in kj.verk:
         r = kjent.get(wid)
+        if r is None and wid in ekstra:
+            r = ekstra[wid]
+            f = v / r["fil"]
+            if not f.is_file():
+                raise LeddFeil(f"{wid}: filen mangler på Vault: {f}")
+            sha = sha256_file(f)
+            if sha != r["sha256"]:
+                raise LeddFeil(f"{wid}: sha256 stemmer ikke med utvalgsfilen ({sha[:16]}…)")
+            rader.append({"work_id": wid, "felt": r["felt"], "fil": r["fil"],
+                          "bytes": f.stat().st_size, "sha256": sha, "port_ledd": r["port_ledd"],
+                          "doi": r.get("doi"), "opphav": f"utvalgsfil {kj.utvalg.name}",
+                          "sett": nå()})
+            continue
         if r is None:
             mangler.append(wid)
             continue
@@ -643,29 +667,16 @@ def steg_les(kj: Kjøring, *, tørr: bool = False, cache: Path | None = None,
             ferdig.append({"okt": ø["okt"], "status": "venter på subagent",
                            "oppdrag": ø["oppdrag"], "utfil": str(utfil), "n": len(ventede)})
             continue
-        t0 = time.time()
-        # Oppdraget går på stdin, ikke som argument: ``--add-dir`` tar flere kataloger og
-        # sluker et etterfølgende posisjonsargument. Stdin tar også lange oppdrag trygt.
-        r = subprocess.run(
-            ["claude", "-p", "--model", modell, "--output-format", "json",
-             "--permission-mode", "acceptEdits", "--add-dir", str(kj.k.vault_mål)],
-            cwd=kj.k.rot, capture_output=True, text=True, timeout=7200, input=oppdrag)
-        bruk = {}
+        # Leser-protokollen (kjede/leser.py): CC-implementasjonen kjører økten og fører forbruket
+        # fra kommandoens eget JSON-svar. Oppdraget går på stdin, ikke som argument:
+        # ``--add-dir`` tar flere kataloger og sluker et etterfølgende posisjonsargument.
+        from .leser import CCLeser, LeserFeil
         try:
-            svar = json.loads(r.stdout)
-            bruk = {"usage": svar.get("usage"), "total_cost_usd": svar.get("total_cost_usd"),
-                    "num_turns": svar.get("num_turns"), "is_error": svar.get("is_error"),
-                    "resultat": str(svar.get("result"))[:400]}
-            # En utløpt OAuth-økt ser ut som en tom kjøring. Si hva det er, og hva som retter det.
-            if svar.get("is_error") and "authenticate" in str(svar.get("result", "")).lower():
-                raise LeddFeil(
-                    f"leserøkt {ø['okt']}: claude-CLI-en kunne ikke autentisere "
-                    f"({svar.get('result')}). Kjeden kan ikke logge inn for deg: kjør "
-                    f"«claude login» i en terminal og start leddet på nytt med --from les.")
-        except ValueError:
-            bruk = {"feil": "kunne ikke lese JSON fra claude -p",
-                    "stderr": r.stderr[-400:]}
-        bruk |= {"okt": ø["okt"], "minutter": round((time.time() - t0) / 60, 1)}
+            bruk = CCLeser(modell=modell, rot=kj.k.rot,
+                           ekstra_kataloger=(kj.k.vault_mål,)).kjør_økt(oppdrag, utfil)
+        except LeserFeil as e:
+            raise LeddFeil(f"leserøkt {ø['okt']}: {e} Start leddet på nytt med --from les.") from e
+        bruk |= {"okt": ø["okt"]}
         forbruk.append(bruk)
         fikk = [r_["id"] for r_ in _les_jsonl(utfil)]
         if fikk != ventede:
@@ -717,6 +728,37 @@ def _dekning(fals: dict, doi: str | None) -> dict:
 
 
 # ============================================================= 8 register
+#: Verksnivået teller silens flagg, ikke leserens verdikter (RESULTAT-ADDENDUM-25 § 0.7). Merknaden følger hodet.
+VERKSNIVAA_MERKNAD = ("n_doemte_treff, n_loftbare og klasser i 7b-verksniva.jsonl teller silens flagg "
+                      "(dommeren, 3-dommer.jsonl), ikke leserens verdikter; materialtilgang, eier, tilgang og "
+                      "forsok_mulig gjelder verket")
+
+
+def registerhode(kj: Kjøring, *, port: str | None, n_rader: int, n_dømt: int,
+                 register_sha256: str, innhold_sha256: str) -> dict:
+    """Hodet registeret skrives med. Skilt ut 30.09.2026: hodet brøt sitt eget skjema — `navnepolicy` og
+    forbeholdene `leser_datert` og `silrecall` kom inn i `6666d4f` uten at leddet fulgte (RESULTAT-ADDENDUM-25
+    § 0.8), og ingen test bygde et hode med leddet selv."""
+    les_tid = str((kj.les_tilstand()["ledd"].get("les") or {}).get("tid") or nå())
+    dato = f"{les_tid[8:10]}.{les_tid[5:7]}.{les_tid[:4]}"
+    return {
+        "kjøring": kj.navn, "tid": nå(),
+        "port": port or str(kj.k.verdi("register", "uten_port")),
+        "bekreftet": bool(port),
+        "n_rader": n_rader, "n_dømt": n_dømt,
+        "forbehold": {"stabil_kjerne": str(kj.k.verdi("register", "stabil_kjerne")),
+                      "n3_spredning": str(kj.k.verdi("register", "n3_spredning")),
+                      "ikke_prosa": "merket, aldri fjernet",
+                      "leser_datert": (f"datert {dato}, {kj.k.verdi('leser', 'modell')}, regelfil "
+                                       f"{str(kj.k.verdi('leser', 'regelfil_sha256'))[:16]}; lesningen er ikke "
+                                       f"gjentakbar (METODE §9)"),
+                      "silrecall": "ikke målt",
+                      "verksnivaa": VERKSNIVAA_MERKNAD},
+        "adr": "ADR-0012", "register_sha256": register_sha256, "register_innhold_sha256": innhold_sha256,
+        "navnepolicy": "verk, ikke person",
+    }
+
+
 def steg_register(kj: Kjøring, *, port: str | None = None) -> dict:
     """Skriv registeret i claims-2 med ``tvil``-felt og en header som sier hvilken port som er bestått."""
     v = require_vault(kj.k.vault_rot)
@@ -821,16 +863,8 @@ def steg_register(kj: Kjøring, *, port: str | None = None) -> dict:
         json.dumps({n_: r[n_] for n_ in sorted(r) if n_ not in DATERT},
                    ensure_ascii=False, sort_keys=True) + "\n"
         for r in rader).encode()).hexdigest()
-    hode = {
-        "kjøring": kj.navn, "tid": nå(),
-        "port": port or str(kj.k.verdi("register", "uten_port")),
-        "bekreftet": bool(port),
-        "n_rader": len(rader), "n_dømt": len(verdikter),
-        "forbehold": {"stabil_kjerne": str(kj.k.verdi("register", "stabil_kjerne")),
-                      "n3_spredning": str(kj.k.verdi("register", "n3_spredning")),
-                      "ikke_prosa": "merket, aldri fjernet"},
-        "adr": "ADR-0012", "register_sha256": s, "register_innhold_sha256": innhold,
-    }
+    hode = registerhode(kj, port=port, n_rader=len(rader), n_dømt=len(verdikter),
+                        register_sha256=s, innhold_sha256=innhold)
     _valider("registerhode", hode)
     hf = kj.fil("8-register-header.json")
     hf.write_text(json.dumps(hode, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

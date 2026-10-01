@@ -224,17 +224,60 @@ def test_dekning_kan_ikke_vaere_null_uten_maling():
         validate("kandidat", r)          # status mangler
 
 
-def test_registerhodet_krever_forbeholdene():
-    hode = {"kjøring": "t", "tid": "2026-09-27T00:00:00+00:00", "port": "ubekreftet kandidatliste",
+def _hode() -> dict:
+    return {"kjøring": "t", "tid": "2026-09-27T00:00:00+00:00", "port": "ubekreftet kandidatliste",
             "bekreftet": False, "n_rader": 0, "n_dømt": 0, "adr": "ADR-0012",
+            "navnepolicy": "verk, ikke person",
             "forbehold": {"stabil_kjerne": "3 av 27", "n3_spredning": "5,8–13,6 %",
-                          "ikke_prosa": "merket, aldri fjernet"}}
-    validate("registerhode", hode)
-    del hode["forbehold"]["stabil_kjerne"]
+                          "ikke_prosa": "merket, aldri fjernet",
+                          "leser_datert": "datert 27.09.2026, lesningen er ikke gjentakbar",
+                          "silrecall": "ikke målt"}}
+
+
+def test_registerhodet_krever_forbeholdene():
+    validate("registerhode", _hode())
+    for nøkkel in ("stabil_kjerne", "n3_spredning", "ikke_prosa", "leser_datert", "silrecall"):
+        h = _hode()
+        del h["forbehold"][nøkkel]
+        with pytest.raises(Exception):
+            validate("registerhode", h)
+
+
+def test_navnepolicyen_er_paakrevd_og_har_bare_en_gyldig_verdi():
+    """T5: policyen er «verk, ikke person». Den skal ikke kunne utelates og ikke omformuleres."""
+    h = _hode()
+    del h["navnepolicy"]
     with pytest.raises(Exception):
-        validate("registerhode", hode)
+        validate("registerhode", h)
+    h = _hode()
+    h["navnepolicy"] = "person og verk"
+    with pytest.raises(Exception):
+        validate("registerhode", h)
+
+
+def test_silrecall_kan_bare_vaere_ikke_maalt():
+    """Recall for silen kan ikke måles av dette materialet. Et tall skal ikke kunne føres."""
+    h = _hode()
+    h["forbehold"]["silrecall"] = "0,47"
+    with pytest.raises(Exception):
+        validate("registerhode", h)
 
 
 def test_begge_skjemaene_er_gyldige():
     for n in ("kandidat", "registerhode"):
         validator(n)
+
+
+def test_registerleddets_eget_hode_bestaar_skjemaet(k, tmp_path):
+    """30.09.2026: det låste registerleddet skrev et hode uten navnepolicy, leser_datert og silrecall, og
+    fase 3-kjøringen stoppet i register. Testene validerte bare håndskrevne hoder. Denne bygger hodet med
+    leddet selv."""
+    from gjenopptak.kjede import ledd as L
+    kj = L.Kjøring(k=k, navn="hodeprøve", verk=[], felt=None)
+    kj.les_tilstand = lambda: {"ledd": {"les": {"tid": "2026-09-30T14:29:24+00:00"}}}
+    hode = L.registerhode(kj, port="arbeidsliste (prospektiv port)", n_rader=673, n_dømt=4107,
+                          register_sha256="0" * 64, innhold_sha256="1" * 64)
+    validate("registerhode", hode)
+    assert hode["forbehold"]["leser_datert"].startswith("datert 30.09.2026, claude-opus-5, regelfil 234695dd")
+    assert hode["forbehold"]["silrecall"] == "ikke målt" and hode["navnepolicy"] == "verk, ikke person"
+    assert "silens flagg" in hode["forbehold"]["verksnivaa"] and hode["bekreftet"] is True
