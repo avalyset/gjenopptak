@@ -21,8 +21,8 @@ license:
   - Apache-2.0
   - CC-BY-4.0
 license-url: "https://www.apache.org/licenses/LICENSE-2.0"
-version: "0.4.0"
-date-released: "2026-10-01"
+version: "0.4.1"
+date-released: "2026-10-02"
 keywords:
   - metascience
   - preregistration
@@ -35,6 +35,9 @@ identifiers:
   - type: doi
     value: "10.5281/zenodo.22959326"
     description: "Concept DOI — all versions"
+  - type: doi
+    value: "10.5281/zenodo.23096158"
+    description: "Version DOI — v0.4.1, deposited 2026-10-02 (manuscript v2.9: corrected statement on the use of AI tools and publication status; adds the rendered preprint; no data, figures or analysis code changed)"
   - type: doi
     value: "10.5281/zenodo.23073893"
     description: "Version DOI — v0.4.0, deposited 2026-10-01 (phase 2 and phase 3: the prospective gate passed, 85 of 100; first measured sieve recall; manuscript draft v2.8)"

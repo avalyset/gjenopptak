@@ -46,12 +46,13 @@ REPO_MØNSTRE = ("PREREG-v1.md", "ADDENDUM-*.md", "README.md", "CITATION.cff", "
 REPO_UTENFOR = ("docs/patch/",)
 
 #: Ekskluderingslisten, versjonert. Oppgis i release notes for versjonen som bygges. Et mønster med
-#: ``**`` dekker alle underkataloger. ``MANUSKRIPT-v2*-UTKAST.md`` er unntatt for den nyeste: bare det
-#: siste utkastet (høyest versjonsnummer) deponeres.
-UTELATT_VERSJON = "1 (29.09.2026, eierens avgjørelse)"
+#: ``**`` dekker alle underkataloger. Det nyeste manuskriptet under ``NYESTE_UNNTATT`` er unntatt: bare det
+#: siste (høyest versjonsnummer, utkast eller ikke) deponeres. Versjon 2 (02.10.2026): fra v2.9 heter manuset
+#: ``MANUSKRIPT-v2.9.md``, så v2.8-utkastet faller ut; preprintens kilde holdes ute fordi den deponeres som PDF.
+UTELATT_VERSJON = "2 (02.10.2026, eierens avgjørelse)"
 UTELATT = ("docs/INSTRUKSER-*.md", "docs/patch/**", "ROADMAP.md", "docs/ROADMAP.md",
-           "docs/BYGGEPLAN.md", "docs/MANUSKRIPT-v2*-UTKAST.md")
-NYESTE_UNNTATT = "docs/MANUSKRIPT-v2*-UTKAST.md"
+           "docs/BYGGEPLAN.md", "docs/MANUSKRIPT-v2*-UTKAST.md", "docs/PREPRINT-v*.md")
+NYESTE_UNNTATT = "docs/MANUSKRIPT-v2*.md"
 
 #: Filer i repoet som ikke er dokumenter, men som en låst måling leste eller som depositumet
 #: tidligere har båret.
@@ -87,6 +88,8 @@ VAULT_FILER = (
     ("arbeidsliste-nokkel.jsonl", "arbeidsliste/nokkel.jsonl"),
     ("arbeidsliste-presisjon-100-nokkel.json", "arbeidsliste/presisjon-100-nokkel.json"),
     ("fase3-kjede-nokkel.jsonl", "fase3-kjede/nokkel.jsonl"),
+    # v0.4.1 (02.10.2026): preprinten deponeres rendret; kilden er docs/PREPRINT-v2.md i repoet.
+    ("PREPRINT-v2.pdf", "manuskript/preprint-v2/PREPRINT-v2.pdf"),
 )
 
 #: Fase 3s kjøringskatalog på Vault (relativ til gjenopptak-kilder/): leserens verdikter pakkes som zip.
@@ -172,13 +175,13 @@ def _treffer(rel: str, mønster: str) -> bool:
 
 
 def _versjon(rel: str) -> tuple[int, ...]:
-    """``docs/MANUSKRIPT-v2.5-UTKAST.md`` → (2, 5); ``…-v2-UTKAST.md`` → (2,)."""
-    m = re.search(r"-v(\d+(?:\.\d+)*)-UTKAST\.md$", rel)
+    """``docs/MANUSKRIPT-v2.5-UTKAST.md`` → (2, 5); ``…-v2-UTKAST.md`` → (2,); ``…-v2.9.md`` → (2, 9)."""
+    m = re.search(r"-v(\d+(?:\.\d+)*)(?:-UTKAST)?\.md$", rel)
     return tuple(int(x) for x in m.group(1).split(".")) if m else ()
 
 
 def utelat(stier: list[str]) -> tuple[list[str], list[str]]:
-    """(beholdt, utelatt) etter ``UTELATT``. Det nyeste utkastet under ``NYESTE_UNNTATT`` beholdes."""
+    """(beholdt, utelatt) etter ``UTELATT``. Det nyeste manuskriptet under ``NYESTE_UNNTATT`` beholdes."""
     utkast = [r for r in stier if _treffer(r, NYESTE_UNNTATT)]
     nyeste = max(utkast, key=_versjon) if utkast else None
     beholdt, utelatt = [], []

@@ -52,6 +52,16 @@ def test_ekskluderingslisten_beholder_bare_nyeste_utkast():
     assert {"docs/MANUSKRIPT-v0.1.md", "docs/METODE.md", "docs/MASTER-PATCH-2026-09-26.md"} <= set(beholdt)
 
 
+def test_ekskluderingslisten_v2_ferdig_manus_fortrenger_utkastet_og_preprintkilden_holdes_ute():
+    from gjenopptak.utgivelse import utelat
+    stier = ["docs/MANUSKRIPT-v2.7-UTKAST.md", "docs/MANUSKRIPT-v2.8-UTKAST.md", "docs/MANUSKRIPT-v2.9.md",
+             "docs/MANUSKRIPT-FAKTA-2026-09-28.md", "docs/PREPRINT.md", "docs/PREPRINT-v2.md"]
+    beholdt, utelatt = utelat(stier)
+    assert set(utelatt) == {"docs/MANUSKRIPT-v2.7-UTKAST.md", "docs/MANUSKRIPT-v2.8-UTKAST.md",
+                            "docs/PREPRINT-v2.md"}
+    assert set(beholdt) == {"docs/MANUSKRIPT-v2.9.md", "docs/MANUSKRIPT-FAKTA-2026-09-28.md", "docs/PREPRINT.md"}
+
+
 def test_zipgruppene_er_bare_nye_grupper_og_taket_er_zenodos():
     from gjenopptak.utgivelse import MAKS_FILER, _i_zip
     assert MAKS_FILER == 100                     # Zenodo: «exceeding the max amount per record», 01.10.2026

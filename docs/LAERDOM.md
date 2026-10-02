@@ -1006,4 +1006,25 @@ overlevde. **Flaks er ikke en sikringsrutine.**
   grenser**. En port som bare ser på det som skal ut, ser ikke det mottakeren nekter.
 * **Gjort:** byggeren nekter mer enn 100 filer (`utgivelse.MAKS_FILER`, test), og tre grupper som alle er nye i
   v0.4.0 — sakene, faktasjekkrapportene og leseroppdragene — deponeres som zip med innholdet ført per fil.
+* **To hindre til samme dag, begge tatt uten skade:** Zenodo svarer **429 over 133 kall i minuttet**, så sletting og
+  opplasting av ~100 filer må strupes og prøves på nytt; og en **ugyldig `GITHUB_TOKEN` i miljøet overstyrte den
+  gyldige keyring-innloggingen** til `gh`, så push feilet på autentisering — løst med `env -u GITHUB_TOKEN` for
+  akkurat det kallet. Versjons-DOI-en ble reservert i utkastet og svarte 302 straks etter publisering.
 * **Filer:** `src/gjenopptak/utgivelse.py`, `tests/test_utgivelse.py`, `docs/RELEASE-NOTES-v0.4.0.md`.
+
+## 49 KI-bruk erklæres som verktøy under forfatterens styring, aldri som forfatterskap (2026-10-02)
+
+* **Målt:** MetaArXiv avviste preprinten zvc34 (manus v0.1) 30.09.2026, manuelt og uten kommentar i OSF.
+  OSF Preprints' moderasjonsregler sier at innhold som helt eller mest er generert av språkmodeller, ikke passer
+  på tjenesten. Manus v2.8 § 8 beskrev utkastet som skrevet av en språkmodell («This draft was written in a chat
+  interface by a language model»). Om det var grunnen til avvisningen, sier ikke OSF.
+* **Slutning:** erklæringen skal være like ærlig og mer presis: den skiller **modellene som forskningsinstrument**
+  — rapportert i metoden med rolle, modell-ID og reliabilitet — fra **modellen som skriveverktøy**, og den sier
+  hva forfatteren gjorde og står ansvarlig for. KI-bruk skjules aldri; den erklæres som verktøy under
+  forfatterens styring, aldri som forfatterskap. **Malen er § 8 i `docs/PREPRINT-v2.md`.** Hver påstand i den må
+  være sann for dokumentet den står i.
+* **Gjort:** § 8 erstattet ordrett i `docs/PREPRINT-v2.md` og `docs/MANUSKRIPT-v2.8-UTKAST.md`; patch til
+  instruksfila for neste v-bump (`docs/patch/INSTRUKSER-2026-10-02-ki-erklaering.md`).
+* **Filer:** `docs/PREPRINT-v2.md`, `docs/MANUSKRIPT-v2.8-UTKAST.md`, `docs/patch/INSTRUKSER-2026-10-02-ki-erklaering.md`.
+* **Regel (02.10.2026):** en fil beholder aldri et versjonsnavn etter at bytene avviker fra det deponerte. `MANUSKRIPT-v2.8-UTKAST.md` er satt
+  tilbake til de deponerte bytene (sha256 `dd723f01…`); endringene står i `MANUSKRIPT-v2.9.md`, deponert med v0.4.1.

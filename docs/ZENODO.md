@@ -1,18 +1,19 @@
 # Zenodo-deponeringen
 
-**Deponert:** 2026-09-25. **Gjeldende versjon:** 0.4.0 (2026-10-01). *(Sto til v0.4.0: «0.3.0 (2026-09-26)».)*
+**Deponert:** 2026-09-25. **Gjeldende versjon:** 0.4.1 (2026-10-02). *(Sto til v0.4.1: «0.4.0 (2026-10-01)».)*
 
 | | |
 |---|---|
 | **Konsept-DOI** (siter denne) | **10.5281/zenodo.22959326** |
-| **Versjons-DOI** (v0.4.0, gjeldende) | **10.5281/zenodo.23073893** |
+| **Versjons-DOI** (v0.4.1, gjeldende) | **10.5281/zenodo.23096158** |
+| Versjons-DOI (v0.4.0) | 10.5281/zenodo.23073893 |
 | Versjons-DOI (v0.3.0) | 10.5281/zenodo.22976464 |
 | Versjons-DOI (v0.2.1) | 10.5281/zenodo.22975301 |
 | Versjons-DOI (v0.2.0) | 10.5281/zenodo.22965761 |
 | Versjons-DOI (v0.1.0) | 10.5281/zenodo.22959327 |
-| Post | https://zenodo.org/records/23073893 (v0.3.0: https://zenodo.org/records/22976464) |
+| Post | https://zenodo.org/records/23096158 (v0.4.0: https://zenodo.org/records/23073893) |
 | Lisens på depositumet | CC BY 4.0 (koden inni er Apache-2.0, jf. `LICENSE`) |
-| Filer | 98 (v0.3.0: 38, v0.2.0: 38, v0.1.0: 35) |
+| Filer | 100 (v0.4.0: 98, v0.3.0: 38, v0.2.0: 38, v0.1.0: 35) |
 
 ## Hva som ligger der
 
@@ -144,3 +145,26 @@ likeså. Versjons-DOI-en ble reservert i utkastet før publisering.
 **Zenodo tillater høyst 100 filer per post.** v0.4.0 har 98: sakfilene, faktasjekkrapportene og leseroppdragene
 ligger i hver sin zip (`RELEASE-NOTES-v0.4.0.md`).
 
+
+## Versjon 0.4.1 (2026-10-02)
+
+**Versjons-DOI:** **10.5281/zenodo.23096158**. **Post:** https://zenodo.org/records/23096158 (100 filer), publisert
+02.10.2026 som ny versjon av post 23073893; konsept-DOI-en **10.5281/zenodo.22959326** er uendret og er den som siteres.
+Begge svarte 302 ved oppslag rett etter publisering. Versjons-DOI-en ble reservert i utkastet før publisering.
+
+**Filkart mot v0.4.0** (`zenodo/v0.4.1-bygg/UTGIVELSE-0.4.1.json`): 90 uendret · 6 endret (`CITATION.cff`,
+`LAERDOM.md`, `MANIFEST-VAULT.md`, `ZENODO.md`, git-bundlen, og `blindfiler-indeks.zip` — samme 31 medlemmer med
+samme innhold, bare zip-tidsstempelet er nytt) · 4 nye (`MANUSKRIPT-v2.9.md`, `PREPRINT-v2.pdf`,
+`RELEASE-NOTES-v0.4.1.md`, `gjenopptak-src-0.4.1.tar.gz`) · 2 fjernet (`MANUSKRIPT-v2.8-UTKAST.md`,
+`gjenopptak-src-0.4.0.tar.gz`).
+
+**Hva som er endret** (`docs/RELEASE-NOTES-v0.4.1.md`): manus v2.9 (`MANUSKRIPT-v2.9.md`) erstatter utkast v2.8 —
+§ 8 er erklæringen om bruk av AI-verktøy, § 2.4, § 3.1 og § 7 bærer publiseringsstatusen til v0.4.0, og hodet er
+tittel, forfatter og DOI-linje. Preprinten deponeres rendret (`PREPRINT-v2.pdf`); kilden er `docs/PREPRINT-v2.md` i
+repoet. Ingen data, tall eller analysekode er endret.
+
+**Ekskluderingsliste versjon 2 (02.10.2026):** som versjon 1, pluss `docs/PREPRINT-v*.md`; unntaket for det nyeste
+manuset gjelder nå `docs/MANUSKRIPT-v2*.md`, utkast eller ikke, så v2.8-utkastet faller ut når v2.9 finnes. Endringen
+står i byggeren (`src/gjenopptak/utgivelse.py`: `UTELATT`, `NYESTE_UNNTATT`, `_versjon`, og PDF-en i `VAULT_FILER`),
+som er med i kildetarballen. `MANUSKRIPT-v2.8-UTKAST.md` i repoet er satt tilbake til de deponerte bytene (sha256
+`dd723f01…`, LAERDOM § 49).

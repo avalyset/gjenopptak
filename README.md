@@ -286,7 +286,8 @@ This repository publishes **states, not history**. The rule is fixed (ADR-0012, 
 **Consequence for readers:** you cannot see commit-by-commit history here, and that is deliberate. What
 you can do is cite an exact state — a tag, a MASTER version, and a Zenodo DOI that all name the same
 tree. **Releases:** `v0.3` = MASTER v0.3 = Zenodo v0.3.0 (2026-09-26/28); `v0.4` = MASTER v0.4 = Zenodo v0.4.0
-(2026-10-01, `docs/ZENODO.md`).
+(2026-10-01, `docs/ZENODO.md`); `v0.4.1` = Zenodo v0.4.1 (2026-10-02, manuscript v2.9 and the preprint PDF; MASTER v0.4
+unchanged).
 
 ## Licensing
 
@@ -365,5 +366,5 @@ in a dated file alongside:
 
 ## Citation
 
-See `CITATION.cff`. It carries the concept DOI `10.5281/zenodo.22959326`; the version DOI for v0.4.0 is
-added when that version is deposited.
+See `CITATION.cff`. It carries the concept DOI `10.5281/zenodo.22959326`; the version DOIs are listed in
+`docs/ZENODO.md` (v0.4.1: `10.5281/zenodo.23096158`).
