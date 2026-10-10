@@ -30,6 +30,7 @@ import argparse
 import hashlib
 import json
 import re
+import ssl
 import sys
 import time
 import urllib.error
@@ -38,6 +39,8 @@ import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
+
+import certifi
 
 from .utgivelse import MAKS_FILER, UTKAST_KATALOG
 from .vault import VaultUnavailable, require_vault, sha256_file
@@ -59,7 +62,11 @@ FYLLES = ("docs/ZENODO.md", "CITATION.cff", "docs/RELEASE-NOTES-v{versjon}.md")
 
 
 class ZenodoFeil(RuntimeError):
-    pass
+    """Feil fra et steg. ``status`` er HTTP-statusen når feilen kom fra et kall mot Zenodo, ellers None."""
+
+    def __init__(self, melding: str, status: int | None = None):
+        super().__init__(melding)
+        self.status = status
 
 
 def les_nøkkel(sti: Path = NØKKELFIL) -> str:
@@ -81,8 +88,11 @@ def _urllib_send(metode: str, url: str, hoder: dict[str, str], kropp, lengde: in
     if lengde is not None:
         h["Content-Length"] = str(lengde)
     forespørsel = urllib.request.Request(url, data=kropp, method=metode, headers=h)
+    # Rotsertifikatene tas eksplisitt fra certifi, som i utgivelse.py. Python fra python.org har ingen egne, og uten
+    # dette stoppet første kjøring mot Zenodo (10.10.2026) på CERTIFICATE_VERIFY_FAILED før noe var sendt.
+    kontekst = ssl.create_default_context(cafile=certifi.where())
     try:
-        with urllib.request.urlopen(forespørsel, timeout=900) as svar:
+        with urllib.request.urlopen(forespørsel, timeout=900, context=kontekst) as svar:
             return svar.status, svar.read(), dict(svar.headers)
     except urllib.error.HTTPError as e:
         return e.code, e.read(), dict(e.headers or {})
@@ -125,7 +135,7 @@ class Klient:
                 self.sov(float({k.lower(): v for k, v in svarhoder.items()}.get("retry-after", 5 * forsøk)))
                 continue
             melding = svar[:300].decode("utf-8", "replace").replace(self.nøkkel, "[nøkkel]")
-            raise ZenodoFeil(f"{metode} {url.removeprefix(self.api)} ga {status}: {melding}")
+            raise ZenodoFeil(f"{metode} {url.removeprefix(self.api)} ga {status}: {melding}", status)
         raise ZenodoFeil(f"{metode} {url.removeprefix(self.api)}: ga opp etter {FORSØK} forsøk")
 
 
@@ -306,6 +316,20 @@ def fjernfiler(k: Klient, t: dict) -> list[dict]:
     return k.kall("GET", f"{k.api}/deposit/depositions/{t['utkast_id']}/files") or []
 
 
+def slett_fil(k: Klient, t: dict, f: dict) -> None:
+    """Slett én fil i Zenodo-utkastet. Svarer Zenodo 404, leses fillisten: er filen borte, er slettingen utført.
+
+    Et slettekall kan gå gjennom hos Zenodo uten at svaret kommer fram. Da prøver klienten igjen og får 404 på en fil
+    som alt er slettet (skjedde ved opplastingen av v0.6.0, 10.10.2026). 404 alene er ikke nok: står filen fortsatt i
+    listen, er noe annet galt, og feilen går videre.
+    """
+    try:
+        k.kall("DELETE", f"{k.api}/deposit/depositions/{t['utkast_id']}/files/{f['id']}", ok=(204,))
+    except ZenodoFeil as e:
+        if e.status != 404 or any(r["id"] == f["id"] for r in fjernfiler(k, t)):
+            raise
+
+
 def last_opp(k: Klient, vault: Path, versjon: str, *, dato: str | None = None) -> dict:
     """Gjør Zenodo-utkastet likt det bygde utkastet. Kan kjøres på nytt: det som alt er likt, står."""
     m, t = les_manifest(vault, versjon), _tilstand(vault, versjon)
@@ -317,7 +341,7 @@ def last_opp(k: Klient, vault: Path, versjon: str, *, dato: str | None = None) -
         raise ZenodoFeil("utkastet er ikke klart for opplasting (kjør fyll og bygg på nytt): " + "; ".join(avvik[:5]))
     p = plan(m, fjernfiler(k, t))
     for f in p["slett"]:
-        k.kall("DELETE", f"{k.api}/deposit/depositions/{t['utkast_id']}/files/{f['id']}", ok=(204,))
+        slett_fil(k, t, f)
     ut = Path(m["utkast"])
     for navn in p["last_opp"]:
         k.kall("PUT", f"{t['bucket']}/{urllib.parse.quote(navn)}", fil=ut / navn, ok=(200, 201))

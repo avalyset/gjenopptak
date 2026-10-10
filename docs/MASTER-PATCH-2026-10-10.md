@@ -1,8 +1,8 @@
 # MASTER-patch 2026-10-10 — landingen: hver åpen post ført, og hva v0.5 bærer
 
 **§ 1 og § 2 er påført i `MASTER_GJENOPPTAK_v0_5_2026-10-10.md`** (bumpet 10.10.2026 med `bump-master.sh`), sammen
-med `docs/MASTER-PATCH-2026-10-07.md`. **§ 3 er påført i `MASTER_GJENOPPTAK_v0_6_2026-10-10.md`** (bumpet samme dag;
-POINTER peker dit). MASTER ligger på Vault og i `00-KONTEKST/`, ikke i git. Finansieringsstatus
+med `docs/MASTER-PATCH-2026-10-07.md`. **§ 3 er påført i `MASTER_GJENOPPTAK_v0_6_2026-10-10.md`** (bumpet samme dag). **§ 4 er påført i
+`MASTER_GJENOPPTAK_v0_7_2026-10-10.md`** (bumpet etter publiseringen; POINTER peker dit). MASTER ligger på Vault og i `00-KONTEKST/`, ikke i git. Finansieringsstatus
 føres bare i MASTER.
 
 ## 1 Endringer i MASTER v0.5
@@ -94,3 +94,22 @@ Avgjørelsene:
 | `gjenvunnet/addendum-19/README.md`: regenerert, ikke byte-verifisert | 2 | `d21624b` |
 | Taggen `v0.5.0` på treet Zenodo v0.5.0 ble bygget fra, med de 14 innsendingsfilene | 3 | `cd7c032`, tre lik `f0bc64b`; verifisert mot bundelens HEAD og kildetarballen i depositumet |
 | MASTER bumpes, endres ikke på stedet | 3 | v0.6; v0.5 gjenopprettet |
+
+## 4 Endringer i MASTER v0.7 — v0.6.0 er publisert (10.10.2026)
+
+v0.6 står urørt i arkivet. Bumpet med `bump-master.sh` etter publiseringen.
+
+* **§ 0:** ny statusblokk for v0.7 over de to tidligere; ny rad i changeloggen. **Zenodo v0.6.0 er publisert
+  10.10.2026: 10.5281/zenodo.23279145**, 97 filer, md5 likt byggemanifestet for alle; bygget fra `main` `12503a2`.
+  GitHub `main` er `504146e` (utgivelsescommiten for v0.6.0), og taggene `v0.5.0` (`cd7c032`) og `v0.6.0` (`504146e`) er
+  pushet.
+* **§ 0, rettet:** blokken fra v0.5 sa at språkmodellen bak vurderingen 03.10.2026 «fikk manuskriptet alene».
+  Instruksen (Vault `fagfellevurdering/gpt-2026-10-03/FAGFELLEVURDERING-instruks.txt`) ga den manuskriptet som PDF og
+  lenkene til det offentlige depositumet og repoet.
+* **§ 0:** kontrollen før publisering (25 avvik, 19 rettet eller ført i INNHENTET-filer, deretter tre restfunn fra
+  gjenkontrollen); metadata i den publiserte posten rettet samme dag; `zenodo.py` rettet etter publiseringen
+  (certifi-kontekst, og slettekall som får 404 etter et tapt svar).
+* **§ 2:** v0.6.0 er gjeldende versjon; GitHub-raden fører hva som er pushet.
+* **§ 9:** «Zenodo v0.6.0 og push av `offentlig`» er gjort og strøket som åpen post. Nye poster: de fem kosmetiske
+  avvikene som står; filkartet og instruksfila i kontekstsettet navngir fortsatt MASTER v0.6 og status fra før
+  publiseringen; GitHub `main` har fått én commit etter `v0.6.0` uten egen tagg.

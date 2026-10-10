@@ -356,3 +356,93 @@ def test_fyll_fra_kommandolinjen_leser_doien_fra_tilstandsfilen(oppsett, tmp_pat
     assert (repo / "docs/ZENODO.md").read_text() == "10.5281/zenodo.222 2026-10-12" and len(fz.logg) == n             # ingen nettkall
     assert "docs/ZENODO.md: 2 plassholdere fylt" in capsys.readouterr().out
 
+
+def test_kallene_bruker_certifi_som_rotsertifikater(monkeypatch):
+    """10.10.2026: første kjøring mot Zenodo stoppet på CERTIFICATE_VERIFY_FAILED; klienten tok ikke certifi i bruk."""
+    import ssl
+    import certifi
+    sett = {}
+    ekte = ssl.create_default_context
+
+    def lag(*a, **k):
+        sett["cafile"] = k.get("cafile")
+        return ekte(*a, **k)
+
+    class Svar:
+        status, headers = 200, {}
+        def read(self): return b"{}"
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+
+    def åpne(forespørsel, timeout=None, context=None):
+        sett["context"], sett["url"] = context, forespørsel.full_url
+        return Svar()
+
+    monkeypatch.setattr(Z.ssl, "create_default_context", lag)
+    monkeypatch.setattr(urllib.request, "urlopen", åpne)
+    assert Z._urllib_send("GET", f"{API}/x", {}, None, None) == (200, b"{}", {})
+    assert sett["cafile"] == certifi.where() and isinstance(sett["context"], ssl.SSLContext)
+    assert sett["context"].verify_mode == ssl.CERT_REQUIRED and sett["context"].check_hostname          # kontrollen er på
+
+
+def test_slettekall_med_tapt_svar_regnes_som_utfoert_naar_filen_er_borte(oppsett):
+    """10.10.2026: en sletting gikk gjennom hos Zenodo, svaret kom ikke fram, og gjentaket fikk 404."""
+    fz, k, vault, m, _ = oppsett
+    Z.reserver(k, vault, "0.6.0", "111")
+    offer = fz.filer["README.md"]["id"]
+    ekte = fz.send
+
+    def send(metode, url, hoder, kropp, lengde):
+        if metode == "DELETE" and url.endswith("/" + offer) and "tapt" not in fz.__dict__:
+            fz.tapt = True
+            ekte(metode, url, hoder, kropp, lengde)                    # slettingen utføres …
+            return 503, b'{"message": "gateway"}', {"Retry-After": "0"}  # … men svaret går tapt
+        return ekte(metode, url, hoder, kropp, lengde)
+
+    k.send = send
+    assert Z.last_opp(k, vault, "0.6.0") == {"slettet": 3, "lastet_opp": 5, "sto": 1}
+    assert [s for mt, s in fz.logg if mt == "DELETE" and s.endswith("/" + offer)] == [f"/deposit/depositions/222/files/{offer}"] * 2
+    assert Z.verifiser(k, vault, "0.6.0") == []
+
+
+def test_slettekall_med_404_feiler_naar_filen_fortsatt_staar(oppsett):
+    fz, k, vault, m, _ = oppsett
+    Z.reserver(k, vault, "0.6.0", "111")
+    offer = fz.filer["README.md"]["id"]
+    ekte = fz.send
+    k.send = lambda metode, url, *a: (404, b'{"message": "not found"}', {}) if metode == "DELETE" and url.endswith("/" + offer) else ekte(metode, url, *a)
+    with pytest.raises(Z.ZenodoFeil, match="ga 404") as e:
+        Z.last_opp(k, vault, "0.6.0")
+    assert e.value.status == 404 and "README.md" in fz.filer                   # filen står: 404 alene godtas ikke
+    assert not any(mt == "PUT" for mt, _ in fz.logg)                           # og ingenting er lastet opp
+
+
+def test_andre_feil_paa_slettekall_gaar_videre(oppsett):
+    fz, k, vault, m, _ = oppsett
+    Z.reserver(k, vault, "0.6.0", "111")
+    offer = fz.filer["README.md"]["id"]
+    ekte = fz.send
+    k.send = lambda metode, url, *a: (403, b'{"message": "forbidden"}', {}) if metode == "DELETE" and url.endswith("/" + offer) else ekte(metode, url, *a)
+    with pytest.raises(Z.ZenodoFeil, match="ga 403") as e:
+        Z.last_opp(k, vault, "0.6.0")
+    assert e.value.status == 403
+
+
+def test_bare_404_tolkes_som_tapt_svar(oppsett):
+    """En annen feilkode godtas ikke selv om filen viser seg å være borte: da er det ukjent hva som skjedde."""
+    fz, k, vault, m, _ = oppsett
+    Z.reserver(k, vault, "0.6.0", "111")
+    offer = fz.filer["README.md"]["id"]
+    ekte = fz.send
+
+    def send(metode, url, hoder, kropp, lengde):
+        if metode == "DELETE" and url.endswith("/" + offer):
+            ekte(metode, url, hoder, kropp, lengde)
+            return 403, b'{"message": "forbidden"}', {}
+        return ekte(metode, url, hoder, kropp, lengde)
+
+    k.send = send
+    with pytest.raises(Z.ZenodoFeil, match="ga 403"):
+        Z.last_opp(k, vault, "0.6.0")
+    assert "README.md" not in fz.filer
+

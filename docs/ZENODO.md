@@ -196,6 +196,18 @@ uten kjennskap til byggeøkten: 25 avvik, hvorav de 19 som ikke var kosmetiske, 
 release notes med `python -m gjenopptak.zenodo fyll` før opplasting; utkastet ble så bygget på nytt, lastet opp og
 verifisert fil for fil mot byggemanifestet.
 
+### Etter publisering
+
+**Metadata rettet 10.10.2026** (redigering av den publiserte posten; ingen fil endret, samme DOI): beskrivelsen fikk et
+avsnitt om 0.6.0 øverst, og avsnittet om 0.5.0 sier nå «Revision after an external review by a language model (GPT)» der
+det sto «Revision after external peer review». Beskrivelsen er lest tilbake fra den offentlige posten og er lik det som
+ble lagret; de 97 filene er fortsatt like byggemanifestet.
+
+**Opplastingen 10.10.2026:** `zenodo.py` nådde ikke Zenodo før rotsertifikatene ble hentet fra certifi, og ett slettekall
+fikk 404 fordi første forsøk var gått gjennom uten at svaret kom fram. Begge er rettet i skriptet etter publiseringen:
+kallene bruker certifi eksplisitt, og et slettekall som får 404, regnes som utført når fillisten bekrefter at filen er
+borte. Kildetarballen i v0.6.0 bærer skriptet slik det var da versjonen ble deponert.
+
 **Hva versjonen er** (`docs/RELEASE-NOTES-v0.6.0.md`): en opprydning. Ingen ny måling, ingen endrede tall, ingen låst fil
 endret. Nytt er måleinndata og utfallsfiler (`maalefiler.zip`, se `docs/DEPOSITUMSKRAV-2026-10-10.md`), de gjenvunne
 skriptene bak ADDENDUM-19, 19b og 20 (`gjenvunnet-kode.zip`), manuskript v3.3 slik det ble sendt, ADDENDUM-28 (låst, ikke
