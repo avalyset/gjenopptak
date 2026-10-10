@@ -1029,7 +1029,7 @@ overlevde. **Flaks er ikke en sikringsrutine.**
 * **Regel (02.10.2026):** en fil beholder aldri et versjonsnavn etter at bytene avviker fra det deponerte. `MANUSKRIPT-v2.8-UTKAST.md` er satt
   tilbake til de deponerte bytene (sha256 `dd723f01…`); endringene står i `MANUSKRIPT-v2.9.md`, deponert med v0.4.1.
 
-## 50 Ekstern fagfellevurdering: klyngene, en paret test og en referanse som fantes likevel (2026-10-03)
+## 50 Ekstern vurdering gjort av en språkmodell: klyngene, en paret test og en referanse som fantes likevel (2026-10-03)
 
 * **Målt:** en ekstern vurdering (major revision) av manus v2.9, og en reanalyse av tallene med verket som klyngeenhet
   (`docs/REANALYSE-2026-10-03.md`, generert fra `revisjon-2026-10/reanalyse.json`). Referansene i vurderingen slått opp i
@@ -1039,7 +1039,7 @@ overlevde. **Flaks er ikke en sikringsrutine.**
   * Der få verk bærer mange rader, blir intervallene mye bredere: leserens recall i fase 3 [60,9–89,7] mot [73,2–88,0]
     (12 verk, ett med 51 av 104); løftbar H1–H6 i kandidatlista [9,0–26,5] mot [15,4–23,1] (ett verk med 113 rader).
   * **Differansen 0,812 − 0,636 er etablert** med paret bootstrap ([0,044–0,323]; verksklynget [0,057–0,318]). Manuset sa
-    «not statistically established» fordi de separate intervallene overlappet — feil slutning, feil vei.
+    «not statistically established» fordi de separate intervallene overlappet — feil slutning, feil vei (differansen er 0,177).
   * Intervallet [2,12–7,95] for grunnraten var ikke et konfidensintervall: bare bomratens Wilson-grenser, uten presisjonens
     usikkerhet. Riktig: [1,3–7,2] stratifisert, [1,3–7,5] verksklynget.
   * 432 kandidatrader er **276 unike erklæringer**; 673 i fase 3 er 424. Kjeden deduplikerer ikke.
@@ -1060,3 +1060,67 @@ overlevde. **Flaks er ikke en sikringsrutine.**
 * **Filer:** `docs/REANALYSE-2026-10-03.md`, `docs/REVISJON-2026-10-03-REFERANSER.md`, `docs/CASEUTVALG-2026-10-03.md`,
   `docs/TALLMANIFEST.md`, `docs/KODEBOK-MENNESKER-v1.md`, `ADDENDUM-27.md`, `docs/RESULTAT-ADDENDUM-27.md`,
   `docs/MANUSKRIPT-FAKTA-2026-09-28.md` § 10.
+
+*(Rettet 10.10.2026 i § 50: overskriften sa «Ekstern fagfellevurdering». Leseren var en språkmodell (GPT); ingen menneskelig fagfelle har lest manuskriptet. Merknaden står sist i seksjonen for at
+linjenumrene over skal stå.)*
+
+## 51 En fil tatt ut av treet ligger fortsatt i bundelen (2026-10-10)
+
+* **Målt:** hva en git-bundle med hele historikken bærer av `docs/innsending/`, etter at katalogen ble tatt ut av git
+  (`ac8225c`). Slått opp med `git log --all --name-only -- docs/innsending` og slektskap mot `f0bc64b`, commiten v0.5.0
+  ble bygget fra.
+* **Tall:** 19 filer har ligget i katalogen. **14 er alt offentlige** i bundelen i Zenodo v0.5.0, blant dem første
+  følgebrev og første skjema til tidsskriftet. Fem kom etter v0.5.0 og er ikke offentlige. Utgivelsestreet for v0.5.0 på
+  `offentlig` bar de 14; det var ikke pushet. Det pushede treet (v0.4.1) bar ingen.
+* **Slutning:**
+  * **Depositumets ekskluderingsliste virker på filer, ikke på historikk.** Alt som noen gang er committet, følger en
+    bundle av hele historikken, uansett hva lista sier og uansett om filen er slettet siden. Scrub over treet ser det ikke.
+  * **Det som ikke skal ut, må aldri inn.** `.gitignore` før første commit er eneste virkemiddel som ikke koster
+    historikken. Å skrive om historikken ville brutt samsvaret med kanon-bundlene og tidsstemplene.
+  * To avgjørelser som hver er klare («hele historikken» og «publiseres ikke») kan møtes i én fil. Bygget følger den
+    ene og sier fra om den andre; det velger ikke stille.
+* **Gjort:** katalogen ut av git og inn i `.gitignore`, kildene til Vault med sha256; utgivelsestrærne for v0.5.0 og
+  v0.6.0 på `offentlig` laget uten katalogen; `--bundle alle|offentlig` i `utgivelse.py`, så valget er ett bygg unna;
+  åpen post i MASTER § 9. Historikken er ikke omskrevet.
+* **Filer:** `.gitignore`, `tests/test_innsending_utenfor.py`, `src/gjenopptak/utgivelse.py`,
+  `docs/RELEASE-NOTES-v0.6.0.md`, `docs/GJENOPPTAK_FILKART_v1_2026-10-10.md`.
+
+## 52 To kontroller som deler en blindflekk, er én kontroll (2026-10-10)
+
+* **Målt:** ordrette utdrag fra blindfilpassasjene i v0.6.0-utkastet, søkt på nytt etter at byggkontrollen og det første
+  «uavhengige» søket begge var grønne. Det nye søket jevnet ut bokstavstørrelse og Unicode-form (NFKC) før
+  sammenlikning; de to første gjorde ikke det.
+* **Tall:** ett sitat på nøyaktig 50 tegn sto igjen i tre filer i `maalefiler.zip`. Koderen hadde gitt det stor
+  forbokstav; passasjen har liten. Skriftsensitivt var sammenfallet 49 tegn, og begge kontrollene slapp det. Uttaket gikk
+  fra 98 til 101. Kandidatlista var ren uansett (83).
+* **Slutning:**
+  * **En kontroll er uavhengig bare på de aksene der den er bygget annerledes.** Byggkontrollen og det første søket
+    brukte samme normalisering. At de var enige, sa ingenting om normaliseringen (jf. § 50 om sjekker som kontrollerer
+    at tallet står, ikke hvordan det er regnet).
+  * **«Ordrett» må defineres av leseren, ikke av strengsammenlikningen.** Stor forbokstav, en ligatur løst opp eller et
+    hardt mellomrom gjør ikke et sitat til noe annet.
+  * Terskelen (50 tegn) er skarp. Et tegn fra eller til avgjør, og derfor må kanten prøves i testen.
+* **Gjort:** `_norm` i `maalefiler.py` sammenlikner i NFKD uten skille mellom store og små bokstaver;
+  `tests/test_maalefiler.py` prøver stor forbokstav på nøyaktig 50 tegn, versaler, ligatur, dekomponerte aksenter og hardt
+  mellomrom, og at 49 tegn står. Depositumskravet § 7 fører hva som sto.
+* **Filer:** `src/gjenopptak/maalefiler.py`, `tests/test_maalefiler.py`, `docs/DEPOSITUMSKRAV-2026-10-10.md` § 7.
+
+## 53 En tagg for en publisert versjon peker på det som ble deponert, og MASTER endres ikke på stedet (2026-10-10)
+
+* **Målt:** hvilken commit Zenodo v0.5.0 ble bygget fra, slått opp i depositumet og ikke i egne notater. Vault-kopien av
+  bundelen og kildetarballen har samme md5 som Zenodo-posten fører (`f532f286…` og `43555868…`).
+* **Tall:** bundelens HEAD er `f0bc64b`. `git archive` av den commiten, med samme stier og prefiks, er byte-lik den
+  deponerte tarballen (121 filer). Treet (`dcd143c1…`) bærer 14 filer under `docs/innsending/`.
+* **Slutning:**
+  * **En tagg er en påstand om hva som ble utgitt.** I runde 2 ble utgivelsescommiten for v0.5.0 laget på nytt uten de
+    14 filene, fordi de ikke skulle til GitHub. Da pekte `v0.5.0` på et tre ingen har deponert. Det som alt er
+    offentlig, gjøres ikke upublisert ved å tagge noe annet.
+  * **Et styringsdokument med versjon i navnet endres ved bump, også samme dag.** Avgjørelsene fra runde 2 ble skrevet
+    inn i MASTER v0.5 på stedet for å spare en versjon. To filer med samme navn og ulikt innhold er verre enn to
+    versjoner på én dag.
+  * Begge var avvik gjort for å rydde. Rydding som endrer hva et navn peker på, er ikke rydding.
+* **Gjort:** `v0.5.0` peker på utgivelsescommiten `cd7c032`, hvis tre er treet i `f0bc64b`; taggmeldingen fører
+  verifiseringen. MASTER v0.5 er gjenopprettet byte for byte (sha256 `3a751cb8…`), og v0.6 er bumpet med
+  `bump-master.sh`. Regelen står i instruksfila § 12.
+* **Filer:** `README.md`, `docs/MASTER-PATCH-2026-10-10.md` § 3, `docs/GJENOPPTAK_INSTRUKSER_v1.4_2026-10-10.md`,
+  `docs/GJENOPPTAK_FILKART_v1_2026-10-10.md`.

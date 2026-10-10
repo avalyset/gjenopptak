@@ -1,19 +1,21 @@
 # Zenodo-deponeringen
 
-**Deponert:** 2026-09-25. **Gjeldende versjon:** 0.4.1 (2026-10-02). *(Sto til v0.4.1: «0.4.0 (2026-10-01)».)*
+**Deponert:** 2026-09-25. **Gjeldende versjon:** 0.6.0 (2026-10-10). *(Sto til v0.6.0: «0.5.0 (2026-10-03)».)*
 
 | | |
 |---|---|
 | **Konsept-DOI** (siter denne) | **10.5281/zenodo.22959326** |
-| **Versjons-DOI** (v0.4.1, gjeldende) | **10.5281/zenodo.23096158** |
+| **Versjons-DOI** (v0.6.0, gjeldende) | **10.5281/zenodo.23279145** |
+| Versjons-DOI (v0.5.0) | 10.5281/zenodo.23120143 |
+| Versjons-DOI (v0.4.1) | 10.5281/zenodo.23096158 |
 | Versjons-DOI (v0.4.0) | 10.5281/zenodo.23073893 |
 | Versjons-DOI (v0.3.0) | 10.5281/zenodo.22976464 |
 | Versjons-DOI (v0.2.1) | 10.5281/zenodo.22975301 |
 | Versjons-DOI (v0.2.0) | 10.5281/zenodo.22965761 |
 | Versjons-DOI (v0.1.0) | 10.5281/zenodo.22959327 |
-| Post | https://zenodo.org/records/23096158 (v0.4.0: https://zenodo.org/records/23073893) |
+| Post | https://doi.org/10.5281/zenodo.23279145 (v0.5.0: https://zenodo.org/records/23120143) |
 | Lisens på depositumet | CC BY 4.0 (koden inni er Apache-2.0, jf. `LICENSE`) |
-| Filer | 100 (v0.4.0: 98, v0.3.0: 38, v0.2.0: 38, v0.1.0: 35) |
+| Filer | 97 (v0.5.0: 98, v0.4.1: 100, v0.4.0: 98, v0.3.0: 38, v0.2.0: 38, v0.1.0: 35) |
 
 ## Hva som ligger der
 
@@ -171,10 +173,60 @@ som er med i kildetarballen. `MANUSKRIPT-v2.8-UTKAST.md` i repoet er satt tilbak
 
 ## Versjon 0.5.0 (2026-10-03)
 
-**Versjons-DOI:** **10.5281/zenodo.23120143** (reservert i utkastet før bygget; satt inn i manus v3.1 og CITATION.cff før opplasting).
+**Versjons-DOI:** **10.5281/zenodo.23120143** (reservert i utkastet før bygget; satt inn i manus v3.1 og CITATION.cff før opplasting). **Publisert 03.10.2026**, post https://zenodo.org/records/23120143, 98 filer, md5 likt utkastet for alle 98; versjons- og konsept-DOI svarte 302. Filkart mot v0.4.1: 69 uendret · 11 endret · 18 nye · 20 fjernet (`zenodo/v0.5.0-bygg/UTGIVELSE-0.5.0.json`).
 
 ### Forberedelsen
 
-Bygget etter ekstern fagfellevurdering (`docs/RELEASE-NOTES-v0.5.0.md`). Utkastet ligger på Vault, `zenodo/v0.5.0-utkast/`;
-filkart mot v0.4.1 i `zenodo/v0.5.0-bygg/UTGIVELSE-0.5.0.json`. **Publiseres ikke før eierens go.** `CITATION.cff` bærer
-0.5.0 og 03.10.2026; datoen settes til publiseringsdatoen, og utkastet bygges på nytt, før publisering.
+Bygget etter en ekstern vurdering gjort av en språkmodell (`docs/RELEASE-NOTES-v0.5.0.md`). *(Rettet 10.10.2026: sto «etter ekstern fagfellevurdering». Leseren var en språkmodell (GPT); ingen menneskelig fagfelle har lest manuskriptet.)* Utkastet ligger på Vault, `zenodo/v0.5.0-utkast/`;
+filkart mot v0.4.1 i `zenodo/v0.5.0-bygg/UTGIVELSE-0.5.0.json`. *(Sto før publiseringen 03.10.2026: «Publiseres ikke før
+eierens go. `CITATION.cff` bærer 0.5.0 og 03.10.2026; datoen settes til publiseringsdatoen, og utkastet bygges på nytt, før
+publisering.» Versjonen ble publisert samme dag.)*
+
+## Versjon 0.6.0 (2026-10-10)
+
+**Versjons-DOI:** **10.5281/zenodo.23279145**. **Publisert 2026-10-10**, post https://doi.org/10.5281/zenodo.23279145, 97 filer. Filkart
+mot v0.5.0: 69 uendret · 16 endret · 12 nye · 13 fjernet (`zenodo/v0.6.0-bygg/UTGIVELSE-0.6.0.json`). `CITATION.cff` bærer
+0.6.0, publiseringsdatoen, konsept-DOI, denne versjons-DOI-en og preprintens DOI.
+
+### Forberedelsen
+
+Bygget som utkast på Vault 10.10.2026 (`zenodo/v0.6.0-utkast/`). Før publisering ble utkastet kontrollert i en egen økt
+uten kjennskap til byggeøkten: 25 avvik, hvorav de 19 som ikke var kosmetiske, ble rettet eller ført i INNHENTET-filer
+(`docs/RELEASE-NOTES-v0.6.0.md`). Versjons-DOI-en ble reservert i utkastet på Zenodo og satt inn her, i `CITATION.cff` og i
+release notes med `python -m gjenopptak.zenodo fyll` før opplasting; utkastet ble så bygget på nytt, lastet opp og
+verifisert fil for fil mot byggemanifestet.
+
+**Hva versjonen er** (`docs/RELEASE-NOTES-v0.6.0.md`): en opprydning. Ingen ny måling, ingen endrede tall, ingen låst fil
+endret. Nytt er måleinndata og utfallsfiler (`maalefiler.zip`, se `docs/DEPOSITUMSKRAV-2026-10-10.md`), de gjenvunne
+skriptene bak ADDENDUM-19, 19b og 20 (`gjenvunnet-kode.zip`), manuskript v3.3 slik det ble sendt, ADDENDUM-28 (låst, ikke
+kjørt), addendumstatusen og fire INNHENTET-filer. De fem INNHENTET-filene ligger samlet i `innhentet.zip`.
+
+**Ekskluderingsliste versjon 5 (10.10.2026):** som versjon 4, pluss `docs/GJENOPPTAK_INSTRUKSER_*.md` og
+`docs/GJENOPPTAK_FILKART_*.md`.
+
+**Holdt utenfor etter eierens avgjørelser 10.10.2026:** `docs/innsending/` (følgebrev og skjemasvar til tidsskriftet)
+er tatt ut av git og ligger på Vault; ingen fil derfra er i utkastet. `SAKBEHANDLING-2026-09-27-kandidater.md` er
+renset i repoet (83 ordrette utdrag byttet med merke, samme regel som `maalefiler.zip`) og ligger slik i `saker.zip`. Git-bundelen bærer hele
+historikken (`--bundle alle`, standard); den bærer derfor også det som har ligget i `docs/innsending/` i tidligere
+commits. Se `docs/RELEASE-NOTES-v0.6.0.md`.
+
+### Opplasting og publisering
+
+`src/gjenopptak/zenodo.py` gjør det `utgivelse.py` ikke gjør. Fire steg, hvert for seg, og hvert kan kjøres på nytt:
+
+| steg | kommando | hva det gjør |
+|---|---|---|
+| plan | `python -m gjenopptak.zenodo plan --versjon 0.6.0` | regner fra filkartet hva som slettes, lastes opp og står; kontrollerer utkastet på disk mot manifestet og sier om plassholdere står igjen. Ingen nettkall |
+| reserver | `… reserver --versjon 0.6.0 --forrige 23120143 --ja` | oppretter utkast til ny versjon; skriver id, bucket og reservert DOI til `zenodo/zenodo-v0.6.0-tilstand.json` på Vault |
+| fyll | `… fyll --versjon 0.6.0 --dato ÅÅÅÅ-MM-DD` | setter den reserverte DOI-en og publiseringsdatoen inn for plassholderne i denne filen, `CITATION.cff` og release notes. Ingen nettkall. Deretter commit, nytt bygg og ny tagg |
+| last opp | `… last-opp --versjon 0.6.0 --dato ÅÅÅÅ-MM-DD --ja` | gjør fillisten i Zenodo-utkastet lik manifestet; setter versjon og dato i metadata |
+| verifiser | `… verifiser --versjon 0.6.0` | leser fillisten tilbake; krever samme navn og md5, fil for fil |
+| publiser | `… publiser --versjon 0.6.0 --ja "publiser v0.6.0"` | **irreversibelt.** Kjører bare med null avvik og eierens ja ordrett |
+
+Fram til `fyll` er kjørt, står en plassholder for versjons-DOI og dato i de tre filene (gyldige etter CFF-skjemaet, så
+`CITATION.cff` validerer). Et utkast som bærer en plassholder, eller som ikke fører den reserverte DOI-en, nekter skriptet
+å laste opp og å publisere. Nøkkelen leses fra `~/.config/zenodo.env` og sendes bare som `Authorization`-hode.
+
+Skriptet er testet mot en falsk Zenodo, uten nettverk (`tests/test_zenodo.py`). Det følger kallene som ble brukt for
+v0.2.1–v0.5.0 (newversion 201 · fil-DELETE 204 · fil-PUT 201 · metadata-PUT 200 · publish 202); avviker et svar fra det
+testene antar, stopper skriptet med statuskoden.

@@ -36,8 +36,8 @@ tall her som motsier chat, gjelder dette.
 | ADDENDUM-21 (koder 3, ukjørt) | `ADDENDUM-21.md` | 7 751 | `de6c49743a0fc652776aa759…` |
 | ADDENDUM-22 (porten) | `ADDENDUM-22.md` | 19 606 | `fc11ff062a0e0c2d620fdd3c…` |
 | ADDENDUM-23 (post hoc port) | `ADDENDUM-23.md` | 7 604 | `d0eb2ca4818ea965ec722da7…` |
-| ADR-0012 (kjeden) | `docs/decisions/0012-kjeden-er-en-sti.md` | 11 452 | `6ee627a16bda7ddd2714f61c…` |
-| METODE | `docs/METODE.md` | 35 529 | `6523425b17953dd440098d36…` |
+| ADR-0012 (kjeden) | `docs/decisions/0012-kjeden-er-en-sti.md` | 11 860 | `23df1877e50e74a2d845a6fb…` |
+| METODE | `docs/METODE.md` | 37 130 | `eb3005e5c6a654c6e9e56b35…` |
 | kjede.toml | `kjede.toml` | 5 029 | `65620200fb2a3ca7bc45273c…` |
 | **register v1 (fasit)** | Vault: `register/claims.jsonl` | 40 639 | `a56cac542d26a296231351bd…` |
 | **register v2 (kandidatlista)** | `data/kjede/kandidat432/8-register.jsonl` | 537 493 | `c6895202b76199aac1b35b53…` |
@@ -55,10 +55,11 @@ tall her som motsier chat, gjelder dette.
 senere commits — ADR-0012, METODE, SAK-14-resultatet, SAK-09c, SAK-08, sakregisteret og triagen. Tabellen
 føres for dokumenter som fortsatt endres, og må regnes om ved hver endring av en fil den fører. Regnet om igjen 28.09.2026 for sakregisteret og triagen etter
 SAK-08-tillegget, og for SAK-11 etter noten om forfattertallet, og for ADR-0012 etter
-eierens bundleavgjørelse 29.09., og 30.09.2026 for docs/METODE.md etter tilleggene om fase 3-utfallet, og igjen etter frys-lesning 4 for docs/METODE.md, docs/SAKBEHANDLING-2026-09-27-triage.md, docs/decisions/0012-kjeden-er-en-sti.md, docs/saker/REGISTER-SAKER.md, docs/saker/SAK-11/LUKKET.md.)*
+eierens bundleavgjørelse 29.09., og 30.09.2026 for docs/METODE.md etter tilleggene om fase 3-utfallet, og igjen etter frys-lesning 4 for docs/METODE.md, docs/SAKBEHANDLING-2026-09-27-triage.md, docs/decisions/0012-kjeden-er-en-sti.md, docs/saker/REGISTER-SAKER.md, docs/saker/SAK-11/LUKKET.md, og 10.10.2026 for docs/METODE.md og docs/decisions/0012-kjeden-er-en-sti.md etter rettelsene om differansen og grunnratens intervall.)*
 
-Repo: `https://github.com/avalyset/gjenopptak`, offentlig gren = rotcommit `5fcb353` + utgivelsescommit
-`967254a` (v0.3), 168 filer publisert; oppdateres ved v0.4.0.
+*Per 28.09.2026:* Repo: `https://github.com/avalyset/gjenopptak`, offentlig gren = rotcommit `5fcb353` + utgivelsescommit
+`967254a` (v0.3), 168 filer publisert. *(10.10.2026: grenen har siden fått utgivelsescommitene for v0.4 og v0.4.1; gjeldende
+tilstand står i `docs/ZENODO.md` og README.)*
 Konsept-DOI **10.5281/zenodo.22959326**. MASTER v0.3, Vault, sha256 `46aeb328b4b04ab68b980350…`.
 
 ---
@@ -113,7 +114,7 @@ ikke bære en terskel nær sin egen ytterkant.»
 |---|---|---|
 | a) bekreftede treff / alle tekstbiter | 25/22 243 = **0,112 %** = ett per **890** | **måler utvalget — skal ikke brukes** |
 | b) presisjon × flaggede / alle | 0,1667 × 2 173 = 362 → **1,63 %** = ett per **61** [1,13–2,29 %] | et **gulv** |
-| c) b delt på implisert recall | 362/0,475 = 763 → **3,43 %** = ett per **29** [2,12–7,95 %] | **beste anslag** |
+| c) b delt på implisert recall | 362/0,475 = 763 → **3,43 %** = ett per **29**; cellevektet 3,42 %, verksklynget **[1,3–7,5 %]** *(rettet 10.10.2026: sto [2,12–7,95 %], som ikke var et konfidensintervall — § 10)* | **sekundær størrelse** *(sto «beste anslag»)* |
 
 **Bruk c, med intervallet, og si hvilken du bruker.**
 
@@ -133,8 +134,9 @@ en agentisk Claude Code-instans på `claude-opus-5`, ikke et menneske — modell
 versjonert. κ = 0,812 er derfor **etterprøvbar på sin egen inndata**, men den måler samsvar mellom to
 modeller, ikke gyldighet.
 
-**Koder 4 (28.09.2026, `docs/METODE.md` «Koder 4»):** Fable 5.1 i chat, en **annen modellfamilie**, samme
-320 passasjer, blindfil og regelfil. κ **0,899** [0,808–0,969] mot koder 2 og **0,781** [0,659–0,883] mot
+**Koder 4 (28.09.2026, `docs/METODE.md` «Koder 4»):** Fable 5.1 i chat, en **annen modell fra samme leverandør**
+*(Rettet 10.10.2026: sto «annen modellfamilie». ADDENDUM-28 § 1 sier: «Koder 4 (Fable 5.1) er i `docs/METODE.md` omtalt som en annen modellfamilie, men kommer fra samme leverandør som koder 1 og 2.» Manuskript v3.3 § 3: «a different model from the same vendor».)*,
+samme 320 passasjer, blindfil og regelfil. κ **0,899** [0,808–0,969] mot koder 2 og **0,781** [0,659–0,883] mot
 koder 1. Retningen er motsatt av det modellfamilie-forbeholdet forutså, men intervallene overlapper.
 **7 av 320 rader var eksponert** for koder 4 før kodingen (METODE, datert note); uten dem 0,874 og 0,757.
 Koder 4 er heller ikke et menneske.
@@ -156,10 +158,13 @@ regelfil, samme 320 passasjer. Gjengitt identisk i `ADR-0012`.
 **Hovedfunnet:** rekken **0,031 → 0,294 → 0,636** er monoton, og intervallene for Haiku og Opus
 **overlapper ikke**. Modellkapasitet dominerer.
 
-**Forbeholdet som må med, og som er lett å utelate:** differansen mellom **0,636** og **0,812** er
-**ikke statistisk etablert**. Intervallene overlapper i **0,697–0,768**, og punktanslagene skiller
-0,176. Øktformens bidrag er derfor ikke påvist (ADDENDUM-19 § 7.2). §4s kriterium plasserer 0,636 i
+**Differansen mellom 0,636 og 0,812 er etablert:** **0,177**, paret bootstrap **[0,044–0,323]**, verksklynget
+**[0,057–0,318]**; intervallet utelukker 0 (§ 10 og `docs/REANALYSE-2026-10-03.md` b). Den er målt mellom én
+sammenhengende økt og 320 enkeltkall med samme modell og regelfil. §4s kriterium plasserer 0,636 i
 båndet 0,30–0,70: «begge bidrar, ingen enkel forklaring står».
+*(Rettet 10.10.2026, 0,177 [0,044–0,323]: avsnittet sa at differansen var «ikke statistisk etablert» fordi de separate
+intervallene overlapper i 0,697–0,768, og at øktformens bidrag derfor ikke var påvist (ADDENDUM-19 § 7.2). Det er
+innhentet av den parede testen 03.10.2026 — `docs/INNHENTET-2026-10-10-differansen-0812-0636.md`.)*
 
 **2×2 for Opus, ett kall (19b):** 20 av koder 1s 39 treff funnet, 19 mistet, **bare 1 falsk positiv**,
 280 begge enige om ikke-treff. **Presis men taper halvparten.**
@@ -386,7 +391,7 @@ arbeider videre i nærheten.**
 Ti forbehold, fra MASTER v0.3 § 7. De åtte første sto i v0.2; de to siste er nye.
 
 1. **Tre kodere på de 320, alle LLM-baserte, ingen menneskelig annotør.** Koder 1 og 2 er Opus-instanser;
-   koder 4 (28.09.2026) er Fable 5.1, en annen modellfamilie, med 7 av 320 rader eksponert.
+   koder 4 (28.09.2026) er Fable 5.1, en annen modell fra samme leverandør, med 7 av 320 rader eksponert.
    κ mot menneskelig lesning er ukjent.
 2. **M2 bærer koderidentitet.**
 3. **Formålsvalgte felt** — tallene gjelder disse fire.
@@ -418,7 +423,7 @@ eller la være å bruke dem.
 | **«fasit»** | grunnsannhet | Fasiten er **dommerbetinget**. Den kan måle recall-tap *relativt til dommeren*, og **ikke** presisjon for en ny metode, **ikke** absolutt recall, **ikke** prevalens (METODE § 2). «21 av 25» betyr «21 av de 25 dommeren fant og vi bekreftet». |
 | **«bekreftet»** | uavhengig verifisert | **Kandidatlista:** registerhodet har `bekreftet: true`. Det som er bekreftet, er en **post hoc** port på **85 av 100** [76,7–90,7] — ikke den preregistrerte, som falt på 21 av 27. Og **15 av de 100** ble kodet av en **annen** instans etter at den første ble avbrutt etter 85. **Fase 3-lista:** `bekreftet: true` fra en **prospektiv** port, 85 av 100 [76,7–90,7], én instans (§ 9). I begge er «bekreftet» enighet med en annen LLM-lesning, ikke menneskelig validering. *(Fase 3 lagt til 30.09.2026.)* |
 | **«stabil»** | en egenskap ved settet | «Stabil kjerne **3 av 27**» er ikke en egenskap ved fasiten, men ved **enigheten mellom to LLM-kodere uten tvilsmerke**. Koder 1 merket **20 av 27** med `tvil`. Delkriteriene: enige 19, uten tvil hos koder 1 bare 7, hos koder 2 bare 4. |
-| **«uavhengig»** | en annen kilde til sannhet | Koder 2, koder c (ADDENDUM-22) og den blinde presisjonsleseren er alle **samme modellfamilie**; koder 4 (Fable 5.1) er den eneste av en annen familie, og heller ikke den er et menneske. **Ingen menneskelig annotør finnes** i hele sporet. «Uavhengig» betyr her *tom kontekst og egen kladdekatalog*, ikke uavhengig dømmekraft. κ mot menneskelig lesning er **ukjent**. |
+| **«uavhengig»** | en annen kilde til sannhet | Koder 2, koder c (ADDENDUM-22) og den blinde presisjonsleseren er alle **samme modellfamilie**; koder 4 (Fable 5.1) er en annen modell, men fra samme leverandør, og heller ikke den er et menneske. **Ingen menneskelig annotør finnes** i hele sporet. «Uavhengig» betyr her *tom kontekst og egen kladdekatalog*, ikke uavhengig dømmekraft. κ mot menneskelig lesning er **ukjent**. |
 
 **Tre ord som *tåler* vekten, og bør brukes i stedet der det går:** «kandidatliste» (lista har ikke
 bestått en prospektiv port, og navnet sier det), «ikke målt» (en ærlig tilstand, ikke en mangel), og
@@ -432,7 +437,9 @@ dekker.
 
 * **Ikke prevalens.** Grunnraten a måler utvalget. Bruk c med intervall.
 * **Ikke absolutt recall.** Fasiten er dommerbetinget.
-* **Ikke at øktformen forklarer κ-forskjellen.** Intervallene overlapper i 0,697–0,768.
+* **Ikke at øktformen forklarer κ-forskjellen.** Differansen er etablert (0,177, paret [0,044–0,323], verksklynget
+  [0,057–0,318]), men økten er kjørt én gang, og ADDENDUM-21 arm A er ukjørt. *(Rettet 10.10.2026: sto «Intervallene
+  overlapper i 0,697–0,768», den innhentede begrunnelsen.)*
 * **Ikke at lista er en arbeidsliste.** Den preregistrerte porten falt; navnet er kandidatliste,
   permanent, i alle dokumenter.
 * **Ikke at presisjon er målt per hindringsklasse.** Bare per silkilde.
@@ -576,6 +583,10 @@ leserens verdikter.
 * **Ikke at registerhodet bærer det målte recall-tallet.** Det står «ikke målt» (skjemaet), se over.
 
 ## 10 Revisjon etter ekstern fagfellevurdering (03.10.2026)
+
+*(Presisert 10.10.2026: «ekstern fagfellevurdering» var en vurdering gjort av en språkmodell. Leseren var en språkmodell (GPT); ingen menneskelig fagfelle har lest manuskriptet.
+Overskriften står som den er fordi den låste generatoren finner seksjonen på den; se
+`INNHENTET-2026-10-10-ekstern-vurdering-spraakmodell.md`.)*
 
 **Generert** av `classify/reanalyse_fagfelle.py` fra `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` (Vault; deponeres som `revisjon-reanalyse.json`). Klyngeenhet verket, 10 000 replikater, frø 734248. Fullt dokument: `docs/REANALYSE-2026-10-03.md`; tallmanifest: `docs/TALLMANIFEST.md`.
 

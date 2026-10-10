@@ -280,7 +280,7 @@ def test_rest_oppdraget_nekter_når_malen_ikke_passer():
 
 # --- 02.10.2026: faser, og ekstraksjonens dekning --------------------------------------------------------
 
-def test_fase3_har_den_eksplisitte_laasen_og_fase4_slaar_den_opp(tmp_path):
+def test_fase3_har_den_eksplisitte_laasen_og_en_ny_fase_slaar_den_opp(tmp_path):
     import subprocess
     from gjenopptak.kjede.gjenoppta import FASER, Fase
     assert FASER["fase3"].låsecommit().startswith("f19a3e3")
@@ -290,17 +290,33 @@ def test_fase3_har_den_eksplisitte_laasen_og_fase4_slaar_den_opp(tmp_path):
     g = lambda *a: subprocess.run(["git", "-C", str(r), *a], check=True, capture_output=True, text=True).stdout
     g("init", "-q"); g("config", "user.email", "t@t"); g("config", "user.name", "t")
     (r / "a.txt").write_text("a"); g("add", "a.txt"); g("commit", "-qm", "før")
-    (r / "ADDENDUM-26.md").write_text("lås"); g("add", "ADDENDUM-26.md"); g("commit", "-qm", "lås")
+    (r / "ADDENDUM-99.md").write_text("lås"); g("add", "ADDENDUM-99.md"); g("commit", "-qm", "lås")
     lås = g("rev-parse", "HEAD").strip()
     (r / "b.txt").write_text("b"); g("add", "b.txt"); g("commit", "-qm", "etter")
-    f = Fase("fase4", "ADDENDUM-26.md", "u.jsonl", "v.txt", "fase4-kjede")
-    assert f.låsecommit(cwd=r) == lås and f.worktree(lås) == f"fase4/worktree-{lås[:7]}"
+    f = Fase("fase9", "ADDENDUM-99.md", "u.jsonl", "v.txt", "fase9-kjede")
+    assert f.låsecommit(cwd=r) == lås and f.worktree(lås) == f"fase9/worktree-{lås[:7]}"
+
+
+def test_fase4_er_avvist_og_kommer_ikke_gjennom_registeret(monkeypatch, capsys):
+    """ADDENDUM-26 ble avbrutt 2026-10-03 og inndataene finnes ikke: ``--fase fase4`` gir en egen feilmelding og
+    exit ≠ 0, og ingen sjekk startes. Testen skal feile hvis fase4 igjen står i ``FASER``."""
+    from gjenopptak.kjede import gjenoppta as G
+    assert "fase4" not in G.FASER and "fase4" in G.AVVIST
+    def aldri(*a, **k):
+        raise AssertionError("sjekk() ble kalt for en avvist fase")
+    monkeypatch.setattr(G, "sjekk", aldri)
+    for args in (["--fase", "fase4", "--sjekk"], ["--fase", "fase4"]):
+        assert G.main(args) != 0
+        err = capsys.readouterr().err
+        assert "fase4 (ADDENDUM-26) ble avbrutt 2026-10-03" in err
+        assert "inndata finnes ikke og kjøringen kan ikke gjenopptas" in err
+        assert "docs/RESULTAT-ADDENDUM-26.md" in err
 
 
 def test_rest_oppdraget_bytter_kjoeringens_eget_navn():
-    o = OPPDRAG.format(n=2, t=10).replace("fase3-kjede", "fase4-kjede")
-    ut = rest_oppdrag(o, okt=2, ventet=10, rest=4, k=1, navn="fase4-kjede")
-    assert "fase4-kjede/fullforing/okt-2-rest1/verdikter.jsonl" in ut and "Les 4 blindede" in ut
+    o = OPPDRAG.format(n=2, t=10).replace("fase3-kjede", "annen-kjede")
+    ut = rest_oppdrag(o, okt=2, ventet=10, rest=4, k=1, navn="annen-kjede")
+    assert "annen-kjede/fullforing/okt-2-rest1/verdikter.jsonl" in ut and "Les 4 blindede" in ut
 
 
 def test_etterkontrollen_ser_verk_som_mangler_i_ekstraksjonen(tmp_path):

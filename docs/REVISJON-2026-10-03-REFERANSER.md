@@ -1,4 +1,6 @@
-# Referansene i fagfellevurderingen — slått opp 03.10.2026
+# Referansene i den eksterne vurderingen (gjort av en språkmodell) — slått opp 03.10.2026
+
+*(Rettet 10.10.2026: tittelen sa «Referansene i fagfellevurderingen». Leseren var en språkmodell (GPT); ingen menneskelig fagfelle har lest manuskriptet.)*
 
 Oppslag i arXiv (API), Crossref (API) og Europe PMC med ærlig User-Agent (`gjenopptak-refsjekk/0.1`). Råsvarene ligger på
 Vault, `revisjon-2026-10/referanser/` (12 filer, sha256 i `SHA256SUMS` der). **Alle seks finnes.** Bare de som står her,

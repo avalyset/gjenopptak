@@ -1,6 +1,6 @@
 """Kryssdokumentsjekk: samme størrelse skal ha samme verdi i alle filer som deponeres.
 
-    python -m gjenopptak.kryssjekk [--fil ekstra.txt ...]
+    python -m gjenopptak.kryssjekk [--fil ekstra.txt ...] [--mappe levende/ ...] [--frosset sendt/ ...]
 
 Bakgrunnen står i LAERDOM § 24. Frys-lesningen før v0.2.0 leste hver fil for seg. Hver fil var
 konsistent med seg selv, så alle bestod — men `RESULTAT-PORT-v1.md` bar elleve størrelser som
@@ -25,7 +25,7 @@ MERKER = ("før ADDENDUM", "Før ADDENDUM", "Foreldet", "foreldet", "ikke regnet
           "før språkretting", "Før språkretting", "før spraakretting",
           "v1 (engelske bildetekster)",
           # 28.09.2026: en datert rettelse som siterer det som sto, er merket.
-          "ettet 28.09.2026")
+          "ettet 28.09.2026", "ettet 10.10.2026")
 
 #: En linje som daterer verdien selv, er merket. «4 av 24 er løftbare» er ikke en gjeldende
 #: påstand når samme setning sier «er en påstand om 2026-09-20».
@@ -94,7 +94,53 @@ STØRRELSER: tuple[tuple[str, str, tuple[str, ...], tuple[str, ...]], ...] = (
     ("verksnivå, materialtilgang", "3 ÅPNE · 55 DELVIS · 42 LUKKEDE (v2, språkrettet)",
      (r"49 DELVIS", r"48 LUKKED", r"3 / 49 / 48", r"3 ÅPNE / 49", r"\| 3 \| 49 \| 48 \|"),
      (r"55 DELVIS", r"42 LUKKED", r"3 / 55 / 42", r"\| 3 \| 55 \| 42 \|")),
+    # 07.10.2026: fase 4 (ADDENDUM-26) ble avbrutt 03.10.2026 før noen port var målt. Størrelsene under er det
+    # som ble målt før avbruddet, hentet fra docs/RESULTAT-ADDENDUM-26.md § 0 («Hvor langt kjøringen kom»)
+    # og ADDENDUM-26.md (§ 2, rammeraden). Ingen av dem har vært foreldet; signaturene fanger en annen verdi på
+    # samme linje som emnet (fase 4 / håndskrift), ikke fase 3-tall på egne linjer.
+    ("fase 4: rammerader", "807 (frames/frame-haandskrift-RAW.jsonl, sha256 6e444a08…; ADDENDUM-26 § 2)",
+     (r"(?i:håndskrift|haandskrift)[^\n]{0,80}\b(?!807\b)\d{3} rader",), (r"\b807\b",)),
+    ("fase 4: overlapp med tekstvitenskap-rammen", "799 av 807 (ADDENDUM-26 § 2)",
+     (r"\b(?!799\b)\d{3} av 807\b",), (r"\b799 av 807\b",)),
+    ("fase 4: trukne verk", "100 (RESULTAT-ADDENDUM-26 § 0, trekking 02.10.2026)",
+     (r"(?i:fase 4|håndskrift)[^\n]{0,80}\b(?!100\b)\d{2,3} verk\b",), (r"\b100 verk\b",)),
+    ("fase 4: tekstbiter", "31 031 (RESULTAT-ADDENDUM-26 § 0, `hent`/`tekstbiter`)",
+     (r"(?i:fase 4|håndskrift)[^\n]{0,80}\b(?!31 031\b)\d{1,3}(?: \d{3})* tekstbiter",), (r"\b31 031\b",)),
+    ("fase 4: dømte tekstbiter", "830 av 31 031 (RESULTAT-ADDENDUM-26 § 0, `dommer` delvis; ingen port målt)",
+     (r"(?i:fase 4|håndskrift)[^\n]{0,80}\b(?!830\b)\d+ av 31 031\b",), (r"\b830 av 31 031\b",)),
+    # 10.10.2026: differansen mellom Opus i én økt og Opus i ett kall ble kalt «ikke statistisk etablert» fordi to
+    # separate intervaller overlappet. Den parede testen i reanalysen 03.10.2026 etablerte den
+    # (docs/REANALYSE-2026-10-03.md b; docs/INNHENTET-2026-10-10-differansen-0812-0636.md).
+    ("differansen 0,812 − 0,636", "0,177; paret bootstrap [0,044–0,323], verksklynget [0,057–0,318]",
+     (r"ikke\W{0,4} statistisk etablert", r"not statistically established",
+      r"øktformens bidrag er \**(mulig og umålt|ikke påvist)", r"resteffekt av øktformen er \**mulig"),
+     (r"0[,.]177", r"0,044[–-]0,323", r"0[,.]057[–-]0[,.]318")),
+    # 10.10.2026: grunnrate c) sto med [2,12–7,95], bygget av punktpresisjonen og Wilson-grensene for bomraten alene —
+    # ikke et konfidensintervall. Reanalysen 03.10.2026 e) gir 3,42 %, verksklynget [1,3–7,5].
+    ("grunnrate c), intervall", "3,42 %, verksklynget [1,3–7,5] % (stratifisert [1,3–7,2] %); sekundær størrelse",
+     (r"2[,.]12[–-]7[,.]95",),
+     # en linje som sier at det gamle intervallet var feil, er en rettelse og ikke en foreldet påstand
+     (r"1[,.]3[–-]7[,.]5", r"1[,.]3[–-]7[,.]2", r"ikke et konfidensintervall", r"previous interval", r"erstatter")),
+    # 10.10.2026: i leserstigen «samme regelfil, ett kall» er Sonnet 5 0,294 (n = 319). 0,297 er Sonnet med det
+    # tynne utdraget (ADDENDUM-18 § 9). Signaturen krever stigen på samme linje.
+    ("Sonnet 5 med full regelfil", "0,294 [0,126–0,455], n = 319 (ADDENDUM-19 § 7.1)",
+     (r"Sonnet 0,297[^\n]{0,40}Opus 0,636", r"Haiku 0,031[^\n]{0,40}Sonnet 0,297"), (r"0,294",)),
+    # 10.10.2026: MetaArXiv-preprinten zvc34 ble avvist 30.09.2026; gjeldende preprint er Preprints.org
+    # 10.20944/preprints202610.0368.v1, publisert 07.10.2026 (docs/MASTER-PATCH-2026-10-07.md).
+    ("preprintens status", "MetaArXiv zvc34 avvist 30.09.2026; Preprints.org 10.20944/preprints202610.0368.v1",
+     (r"zvc34[^\n]{0,100}(pending|pre-moderering|under moderation)",
+      r"(pending|pre-moderering)[^\n]{0,100}zvc34"),
+     (r"avvist", r"rejected", r"preprints202610")),
 )
+
+#: Versjonerte dokumenter som er publisert eller sendt. Bytene endres ikke etter det (LAERDOM § 49-regelen):
+#: en rettelse kommer i neste versjon, og det innhentede føres i en INNHENTET-fil. Av instruksfilene er bare
+#: den høyeste versjonen levende.
+VERSJONERT = (r"MANUSKRIPT-v[\d.]+(-UTKAST)?\.md", r"PREPRINT(-v\d+)?\.md", r"RELEASE-NOTES-v[\d.]+\.md")
+INSTRUKS = re.compile(r"(?:GJENOPPTAK_)?INSTRUKSER[-_]v(\d+)\.(\d+)")
+
+#: Kataloger gitt med --frosset: sendte og frosne filer utenfor repoet. Settes av main().
+FROSNE_RØTTER: list[Path] = []
 
 
 def er_laast(f: Path) -> bool:
@@ -110,6 +156,14 @@ def er_laast(f: Path) -> bool:
     from .vault import LOCKED_FILES
     if f.name in LOCKED_FILES or re.fullmatch(r"ADDENDUM-\d+\.md", f.name):
         return True
+    if any(re.fullmatch(m, f.name) for m in VERSJONERT):
+        return True
+    if any(rot == f.resolve() or rot in f.resolve().parents for rot in FROSNE_RØTTER):
+        return True
+    m = INSTRUKS.match(f.name)
+    if m:       # en instruksversjon er levende bare så lenge ingen høyere finnes ved siden av
+        andre = [INSTRUKS.match(p.name) for p in f.parent.iterdir()]
+        return any(a and (int(a[1]), int(a[2])) > (int(m[1]), int(m[2])) for a in andre)
     # En påført MASTER-patch er et historisk dokument: den beskriver hva som ble skrevet inn i en
     # MASTER-versjon, og rettes ikke i ettertid. Funn der føres i korrigendum (28.09.2026).
     return f.name.startswith("MASTER-PATCH-")
@@ -186,9 +240,23 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--rot", type=Path, default=Path.cwd())
     ap.add_argument("--fil", type=Path, action="append", default=[],
                     help="Ekstra fil utenfor repoet, f.eks. faktaarket.")
+    ap.add_argument("--mappe", type=Path, action="append", default=[],
+                    help="Katalog utenfor repoet med levende dokumenter for eksterne lesere (.md, .txt, rekursivt).")
+    ap.add_argument("--frosset", type=Path, action="append", default=[],
+                    help="Katalog utenfor repoet med sendte, frosne dokumenter: funn der krever INNHENTET, ikke retting.")
     args = ap.parse_args(argv)
 
+    FROSNE_RØTTER[:] = [d.resolve() for d in args.frosset]
     filer = dokumentsett(args.rot) + list(args.fil)
+    for d in args.mappe + args.frosset:
+        if not d.is_dir():      # en katalog som ikke kan leses, skal ikke se ut som en tom katalog
+            print(f"MAPPE MANGLER ELLER KAN IKKE LESES: {d}", file=sys.stderr)
+            return 1
+        funnet = sorted(p for p in d.rglob("*") if p.is_file() and p.suffix.lower() in (".md", ".txt"))
+        if not funnet:
+            print(f"MAPPE UTEN LESBARE DOKUMENTER: {d}", file=sys.stderr)
+            return 1
+        filer += funnet
 
     print("Gjeldende verdier:")
     for navn, gjeldende, *_ in STØRRELSER:
@@ -201,7 +269,7 @@ def main(argv: list[str] | None = None) -> int:
     for navn, f, nr, linje in rettbare:
         print(f"AVVIK  {navn}\n       {f.name}:{nr}  {linje}")
     if laaste:
-        print("\nLåste filer — vises, rettes aldri i filen. Et utsagn som er innhentet, "
+        print("\nLåste, versjonerte og frosne filer — vises, rettes aldri i filen. Et utsagn som er innhentet, "
               "føres i et datert korrigendum i EGEN fil:")
         for navn, f, nr, linje in laaste:
             print(f"  {f.name}:{nr}  {navn.split(': ',1)[1]}\n      {linje}")

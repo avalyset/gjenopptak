@@ -1,6 +1,6 @@
 # Tallmanifest — manuskript v3.1 → fil, sha256 og skript
 
-**Generert** av `src/gjenopptak/registry/deponering.py tallmanifest`. Hver verdi er **lest ut av fila maskinelt** og sammenliknet med tallet i manuskriptet; ✓ betyr likt, ✗ betyr avvik. «Deponert som» er filnavnet i Zenodo v0.5.0 (utkast, ikke publisert). Skriptet er det som skrev fila; «—» betyr et dokument skrevet for hånd.
+**Generert** av `src/gjenopptak/registry/deponering.py tallmanifest`. Hver verdi er **lest ut av fila maskinelt** og sammenliknet med tallet i manuskriptet; ✓ betyr likt, ✗ betyr avvik. «Deponert som» er filnavnet i Zenodo v0.5.0 (publisert 03.10.2026, 10.5281/zenodo.23120143; *rettet 10.10.2026: sto «utkast, ikke publisert»*). Skriptet er det som skrev fila; «—» betyr et dokument skrevet for hånd.
 
 **45 av 45 stemmer.** Alle 144 tallpunkter i manuset er kontrollert mot kilde i `FAKTASJEKK-MANUSKRIPT-v3-2026-10-03.md` (i `faktasjekk-manuskript.zip`); tabellen her er de som leses maskinelt.
 

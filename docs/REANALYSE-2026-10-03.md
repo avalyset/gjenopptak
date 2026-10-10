@@ -1,4 +1,4 @@
-# Reanalyse etter ekstern fagfellevurdering — 03.10.2026
+# Reanalyse etter ekstern vurdering gjort av en språkmodell — 03.10.2026
 
 **Generert** av `src/gjenopptak/classify/reanalyse_fagfelle.py` fra `revisjon-2026-10/reanalyse.json` på Vault (sha256 `ac782709d90ada772493b546ba9466e8a75ff89e593d84b47f73fd21b12a4824`). Ingen tall er skrevet av for hånd. Bootstrap: 10 000 replikater, frø 734248, persentilintervall; **klyngeenheten er verket**. Ingen låst fil er endret.
 
@@ -88,3 +88,9 @@ Regel: rader i samme verk med overlappende setningsspenn slås sammen til én ko
 | `kandidat432/8-register.jsonl` | `c6895202b76199aa…` |
 | `kandidat432/nokkel.jsonl` | `805ce5a2d8154bfa…` |
 | `fase3-kjede/8-register.jsonl` | `b7d9230c93970c26…` |
+
+---
+
+*(Rettet 10.10.2026: tittelen sa «Reanalyse etter ekstern fagfellevurdering». Leseren var en språkmodell (GPT); ingen menneskelig fagfelle har lest manuskriptet. Generatoren er låst med sha256 i
+ADDENDUM-28 og skriver fortsatt den gamle tittelen; kjøres den på nytt, må rettingen gjøres om. Merknaden står sist i
+filen for at linjenumrene over skal stå.)*

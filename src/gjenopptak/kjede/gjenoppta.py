@@ -2,13 +2,11 @@
 
     python -m gjenopptak.kjede.gjenoppta --sjekk
     python -m gjenopptak.kjede.gjenoppta
-    python -m gjenopptak.kjede.gjenoppta --fase fase4 --sjekk
 
 **Faser (02.10.2026).** Rutinen gjelder hver prospektive kjøring med eget addendum, ikke bare fase 3. En fase
 er addendumet, Vault-katalogen, utvalget og kjøringens navn (``FASER``). Låsecommiten er den som **la til**
 addendumet (``git log --diff-filter=A``); for fase 3 står den eksplisitt (`f19a3e3`). Worktreet ligger på
-``<fase>/worktree-<lås>`` på Vault. Fase 4 kjøres gjennom rutinen fra første ledd, så etterkontrollen gjelder
-også første kall.
+``<fase>/worktree-<lås>`` på Vault. Fase 4 (ADDENDUM-26) ble avbrutt 2026-10-03 og er avvist, se ``AVVIST``.
 
 Eierens regel 28.09.2026 (RESULTAT-ADDENDUM-25 § 0.3): en fase 3-kjøring som avbrytes, gjenopptas fra
 låsecommiten `f19a3e3` i en git worktree på Vault, slik at alle ledd kjører med de sha256-ene
@@ -91,7 +89,12 @@ class Fase:
 FASER = {
     "fase3": Fase("fase3", "ADDENDUM-25.md", "utvalg-fase3-arkeologi.jsonl", "verk-fase3.txt", "fase3-kjede",
                   lås="f19a3e3"),
-    "fase4": Fase("fase4", "ADDENDUM-26.md", "utvalg-fase4-haandskrift.jsonl", "verk-fase4.txt", "fase4-kjede"),
+}
+#: Faser som er avvist, ikke bare utelatt: navnet gir en egen feilmelding og exit ≠ 0. Fase 4 ble avbrutt
+#: 2026-10-03 før noen port var målt, og inndataene er slettet (RESULTAT-ADDENDUM-26 og INNHENTET-2026-10-07).
+AVVIST = {
+    "fase4": "fase4 (ADDENDUM-26) ble avbrutt 2026-10-03; inndata finnes ikke og kjøringen kan ikke gjenopptas, "
+             "se docs/RESULTAT-ADDENDUM-26.md",
 }
 # Bakoverkompatible navn for fase 3 (testene og RESULTAT-ADDENDUM-25 § 0.3 viser til dem).
 LÅS = "f19a3e3"
@@ -524,13 +527,16 @@ def _logg(fase3: Path, rad: dict) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    p.add_argument("--fase", choices=sorted(FASER), default="fase3", help="hvilken låst kjøring")
+    p.add_argument("--fase", choices=sorted([*FASER, *AVVIST]), default="fase3", help="hvilken låst kjøring")
     p.add_argument("--sjekk", action="store_true", help="bare sjekkene; start ingenting")
     p.add_argument("--fra", help="første ledd som kjøres (sendes som --from); ført i loggen")
     p.add_argument("--om", action="store_true", help="kjør ledd fram til og med les om selv om de er ført ferdige")
     p.add_argument("--fullfor-okt", type=int, metavar="N",
                    help="fullfør de udømte i den delvise leserøkta N i én ny instans, og stopp")
     a = p.parse_args(argv)
+    if a.fase in AVVIST:
+        print(f"GJENOPPTAK NEKTET: {AVVIST[a.fase]}", file=sys.stderr)
+        return 2
     fase = FASER[a.fase]
     try:
         s = sjekk(fase=fase)

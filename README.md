@@ -11,7 +11,7 @@ The primary result is the distribution of obstacle types, not the tool used to f
 epidemiology, textual scholarship — parsed into 66,833 sentences and 22,243 passages. A local model
 (gemma2:9b, temperature 0, fixed seed, weight hash logged per judgment) classified every passage
 against a typology locked before data collection. A stratified sample of 320 passages was then read
-blind by LLM coders — coder 1, then coder 2 (ADDENDUM-11) and coder 4 (a different model family,
+blind by LLM coders — coder 1, then coder 2 (ADDENDUM-11) and coder 4 (a different model from the same vendor,
 `docs/METODE.md`) — with the key opened only after all verdicts were written. No human annotator has
 read the sample.
 
@@ -36,7 +36,7 @@ loop, is in `docs/LAERDOM.md`.
   and retrievability filter that skews the frame toward preprint and MDPI-like channels
   (`docs/LAERDOM.md` §3).
 * **Not agreement with human reading.** Three LLM coders have read the sample: coder 1 against coder 2
-  κ = 0.812 [0.697–0.906] (2026-09-25, ADDENDUM-11 §4); coder 4, a different model family, 0.899
+  κ = 0.812 [0.697–0.906] (2026-09-25, ADDENDUM-11 §4); coder 4, a different model from the same vendor, 0.899
   against coder 2 and 0.781 against coder 1 (2026-09-28, `docs/METODE.md`); 7 of the 320 rows had been exposed
   to coder 4 before coding, and without them the values are 0.874 and 0.757. No human annotator has read
   any of it, so κ against human reading has not been measured.
@@ -215,11 +215,28 @@ volume is the original: 30 rows built from coder 1's gold set, `schema_version` 
 `kandidat432/8-register.jsonl` is the candidate list the chain produced: 432 rows from the reader's
 verdicts over the sieve union, same schema plus the `tvil`, `sil` and `leser` fields. `fase3-kjede/8-register.jsonl`
 is the phase 3 list (ADDENDUM-25): 673 rows from 100 new archaeology works, **the only list named a work list** —
-`arbeidsliste (prospektiv port)` — because it passed a gate fixed before the draw (85 of 100 [76.7–90.7] against
-0.70), with the sieve's first measured recall (95 of 104 = 91.3 % [84.4–95.4], against an LLM reference reading of
-20 works; `docs/RESULTAT-ADDENDUM-25.md`). The first is a reference set, the second a candidate list that passed
+`arbeidsliste (prospektiv port)` — because it passed a gate fixed before the draw (85 of 100 against 0.70; work-clustered 95 % interval
+[76.2–93.8], Wilson [76.7–90.7]), with the sieve's first measured recall (95 of 104 = 91.3 %; work-clustered
+[76.9–96.7], Wilson [84.4–95.4]; against an LLM reference reading of 20 works; `docs/RESULTAT-ADDENDUM-25.md`,
+`docs/REANALYSE-2026-10-03.md`). The manuscript reports the work-clustered intervals. The first is a reference set, the second a candidate list that passed
 a post-hoc gate, the third a work list for one field. Cite them separately. *(Updated 30.09.2026: two registers,
 before phase 3 was measured.)*
+
+**Phase numbers.** What this repository and the addenda call phase 3 (ADDENDUM-25, 100 new archaeology works) is «phase 2» in the manuscript and in `docs/TALLMANIFEST.md`; the repository's own phase 2 is the case work in `docs/saker/`, and phase 4 is the aborted ADDENDUM-26.
+
+A fourth phase (ADDENDUM-26, handwriting studies) was started and aborted on 2026-10-03 without being carried
+out; its input data no longer exists. See docs/RESULTAT-ADDENDUM-26.md and
+docs/INNHENTET-2026-10-07-fase4-data.md.
+
+Two further preregistrations are locked and have not been run: ADDENDUM-27 (human validation of the
+instrument; the sample of 149 passages is drawn, no annotator has been recruited) and ADDENDUM-28 (a third
+coder from another model family, a local gemma2). `docs/GJENOPPTAK_ADDENDUMSTATUS_v1_2026-10-10.md` lists
+PREREG-v1 and every addendum with lock commit, status, outcome, files with sha256, and the Zenodo version
+that carries it. `docs/DEPOSITUMSKRAV-2026-10-10.md` records which measurement inputs and outcome files each
+deposit carries; from v0.6.0 they are in `maalefiler.zip`, with text fields replaced by hashes and verbatim
+excerpts of 50 characters or more removed from the coders' justifications. The scripts behind
+ADDENDUM-19, 19b and 20 were never committed and have been recovered from the session transcript
+(`gjenvunnet/addendum-19/OPPHAV.md`).
 
 The 50 rows with a liftable or unresolved class and no doubt flag are written out for case work in
 `docs/SAKBEHANDLING-2026-09-27-kandidater.md`. Their precision has not been measured as a group; blind
@@ -229,8 +246,8 @@ classes (ADDENDUM-23 §7.2).
 `8-register-header.json` names the gate. **Without a passed gate it says `ubekreftet
 kandidatliste`, and that is not a bug.** A list is only a work list after a prospective gate on new
 material; a post-hoc gate gives `kandidatliste (post hoc port)`. The header also carries the global
-caveats: the gold set's stable core is 3 of 27, and the N3 boundary carries coder identity
-(5.8–13.6 % between coders).
+caveats: the gold set's stable core is 3 of 27, and the N3 share spread over 5.8–13.6 % across eight
+reader sessions on different random subsets — not shown to be coder identity (`docs/METODE.md` § 7).
 
 ## History, and what to cite
 
@@ -287,7 +304,9 @@ This repository publishes **states, not history**. The rule is fixed (ADR-0012, 
 you can do is cite an exact state — a tag, a MASTER version, and a Zenodo DOI that all name the same
 tree. **Releases:** `v0.3` = MASTER v0.3 = Zenodo v0.3.0 (2026-09-26/28); `v0.4` = MASTER v0.4 = Zenodo v0.4.0
 (2026-10-01, `docs/ZENODO.md`); `v0.4.1` = Zenodo v0.4.1 (2026-10-02, manuscript v2.9 and the preprint PDF; MASTER v0.4
-unchanged).
+unchanged); `v0.5.0` = Zenodo v0.5.0 (2026-10-03, manuscript v3.1 after an external review by a language model; tagged
+2026-10-10 on the tree the deposit was built from); `v0.6.0` = MASTER v0.6 = Zenodo v0.6.0 (October 2026: manuscript v3.3 as submitted, measurement files,
+recovered scripts, ADDENDUM-28).
 
 ## Licensing
 
@@ -332,7 +351,7 @@ branch is how three mirrored files stood with a superseded author name for a day
 
 ```
 PREREG-v1.md            protocol, locked before data collection
-ADDENDUM-01..25.md      corrections and extensions, each committed alone with its own sha256
+ADDENDUM-01..28.md      corrections and extensions, each committed alone with its own sha256
 docs/decisions/         architecture decision records (ADR-0001..0014; 0005/0006 burned). **Numbers are unique
                         per repository, checked against all refs** — not against HEAD, not against
                         the current branch (repo discipline G1). 0005 and 0006 were burned here
@@ -343,7 +362,7 @@ docs/LAERDOM.md         findings log: what was measured, which number, which con
 docs/RESULTAT-PORT-v1.md    result note, source per number
 docs/MANUSKRIPT-v0.1.md     manuscript draft
 src/gjenopptak/         harvest, parse, extract, classify, falsify, vault
-tests/                  348 tests (1 network test deselected by default), including
+tests/                  the test suite (one network test deselected by default), including
                         the reproduction of Saxton & Rawls Table 3 and the mirror check
 ```
 
@@ -355,16 +374,28 @@ known sha256). **Two exceptions exist:** ADDENDUM-10 (§ 7) and ADDENDUM-11 (§ 
 the rule, and it is recorded as such (`docs/KORRIGENDUM-2026-09-28-frys-v0.4.0.md`, `docs/UTGIVELSE-v0.4.0-PORTSTATUS.md`
 § 1). No other locked file has been edited. *(Corrected 30.09.2026, freeze reading 4: said «and are never edited».)* A statement
 in them that a later measurement superseded was not wrong when written; it is recorded as superseded,
-in a dated file alongside:
+in a dated file alongside (in the Zenodo deposit these files are in `innhentet.zip`):
 
 * `docs/INNHENTET-2026-09-26-en-koder.md` — «Én koder» in PREREG-v1 §9 (locked 2026-09-12) was
   superseded on 2026-09-25 by the independent recoding in ADDENDUM-11 (κ = 0.81 [0.70–0.91]). The
   same phrase in ADDENDUM-06 §1.6 remains true, but describes the recall fasit only.
 * `docs/KORRIGENDUM-2026-09-28-frys-v0.4.0.md` — every error the freeze reading before v0.4.0 found in
   a locked file (PREREG-v1 and all addenda), with what is right, the source, and whether a conclusion
-  changes.
+  changes. It also records that the thresholds in ADDENDUM-21 § 5 were set on the wrong interval.
+* `docs/INNHENTET-2026-10-10-differansen-0812-0636.md` — ADDENDUM-19 § 7.2 and ADDENDUM-24 § 1 say the
+  difference between κ 0.812 (one continuous session) and κ 0.636 (one call per passage) is not
+  statistically established. The paired test of 2026-10-03 superseded that: 0.177, paired bootstrap
+  [0.044–0.323], work-clustered [0.057–0.318].
+* `docs/INNHENTET-2026-10-10-manuskript-v3.3.md` — three places in the submitted manuscript v3.3 (and in v3.1 and
+  v3.2) that will be corrected in revision: class κ 0.722 is computed over all 320 passages, not among hits; the
+  quotation in the introduction lacks its source (Takeuchi et al., 2019); and the number manifest links 45
+  machine-read values, not every number. No figure or conclusion changes.
+* `docs/INNHENTET-2026-10-10-ekstern-vurdering-spraakmodell.md` — ADDENDUM-27, ADDENDUM-28, the v0.5.0 release
+  notes and the response letter for v3.1 speak of an «ekstern fagfellevurdering» / "the reviewer" on 2026-10-03.
+  That review was written by a language model (GPT). No human peer reviewer has read the manuscript.
 
 ## Citation
 
 See `CITATION.cff`. It carries the concept DOI `10.5281/zenodo.22959326`; the version DOIs are listed in
-`docs/ZENODO.md` (v0.4.1: `10.5281/zenodo.23096158`).
+`docs/ZENODO.md` (v0.5.0: `10.5281/zenodo.23120143`). The preprint is `10.20944/preprints202610.0368.v1`
+(Preprints.org, 2026-10-07, manuscript v3.2); manuscript v3.3 was submitted to *Scientometrics* on 2026-10-03.

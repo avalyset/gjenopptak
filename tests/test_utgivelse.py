@@ -90,3 +90,76 @@ def test_case_dokumentene_utenfor_saker_pakkes_i_saker_zip():
     assert _i_zip("git:abc:docs/PS-246-RESULTAT.md", "PS-246-RESULTAT.md") == ("saker.zip", "sakbehandling/PS-246-RESULTAT.md")
     assert _i_zip("git:abc:docs/HERON-KOLLASJON-VURDERING-v2.md", "x")[0] == "saker.zip"
     assert _i_zip("git:abc:docs/RESULTAT-ADDENDUM-25.md", "RESULTAT-ADDENDUM-25.md") is None
+
+
+def test_v060_gruppene_og_ekskluderingsliste_5():
+    from gjenopptak.utgivelse import UTELATT_VERSJON, _i_zip, utelat
+    assert UTELATT_VERSJON.startswith("5 ")
+    assert _i_zip("git:abc:gjenvunnet/addendum-19/a19b.py", "x") == ("gjenvunnet-kode.zip", "addendum-19/a19b.py")
+    assert _i_zip("git:abc:docs/MANUSKRIPT-v3.2.md", "x") == ("manuskript-tidligere.zip", "MANUSKRIPT-v3.2.md")
+    assert _i_zip("git:abc:docs/MANUSKRIPT-v3.3.md", "MANUSKRIPT-v3.3.md") is None          # gjeldende står på toppnivå
+    assert _i_zip("git:abc:docs/PREPRINT.md", "PREPRINT.md") == ("manuskript-tidligere.zip", "PREPRINT.md")
+    assert _i_zip("git:abc:docs/RELEASE-NOTES-v0.5.0.md", "x")[0] == "utgivelser-tidligere.zip"
+    assert _i_zip("git:abc:docs/RELEASE-NOTES-v0.6.0.md", "RELEASE-NOTES-v0.6.0.md") is None
+    assert _i_zip("git:abc:docs/SAKBEHANDLING-2026-09-27-triage.md", "x") == ("saker.zip", "sakbehandling/SAKBEHANDLING-2026-09-27-triage.md")
+    beholdt, utelatt = utelat(["docs/GJENOPPTAK_ADDENDUMSTATUS_v1_2026-10-10.md", "docs/GJENOPPTAK_INSTRUKSER_v1.4_2026-10-10.md",
+                               "docs/GJENOPPTAK_FILKART_v1_2026-10-10.md", "docs/MANUSKRIPT-v3.3.md", "docs/MANUSKRIPT-v3.1.md"])
+    assert utelatt == ["docs/GJENOPPTAK_INSTRUKSER_v1.4_2026-10-10.md", "docs/GJENOPPTAK_FILKART_v1_2026-10-10.md"]
+    assert "docs/GJENOPPTAK_ADDENDUMSTATUS_v1_2026-10-10.md" in beholdt and "docs/MANUSKRIPT-v3.1.md" in beholdt
+
+
+def test_gjenvunnet_katalogen_er_med_i_dokumentsettet():
+    from gjenopptak.utgivelse import repo_dokumenter
+    assert "gjenvunnet/addendum-19/OPPHAV.md" in repo_dokumenter() and "gjenvunnet/addendum-19/a19b.py" in repo_dokumenter()
+
+
+def test_kandidatlista_er_renset_og_bygget_kontrollerer_det(tmp_path):
+    import json
+    import re
+    import pytest
+    from gjenopptak import maalefiler as M
+    from gjenopptak import utgivelse as U
+    assert U.UTEN_UTDRAG == ("docs/SAKBEHANDLING-2026-09-27-kandidater.md",)
+    assert U._i_zip("git:abc:" + U.UTEN_UTDRAG[0], "x")[0] == "saker.zip"
+    lista = (U.REPO / U.UTEN_UTDRAG[0]).read_text(encoding="utf-8")                     # filen i repoet er renset 10.10.2026
+    assert len(re.findall(r"\[utdrag utelatt: \d+ tegn, sha256 [0-9a-f]{16}\]", lista)) == 83
+    assert "*Rettet 10.10.2026: de 83 ordrette utdragene" in lista
+    passasje = "We could not date the lower layer, because no suitable sample was preserved in the trench at all."
+    blind = tmp_path / "blind.jsonl"
+    blind.write_text(json.dumps({"id": "P1", "tekst": passasje}) + "\n", encoding="utf-8")
+    indeks = M.passasjeindeks([blind])
+    ren = tmp_path / "ren.md"
+    ren.write_text("| AL-0001 | H7 | «[utdrag utelatt: 97 tegn, sha256 0123456789abcdef]» |\n| AL-0002 | H1 | egen omtale |\n", encoding="utf-8")
+    assert U.kontroller_uten_utdrag("sakbehandling/kandidater.md", ren, indeks) == 1
+    uren = tmp_path / "uren.md"
+    uren.write_text(f"| AL-0001 | H7 | «{passasje.upper()}» |\n", encoding="utf-8")       # versaler skjuler ikke utdraget
+    with pytest.raises(U.UtgivelseFeil, match="1 ordrette utdrag på 50 tegn eller mer står igjen"):
+        U.kontroller_uten_utdrag("sakbehandling/kandidater.md", uren, indeks)
+
+
+def test_bundlevalget_er_hele_historikken_som_standard():
+    from gjenopptak import utgivelse as U
+    assert U.BUNDLE_REFS["alle"] == ["--all"] and "offentlig" in U.BUNDLE_REFS["offentlig"]
+    import inspect
+    assert inspect.signature(U.bygg).parameters["bundle"].default == "alle"
+
+
+def test_historiske_zipfiler_faar_en_les_foerst_fil():
+    from gjenopptak import utgivelse as U
+    assert set(U.HISTORISK) == {"manuskript-tidligere.zip", "utgivelser-tidligere.zip"}
+    for znavn, sti in U.HISTORISK.items():
+        t = (U.REPO / sti).read_text(encoding="utf-8")
+        flat = " ".join(t.split())
+        assert "status den dagen de ble skrevet" in flat and "`README.md` og `ZENODO.md`" in flat and znavn in t
+    assert U._i_zip("git:abc:docs/PREPRINT.md", "x")[0] == "manuskript-tidligere.zip"           # filene README-en omtaler, ligger der
+    assert U._i_zip("git:abc:docs/RELEASE-NOTES-v0.4.0.md", "x")[0] == "utgivelser-tidligere.zip"
+    alle_mønstre = (*U.REPO_MØNSTRE, *U.REPO_KATALOGER)
+    assert not any(U._treffer(sti, m) or sti.startswith(m) for sti in U.HISTORISK.values() for m in alle_mønstre)   # deponeres ikke som egen fil
+
+
+def test_innhentet_filene_samles_i_en_zip():
+    from gjenopptak import utgivelse as U
+    for navn in ("INNHENTET-2026-09-26-en-koder.md", "INNHENTET-2026-10-10-manuskript-v3.3.md"):
+        assert U._i_zip(f"git:abc:docs/{navn}", navn) == ("innhentet.zip", navn)
+    assert U._i_zip("git:abc:docs/KORRIGENDUM-2026-09-28-frys-v0.4.0.md", "x") is None             # korrigendumet står for seg
+

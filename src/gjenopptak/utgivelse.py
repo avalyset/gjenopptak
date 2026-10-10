@@ -34,6 +34,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from . import maalefiler
 from .vault import VaultUnavailable, require_vault, sha256_file
 
 REPO = Path(__file__).resolve().parents[2]
@@ -44,6 +45,8 @@ UTKAST_KATALOG = "zenodo"
 REPO_MØNSTRE = ("PREREG-v1.md", "ADDENDUM-*.md", "README.md", "CITATION.cff", "LICENSE",
                 "LICENSE-DATA", "docs/*.md", "docs/decisions/*.md", "docs/saker/**/*.md")
 REPO_UTENFOR = ("docs/patch/",)
+#: Sporede kataloger utenfor ``docs/`` som deponeres i sin helhet (i zip, se ``_i_zip``). v0.6.0: de gjenvunne skriptene.
+REPO_KATALOGER = ("gjenvunnet/",)
 
 #: Ekskluderingslisten, versjonert. Oppgis i release notes for versjonen som bygges. Et mønster med
 #: ``**`` dekker alle underkataloger. Det nyeste manuskriptet under ``NYESTE_UNNTATT`` er unntatt: bare det
@@ -53,9 +56,13 @@ REPO_UTENFOR = ("docs/patch/",)
 #: MASTER-fila; posten ville ellers fått 101 filer. Den ligger i git-bundlen.
 #: Versjon 4 (03.10.2026): manus v3 erstatter v2.9 — alle `MANUSKRIPT-v2*.md` holdes ute, og unntaket for det nyeste
 #: gjelder `MANUSKRIPT-v<tall>*.md` (v0.1 står som før: den matcher ikke ekskluderingen).
-UTELATT_VERSJON = "4 (03.10.2026)"
+#: Versjon 5 (10.10.2026): instruksfila og filkartet i kontekstsettet (`docs/GJENOPPTAK_INSTRUKSER_*.md`,
+#: `docs/GJENOPPTAK_FILKART_*.md`) holdes ute som de eldre instruksfilene — arbeidsregler og lokale stier, ikke studiens
+#: dokumentasjon. `docs/GJENOPPTAK_ADDENDUMSTATUS_*.md` deponeres.
+UTELATT_VERSJON = "5 (10.10.2026)"
 UTELATT = ("docs/INSTRUKSER-*.md", "docs/patch/**", "ROADMAP.md", "docs/ROADMAP.md",
-           "docs/BYGGEPLAN.md", "docs/MANUSKRIPT-v2*.md", "docs/PREPRINT-v*.md", "docs/MASTER-PATCH-*.md")
+           "docs/BYGGEPLAN.md", "docs/MANUSKRIPT-v2*.md", "docs/PREPRINT-v*.md", "docs/MASTER-PATCH-*.md",
+           "docs/GJENOPPTAK_INSTRUKSER_*.md", "docs/GJENOPPTAK_FILKART_*.md")
 NYESTE_UNNTATT = "docs/MANUSKRIPT-v[0-9]*.md"
 
 #: Filer i repoet som ikke er dokumenter, men som en låst måling leste eller som depositumet
@@ -101,6 +108,9 @@ VAULT_FILER = (
     ("register-v2-indeks.jsonl", "revisjon-2026-10/register-v2-indeks.jsonl"),
     ("menneskevalidering-utvalg.json", "revisjon-2026-10/menneskevalidering/utvalg.json"),
     ("menneskevalidering-skjema.csv", "revisjon-2026-10/menneskevalidering/skjema.csv"),
+    # v0.6.0 (10.10.2026): manuskript v3.3 slik det ble sendt til Scientometrics 03.10.2026 (sha256 2bf6f977…);
+    # kilden er docs/MANUSKRIPT-v3.3.md, som også deponeres.
+    ("MANUSKRIPT-v3.3.docx", "manuskript/v3.3/MANUSKRIPT-v3.3.docx"),
 )
 
 #: Fase 3s kjøringskatalog på Vault (relativ til gjenopptak-kilder/): leserens verdikter pakkes som zip.
@@ -124,6 +134,22 @@ BLINDFILER = (
 )
 
 
+#: Dokumenter fra git som skal være uten ordrette utdrag fra passasjene, etter samme regel som ``maalefiler.zip``
+#: (eierens beslutning 10.10.2026). Kandidatlista siterte passasjene den lister, opptil 1 039 tegn; filen i repoet er
+#: renset 10.10.2026 (83 utdrag byttet med merke). Byggingen kontrollerer at det fortsatt er slik, og feiler ellers.
+#: Git-historikken og tidligere Zenodo-versjoner bærer lista slik den sto.
+UTEN_UTDRAG = ("docs/SAKBEHANDLING-2026-09-27-kandidater.md",)
+
+#: Zip-filer med historiske dokumenter får en les-først-fil: status i dem er status den dagen de ble skrevet, og
+#: gjeldende status står i README.md og ZENODO.md. Kilden ligger i `historisk/` i repoet (utenfor `docs/`, så den ikke
+#: deponeres som egen fil); i zip-filen heter den README-HISTORISK.md.
+HISTORISK_NAVN = "README-HISTORISK.md"
+HISTORISK = {"manuskript-tidligere.zip": "historisk/README-manuskript-tidligere.md",
+             "utgivelser-tidligere.zip": "historisk/README-utgivelser-tidligere.md"}
+
+#: Hva git-bundelen bærer. «alle» er hele historikken (eierens valg 10.10.2026); «offentlig» er bare utgivelsesgrenen.
+BUNDLE_REFS = {"alle": ["--all"], "offentlig": ["offentlig", "--tags"]}
+
 #: Zenodo tillater høyst 100 filer per post (avvist ved opplasting av v0.4.0, 01.10.2026: «exceeding the max amount
 #: per record»). Byggeren nekter derfor et utkast over grensen.
 MAKS_FILER = 100
@@ -145,6 +171,24 @@ def _i_zip(kilde: str, navn: str) -> tuple[str, str] | None:
     # v0.5.0: beslutningsnotatene (ADR) i én zip, for å holde posten under Zenodos tak på 100 filer.
     if rel and rel.startswith("docs/decisions/"):
         return "decisions.zip", Path(rel).name
+    # v0.6.0 (10.10.2026): tre grupper til, for å holde posten på Zenodos tak med de nye filene.
+    # Skriptene gjenvunnet fra øktutskriften (gjenvunnet/addendum-19/), med katalogen bevart.
+    if rel and rel.startswith("gjenvunnet/"):
+        return "gjenvunnet-kode.zip", rel.removeprefix("gjenvunnet/")
+    # Manuskriptversjonene før den gjeldende (v0.1, v3.1 og v3.2), svarbrevet til v3.1 og kilden til den første
+    # preprinten; v3.3 står på toppnivå. Med dem i zip får posten 99 filer.
+    if rel in ("docs/MANUSKRIPT-v0.1.md", "docs/MANUSKRIPT-v3.1.md", "docs/MANUSKRIPT-v3.2.md", "docs/SVARBREV-v3.1.md",
+               "docs/PREPRINT.md"):
+        return "manuskript-tidligere.zip", Path(rel).name
+    # Release notes og portstatus for tidligere versjoner, og sakbehandlingslistene inn til sakene.
+    if rel and (Path(rel).match("docs/RELEASE-NOTES-v0.[45]*.md") or rel in ("docs/UTGIVELSE-v0.4.0-PORTSTATUS.md",
+                                                                             "docs/B5-PORTSTATUS.md")):
+        return "utgivelser-tidligere.zip", Path(rel).name
+    # v0.6.0 (10.10.2026, etter den uavhengige kontrollen): INNHENTET-filene samlet. Med de to nye ville posten hatt 101 filer.
+    if rel and Path(rel).match("docs/INNHENTET-*.md"):
+        return "innhentet.zip", Path(rel).name
+    if rel and Path(rel).match("docs/SAKBEHANDLING-*.md"):
+        return "saker.zip", "sakbehandling/" + Path(rel).name
     if kilde.startswith("vault:") and (navn.startswith("oppdrag-") or navn in ("arbeidsliste-oppdrag-koder-c.md",
                                                                              "fase3-oppdrag-presisjon.md")):
         return "oppdrag.zip", navn
@@ -221,7 +265,8 @@ def repo_dokumenter(*, med_utelatt: bool = False):
         if any(rel.startswith(u) for u in REPO_UTENFOR):
             continue
         if any(Path(rel).match(m) or (m.endswith("**/*.md") and rel.startswith(m.split("**")[0])
-                                      and rel.endswith(".md")) for m in REPO_MØNSTRE):
+                                      and rel.endswith(".md")) for m in REPO_MØNSTRE) \
+                or any(rel.startswith(k) for k in REPO_KATALOGER):
             ut.append(rel)
     beholdt, utelatt = utelat(ut)
     return (beholdt, utelatt) if med_utelatt else beholdt
@@ -256,6 +301,15 @@ def blindindeks(vault: Path, navn: str, blind_rel: str, nøkkel_rel: str) -> dic
                     "på Vault og kan etterprøves mot blindfil_sha256.", "indeks": rader}
 
 
+def kontroller_uten_utdrag(navn: str, kilde: Path, indeks: tuple) -> int:
+    """Antall merker i filen. Står et ordrett utdrag i den, feiler byggingen: filen skal være renset i repoet."""
+    tekst = kilde.read_text(encoding="utf-8")
+    igjen = maalefiler.utdrag_i_fil(navn, tekst, *indeks)
+    if igjen:
+        raise UtgivelseFeil(f"{navn}: {igjen} ordrette utdrag på {maalefiler.MIN_UTDRAG} tegn eller mer står igjen")
+    return len(re.findall(r"\[utdrag utelatt: \d+ tegn, sha256 [0-9a-f]{16}\]", tekst))
+
+
 def forrige_filer(record: str) -> dict[str, dict]:
     """Lesekall mot den publiserte forrige versjonen: {navn: {bytes, md5}}."""
     # venv-Pythonen har ikke systemets CA-lager (TIDSSTEMPEL.md) — samme rot som ots-feilen.
@@ -280,7 +334,7 @@ def filkart(nye: list[Fil], forrige: dict[str, dict]) -> dict:
             "uendret": uendret, "endret": endret, "ny": ny, "fjernet": borte}
 
 
-def bygg(versjon: str, forrige: str | None, *, bare_filkart: bool = False) -> dict:
+def bygg(versjon: str, forrige: str | None, *, bare_filkart: bool = False, bundle: str = "alle") -> dict:
     vault = require_vault()
     ut = vault / UTKAST_KATALOG / f"v{versjon}-utkast"
     if not bare_filkart:
@@ -319,9 +373,9 @@ def bygg(versjon: str, forrige: str | None, *, bare_filkart: bool = False) -> di
     # 3 byggeartefakter i en egen kladd på Vault (aldri i /tmp: de skal kunne etterprøves)
     bygg_dir = vault / UTKAST_KATALOG / f"v{versjon}-bygg"
     bygg_dir.mkdir(parents=True, exist_ok=True)
-    bundle = bygg_dir / "gjenopptak-git-history.bundle"
+    bundle_fil = bygg_dir / "gjenopptak-git-history.bundle"
     if not bare_filkart:
-        subprocess.run(["git", "-C", str(REPO), "bundle", "create", str(bundle), "--all"],
+        subprocess.run(["git", "-C", str(REPO), "bundle", "create", str(bundle_fil), *BUNDLE_REFS[bundle]],
                        check=True, capture_output=True)
         tar = bygg_dir / f"gjenopptak-src-{versjon}.tar.gz"
         subprocess.run(["git", "-C", str(REPO), "archive", "--format=tar.gz",
@@ -355,17 +409,38 @@ def bygg(versjon: str, forrige: str | None, *, bare_filkart: bool = False) -> di
                 grupper.setdefault(g[0], []).append((g[1], f))
                 filer.remove(f)
                 (ut / f.navn).unlink()
+        # Passasjene i blindfilene: det ordrette utdrag måles mot, her og i maalefiler.zip.
+        blind = [vault / b for _, b, _ in BLINDFILER] + [vault / "revisjon-2026-10/menneskevalidering/blind.jsonl"]
+        indeks = maalefiler.passasjeindeks(blind)
         zipinnhold = {}
         for znavn, medl in sorted(grupper.items()):
             zp = bygg_dir / znavn
+            avledet: dict[str, dict] = {}
             with zipfile.ZipFile(zp, "w", zipfile.ZIP_DEFLATED) as z:
                 for arc, f in sorted(medl):
-                    kilde = REPO / f.kilde.split(":", 2)[2] if f.kilde.startswith("git:") else vault / f.kilde[6:]
+                    rel = f.kilde.split(":", 2)[2] if f.kilde.startswith("git:") else None
+                    kilde = REPO / rel if rel else vault / f.kilde[6:]
+                    if rel in UTEN_UTDRAG:
+                        avledet[arc] = {"kontrollert": "ingen ordrette utdrag",
+                                        "merker": kontroller_uten_utdrag(arc, kilde, indeks)}
                     z.write(kilde, arc)
-            zipinnhold[znavn] = [{"navn": arc, "kilde": f.kilde, "sha256": f.sha256, "bytes": f.bytes}
+                if znavn in HISTORISK:
+                    les_først = REPO / HISTORISK[znavn]
+                    if any(arc == HISTORISK_NAVN for arc, _ in medl):
+                        raise UtgivelseFeil(f"{znavn} har alt et medlem som heter {HISTORISK_NAVN}")
+                    z.write(les_først, HISTORISK_NAVN)
+            zipinnhold[znavn] = [{"navn": arc, "kilde": f.kilde, "sha256": f.sha256, "bytes": f.bytes} | avledet.get(arc, {})
                                  for arc, f in sorted(medl)]
+            if znavn in HISTORISK:
+                zipinnhold[znavn].append({"navn": HISTORISK_NAVN, "kilde": f"git:{head[:12]}:{HISTORISK[znavn]}",
+                                          "sha256": sha256_file(les_først), "bytes": les_først.stat().st_size})
             legg(znavn, zp, f"bygget: {len(medl)} filer i zip")
-        for p, k in ((bundle, "git bundle --all"), (tar, "git archive HEAD"),
+        # v0.6.0: måleinndata og måleutfall fra Vault (docs/DEPOSITUMSKRAV-2026-10-10.md). Tekstfelt er byttet med
+        # sha256, og ordrette utdrag fra blindfilpassasjene er tatt ut; pakkingen feiler om et utdrag står igjen.
+        mz = bygg_dir / maalefiler.ZIPNAVN
+        zipinnhold[maalefiler.ZIPNAVN] = maalefiler.pakk(vault, mz, indeks=indeks)
+        legg(mz.name, mz, f"bygget: {len(zipinnhold[maalefiler.ZIPNAVN])} målefiler fra Vault")
+        for p, k in ((bundle_fil, "git bundle " + " ".join(BUNDLE_REFS[bundle])), (tar, "git archive HEAD"),
                      (otsz, f"{len(ots)} ots-kvitteringer"), (bi, f"{len(BLINDFILER)} blindfiler som indeks"),
                      (lv, f"{len(verdikter)} verdiktfiler fra fase 3s leser")):
             legg(p.name, p, f"bygget: {k}")
@@ -374,7 +449,7 @@ def bygg(versjon: str, forrige: str | None, *, bare_filkart: bool = False) -> di
     kart = filkart(filer, forrige_filer(forrige)) if forrige else None
     _, utelatt = repo_dokumenter(med_utelatt=True)
     manifest = {"versjon": versjon, "bygget": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                "head": head, "utkast": str(ut), "publisert": False,
+                "head": head, "utkast": str(ut), "publisert": False, "bundle": bundle,
                 "utelatt": {"versjon": UTELATT_VERSJON, "mønstre": list(UTELATT),
                             "unntak": f"nyeste {NYESTE_UNNTATT}", "filer": utelatt},
                 "filer": [f.__dict__ for f in filer], "filkart": kart,
@@ -390,9 +465,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--versjon", required=True)
     p.add_argument("--forrige", help="Zenodo-record-ID for forrige versjon (for filkartet)")
     p.add_argument("--bare-filkart", action="store_true", help="ikke kopier, bare regn filkartet")
+    p.add_argument("--bundle", choices=sorted(BUNDLE_REFS), default="alle",
+                   help="hva git-bundelen bærer: hele historikken (standard) eller bare utgivelsesgrenen")
     a = p.parse_args(argv)
     try:
-        m = bygg(a.versjon, a.forrige, bare_filkart=a.bare_filkart)
+        m = bygg(a.versjon, a.forrige, bare_filkart=a.bare_filkart, bundle=a.bundle)
     except (UtgivelseFeil, VaultUnavailable) as e:
         print(f"{type(e).__name__}: {e}", file=sys.stderr)
         return 3

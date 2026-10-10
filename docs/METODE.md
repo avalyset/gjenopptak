@@ -33,7 +33,7 @@ Alle tre tallene gjelder samme materiale: **22 243 tekstbiter** fra 100 verk
 |---|---|---|---|
 | **a) bekreftede treff / alle tekstbiter** | 25/22 243 = **0,112 %** = ett per **890** | 19/22 243 = **0,085 %** = ett per **1 171** | **måler utvalget, ikke materialet.** Telleren er de sanne i et stratifisert utvalg av 150 flaggede; nevneren er alt. Tallet er meningsløst som prevalens og skal ikke brukes. |
 | **b) presisjon × flaggede / alle** | 0,1667 × 2 173 = 362 → **1,63 %** = ett per **61** [1,13–2,29 %] | 0,1267 × 2 173 = 275 → **1,24 %** = ett per **81** [0,81–1,85 %] | **et gulv.** Teller bare sanne blant de flaggede; alt dommeren mistet, er utenfor. Intervallet er presisjonens Wilson. |
-| **c) b delt på implisert recall** | 362/0,475 = 763 → **3,43 %** = ett per **29** [2,12–7,95 %] | 275/0,407 = 676 → **3,04 %** = ett per **33** [1,73–7,55 %] | **beste anslag.** Korrigerer for tapte treff. Intervallet er dominert av usikkerheten i tapte, ikke i presisjonen. |
+| **c) b delt på implisert recall** | 362/0,475 = 763 → **3,43 %** = ett per **29**; cellevektet 3,42 %, verksklynget **[1,3–7,5 %]** *(rettet 10.10.2026: sto [2,12–7,95 %], som ikke var et konfidensintervall — `docs/REANALYSE-2026-10-03.md` e)* | 275/0,407 = 676 → **3,04 %** = ett per **33** (intervallet er ikke regnet om; [1,73–7,55 %] har samme mangel) | **sekundær størrelse** *(sto «beste anslag»)*. Korrigerer for tapte treff. Intervallet er dominert av usikkerheten i tapte, ikke i presisjonen. |
 
 **Implisert recall** = sanne blant flaggede / (sanne blant flaggede + tapte). Tapte er regnet av
 bomraten blant de 100 leste ikke-flaggede (INGEN 1/50 + N3 1/50 = 2/100), Wilson **0,55–7,00 %**, ×
@@ -331,6 +331,9 @@ av samme modellfamilie og regelfil, ikke et menneske. For de første 100 verkene
 12 av 20 verk, 51 i ett — så intervallet er for smalt; uten det største verket er det 45 av 53 = 84,9 %
 [72,9–92,1], RESULTAT § 1.2.)*
 
+Fase 4 (ADDENDUM-26, håndskriftstudier) ble startet og avbrutt 03.10.2026 uten å bli gjennomført; inndataene
+finnes ikke lenger. Se docs/RESULTAT-ADDENDUM-26.md og docs/INNHENTET-2026-10-07-fase4-data.md.
+
 
 ## 9 Leseren — regelfil, øktform, og hvorfor ett kall ikke holder
 
@@ -355,8 +358,13 @@ bedre regler enn referansekoderen hadde.
 | qwen2.5:7b lokalt, **agentisk: regelfil + parti på 20 i samme kontekst** (ADDENDUM-24, 28.09.2026) | 0,248 [0,113–0,376] | **sil** |
 
 Rekken er monoton, og Haiku/Opus-spennene overlapper ikke. **Ett-kall-modeller under Opus er
-sil-klasse:** de kan redusere en mengde, men ikke avgjøre et register. Mellom per-kall-Opus og agentisk
-Opus overlapper intervallene i 0,697–0,768, så **øktformens bidrag er mulig og umålt**.
+sil-klasse:** de kan redusere en mengde, men ikke avgjøre et register. Differansen mellom agentisk Opus og
+per-kall-Opus er **0,177**, paret bootstrap **[0,044–0,323]**, verksklynget **[0,057–0,318]** — intervallet
+utelukker 0 (`docs/REANALYSE-2026-10-03.md` b). Den er målt mellom én sammenhengende økt og 320 enkeltkall med
+samme modell og regelfil; økten er kjørt én gang (ADDENDUM-21 arm A er ukjørt).
+*(Rettet 10.10.2026, 0,177 [0,044–0,323]: sto «overlapper intervallene i 0,697–0,768, så øktformens bidrag er mulig
+og umålt». Slutningen bygget på overlappende separate intervaller; med paret test er differansen etablert —
+`docs/INNHENTET-2026-10-10-differansen-0812-0636.md`.)*
 **Lokal agentisk leser er sil-klasse** (ADDENDUM-24, `docs/RESULTAT-ADDENDUM-24.md`): samme modus som gjorde
 Opus til leser, gir en lokal 7B-modell κ = 0,248 — på høyde med gemma2 i ett kall (0,289). `LokalLeser` i
 `kjede/leser.py` er implementasjonen av `Leser`, klassifisert som sil.
@@ -373,7 +381,7 @@ målt til 25 034 kontekst-tokens per passasje og 29,5 minutter per økt.
 ### Koder 4 — Fable 5.1, chat, ikke menneske (28.09.2026)
 
 **Hvorfor den finnes:** de to første koderne er begge Opus-instanser, og «uavhengig» har hittil betydt
-tom kontekst og egen kladdekatalog, ikke uavhengig dømmekraft. Koder 4 er en **annen modellfamilie**
+tom kontekst og egen kladdekatalog, ikke uavhengig dømmekraft. Koder 4 er en **annen modell fra samme leverandør** *(Rettet 10.10.2026: sto «annen modellfamilie». ADDENDUM-28 § 1 sier: «Koder 4 (Fable 5.1) er i `docs/METODE.md` omtalt som en annen modellfamilie, men kommer fra samme leverandør som koder 1 og 2.» Manuskript v3.3 § 3: «a different model from the same vendor».)*
 på samme 320 passasjer, samme blindfil (`15ce72a7687cea57…`), samme regelfil
 (`234695dd4e1777a9…`), én gjennomgang i PS-rekkefølge. **Den er fortsatt ikke et menneske**, så
 `κ` mot menneskelig lesning er uendret ukjent.
@@ -389,7 +397,7 @@ på samme 320 passasjer, samme blindfil (`15ce72a7687cea57…`), samme regelfil
 | koder 1 mot koder 2 | 300 uten ankere | 0,967 | 0,774 | 0,623–0,898 |
 | koder 4 mot koder 1 | 300 uten ankere | 0,957 | 0,711 | 0,540–0,847 |
 
-**Funnet:** en annen modellfamilie gjenskaper koder 2s treffbeslutning **bedre (0,899) enn koder 1 og
+**Funnet:** en annen modell fra samme leverandør gjenskaper koder 2s treffbeslutning **bedre (0,899) enn koder 1 og
 koder 2 gjenskaper hverandres (0,812)**. Intervallene overlapper, så rekkefølgen er ikke etablert — men
 retningen er motsatt av det modellfamilie-forbeholdet forutså, og **koder 1 er den av de tre som
 avviker mest** fra de to andre. 2×2 mot koder 1: 29 begge, 4 bare koder 4, **10 bare koder 1**, 277 ingen.
@@ -444,8 +452,8 @@ Mot koder 1:
 | `tvil = true` | 37 | 0,757 | 0,433 | 21 av 25 = 84,0 % [65,3–93,6] |
 
 Samme retning som ADDENDUM-23 § 7.2 fant for koder c (97,6 % mot 75,9 %, post hoc), nå i en annen
-modellfamilie. **`tvil` peker samme vei i to modellfamilier; forskjellen er ikke testet, og andre
-prediktorer er ikke sammenlignet** — intervallene over, [67,6–100] og [65,3–93,6], overlapper nesten helt.
+modell fra samme leverandør. **`tvil` peker samme vei i to modeller fra samme leverandør; forskjellen er ikke testet, og andre
+prediktorer er ikke sammenlignet** — intervallene over, [67,6–100] og [65,3–93,6], overlapper nesten helt. *(Rettet 10.10.2026: sto «nå i en annen modellfamilie» og «i to modellfamilier». ADDENDUM-28 § 1 sier: «Koder 4 (Fable 5.1) er i `docs/METODE.md` omtalt som en annen modellfamilie, men kommer fra samme leverandør som koder 1 og 2.» Manuskript v3.3 § 3: «a different model from the same vendor».)*
 *(Rettet 28.09.2026, frys-lesning 2: sto «`tvil` er den mest overførbare enkeltopplysningen i kjeden», en
 rangering ingen har målt; jf. § 9 om andre prediktorer.)*
 

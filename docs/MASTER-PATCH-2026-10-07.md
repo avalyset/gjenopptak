@@ -1,0 +1,2 @@
+2026-10-07: Preprints.org-preprinten (ID 236460) er publisert, DOI 10.20944/preprints202610.0368.v1, URL https://www.preprints.org/manuscript/202610.0368/v1.
+2026-10-07: MetaArXiv zvc34_v1 (sendt 26.09, sist redigert 30.09): avvist av moderator, sett innlogget 07.10.2026. Moderatorbegrunnelse: ingen begrunnelse funnet. Ikke offentlig, ingen uttrekking mulig eller nødvendig. Sendes ikke inn på nytt — Preprints.org 10.20944/preprints202610.0368.v1 er gjeldende preprint.

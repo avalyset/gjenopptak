@@ -6,6 +6,7 @@ Ett kall, maks 10 works, ett felt. Fulltekst hentes ikke.
 """
 
 import json
+from pathlib import Path
 
 import pytest
 from control import Corpus
@@ -15,6 +16,14 @@ from gjenopptak.harvest.smoketest import main
 from gjenopptak.schemas import validate
 
 pytestmark = pytest.mark.network
+
+
+@pytest.fixture(autouse=True)
+def _adr0009_port(tmp_path, monkeypatch):
+    """ADR-0009-porten slippes forbi her, som i test_fetchtest.py; Vault-nektelsen testes i
+    test_vault_standard.py. Røyktesten skriver til tmp_path, som med vilje ikke ligger på Vault."""
+    from gjenopptak.harvest import smoketest as _st
+    monkeypatch.setattr(_st, "krev", lambda d=None, **kw: Path(d) if d else tmp_path)
 
 
 def test_roykttest_ende_til_ende(tmp_path, capsys):

@@ -1,0 +1,27 @@
+SP=/private/tmp/claude-501/-Users-eirikbottennicolaysen-avalyset/1024847e-ef08-48fa-bd0a-2b2d9235bb89/scratchpad
+cd ~/dev/gjenopptak && python3 - <<'PY'
+import hashlib, re
+from pathlib import Path
+SP=Path('/private/tmp/claude-501/-Users-eirikbottennicolaysen-avalyset/1024847e-ef08-48fa-bd0a-2b2d9235bb89/scratchpad')
+src=(SP/'a20.py').read_text(encoding='utf-8')
+a19sha=hashlib.sha256(Path('ADDENDUM-19.md').read_bytes()).hexdigest()
+# bytt ut HELE docstringen, ikke bare første linje
+ny=re.sub(r'^""".*?"""', '"""ADDENDUM-19: Opus 5, koder 2s gjenvunnede regelfil, ett kall per passasje, samme 320.\nFyller cellen som skiller modell fra øktform. Identisk ADDENDUM-20 bortsett fra modell og addendum-sha."""',
+          src, count=1, flags=re.S)
+ny=ny.replace("addendum-20","addendum-19").replace('addendum="ADDENDUM-20"','addendum="ADDENDUM-19"')
+ny=re.sub(r'ASHA="[0-9a-f]{64}"', f'ASHA="{a19sha}"', ny, count=1)
+(SP/'a19.py').write_text(ny, encoding='utf-8')
+import ast; ast.parse(ny); print(f"a19.py parser OK · {len(ny)} B")
+for l in ny.splitlines():
+    if l.startswith(('UT=','ASHA=')) or 'addendum="' in l: print("  "+l.strip()[:110])
+PY
+cat > $SP/ko2.sh <<'SH'
+#!/bin/sh
+# Venter på at den første køen blir ferdig, kjører så ADDENDUM-19 som falt på min syntaksfeil.
+SP=/private/tmp/claude-501/-Users-eirikbottennicolaysen-avalyset/1024847e-ef08-48fa-bd0a-2b2d9235bb89/scratchpad
+cd "$HOME/dev/gjenopptak" || exit 1
+while pgrep -f "a20.py claude" > /dev/null; do sleep 20; done
+echo "$(date '+%H:%M') første kø ferdig — starter ADDENDUM-19 (Opus 5)"
+.venv/bin/python "$SP/a19.py" claude-opus-5 opus5 && echo "FERDIG ADDENDUM-19"
+SH
+chmod +x $SP/ko2.sh; echo "ko2.sh klar"

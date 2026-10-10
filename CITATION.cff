@@ -21,8 +21,8 @@ license:
   - Apache-2.0
   - CC-BY-4.0
 license-url: "https://www.apache.org/licenses/LICENSE-2.0"
-version: "0.5.0"
-date-released: "2026-10-03"
+version: "0.6.0"
+date-released: "2026-10-10"
 keywords:
   - metascience
   - preregistration
@@ -36,8 +36,14 @@ identifiers:
     value: "10.5281/zenodo.22959326"
     description: "Concept DOI — all versions"
   - type: doi
+    value: "10.5281/zenodo.23279145"
+    description: "Version DOI — v0.6.0, deposited 2026-10-10 (measurement input and outcome files behind ADDENDUM-01 to -24; recovered scripts for ADDENDUM-19 and -20; manuscript v3.3 as submitted; ADDENDUM-28 locked and not run; no new measurement)"
+  - type: doi
     value: "10.5281/zenodo.23120143"
-    description: "Version DOI — v0.5.0, deposited 2026-10-03 (manuscript v3.1 and response to review; reanalysis with work-clustered intervals; register v2 as index without text; number manifest; ADDENDUM-26 and ADDENDUM-27)"
+    description: "Version DOI — v0.5.0, deposited 2026-10-03 (manuscript v3.1 after an external review written by a language model; reanalysis with work-clustered intervals; register v2 as index without text; number manifest; ADDENDUM-26 and ADDENDUM-27)"
+  - type: doi
+    value: "10.20944/preprints202610.0368.v1"
+    description: "Preprint (Preprints.org, published 2026-10-07; manuscript v3.2)"
   - type: doi
     value: "10.5281/zenodo.23096158"
     description: "Version DOI — v0.4.1, deposited 2026-10-02 (manuscript v2.9: corrected statement on the use of AI tools and publication status; adds the rendered preprint; no data, figures or analysis code changed)"
@@ -58,6 +64,10 @@ identifiers:
     description: "Version DOI — v0.1.0, deposited 2026-09-25"
 references:
   - type: generic
+    authors:
+      - family-names: "Botten Nicolaysen"
+        given-names: "Eirik"
+        orcid: "https://orcid.org/0009-0001-9188-6788"
     title: "Gjenopptak data, register and frozen lists"
     notes: >-
       Data, frozen frame lists, samples and judgment files are held outside git

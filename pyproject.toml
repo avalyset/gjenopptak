@@ -6,6 +6,9 @@ dependencies = [
   # Pinnet, ikke ">=": en måling som ikke kan gjentas med samme biblioteker, er ikke gjentatt.
   "httpx==0.28.1",
   "jsonschema==4.26.0",
+  # Språkdetektor for recall-sett 2 (ADDENDUM-07 § 1). Sto bare i requirements.txt; uten den feiler
+  # tests/test_recallset2.py i et miljø installert fra denne lista.
+  "langdetect==1.0.9",
   "lxml==6.1.3",
   "pyyaml==6.0.3",
 ]

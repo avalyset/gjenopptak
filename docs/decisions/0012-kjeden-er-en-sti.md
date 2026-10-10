@@ -61,8 +61,11 @@ Målt med **samme regelfil og samme kallstruktur**, ett kall per passasje, mot k
 
 Rekken er monoton, og Haiku/Opus-spennene overlapper ikke. Ett-kall-modeller under Opus er derfor
 **sil-klasse**: de kan redusere en mengde, men ikke avgjøre et register. Mellom per-kall-Opus og agentisk
-Opus overlapper intervallene i 0,697–0,768, så øktformens bidrag er **mulig og umålt** — kjeden bruker den
+Opus overlapper intervallene i 0,697–0,768, så øktformens bidrag er **mulig og umålt** *(rettet 10.10.2026: differansen er etablert, 0,177 — se under)* — kjeden bruker den
 agentiske formen fordi den er den eneste som er målt over 0,70, ikke fordi forskjellen er bevist.
+*(Rettet 10.10.2026: den parede testen i reanalysen 03.10.2026 gir differansen 0,177, paret bootstrap
+[0,044–0,323], verksklynget [0,057–0,318] — `docs/REANALYSE-2026-10-03.md` b. Påstanden over står som den ble
+skrevet; beslutningen i denne ADR-en endres ikke.)*
 *(Rettet 28.09.2026, frys-lesningen: intervallet for 0,812 sto som [0,712–0,917] og overlappet som
 0,712–0,768; [0,712–0,917] hører til κ = 0,826 mot koder 1s første lesning, ADDENDUM-11 § 4. Ingen
 slutning endres.)*
@@ -106,7 +109,7 @@ ikke som vei».
 **Hvorfor det er en beslutning og ikke en innstilling.** Målingene i ADDENDUM-18, -19 og -20 gikk over
 API-et med en betalt nøkkel, og de viste at ett-kall-modeller er sil-klasse (κ 0,031 / 0,294 / 0,636 mot
 0,812 for agentisk Opus). *(Presisert 30.09.2026, frys-lesning 4: 0,636 er et grensetilfelle, som tabellen over og
-FAKTA § 2 sier; intervallene for 0,636 og 0,812 overlapper.)* Verktøyet trenger derfor ikke API-et til leseren, og en API-sti som ikke
+FAKTA § 2 sier; intervallene for 0,636 og 0,812 overlapper — se rettelsen 10.10.2026 over: den parede differansen utelukker 0.)* Verktøyet trenger derfor ikke API-et til leseren, og en API-sti som ikke
 brukes er en sti som kan tas i bruk ved uhell — med en nøkkel i miljøet, en kostnad ingen har budsjettert,
 og en kvotegrense kjeden ikke kan se. `falsify/citations.py` kaller EPMC og Crossref; det er ikke
 Anthropic og står uendret.

@@ -1,0 +1,83 @@
+SP=/private/tmp/claude-501/-Users-eirikbottennicolaysen-avalyset/1024847e-ef08-48fa-bd0a-2b2d9235bb89/scratchpad
+ls -la $SP/blind-q-regler.md 2>&1 | awk '{print $5, $NF}'
+[ -f $SP/blind-q-regler.md ] && echo "sha256: $(shasum -a 256 $SP/blind-q-regler.md | cut -c1-16)  (ADDENDUM-18 brukte 00d69c09ed8b9045)"
+cd ~/dev/gjenopptak && python3 - <<'PY'
+import re, hashlib, ast
+from pathlib import Path
+SP=Path('/private/tmp/claude-501/-Users-eirikbottennicolaysen-avalyset/1024847e-ef08-48fa-bd0a-2b2d9235bb89/scratchpad')
+a19sha=hashlib.sha256(Path('ADDENDUM-19.md').read_bytes()).hexdigest()
+src=(SP/'a20.py').read_text(encoding='utf-8')
+# --- a19b.py: taket 2 000
+ny=re.sub(r'^""".*?"""', '"""ADDENDUM-19b: identisk ADDENDUM-19, men max_tokens 2 000. Første kjøring var ugyldig på avkutting."""',
+          src, count=1, flags=re.S)
+ny=ny.replace("addendum-20","addendum-19").replace('addendum="ADDENDUM-20"','addendum="ADDENDUM-19b"')
+ny=re.sub(r'ASHA="[0-9a-f]{64}"', f'ASHA="{a19sha}"', ny, count=1)
+ny=ny.replace('"max_tokens":300','"max_tokens":2000').replace('max_tokens=300','max_tokens=2000')
+ast.parse(ny); (SP/'a19b.py').write_text(ny, encoding='utf-8')
+print(f"a19b.py OK · max_tokens-forekomster: {[l.strip()[:70] for l in ny.splitlines() if 'max_tokens' in l]}")
+# --- a18_rekjor.py: de avkuttede passasjene i ADDENDUM-18, SAMME tynne regelfil
+rek = '''"""ADDENDUM-19 §3b: kjører om de avkuttede passasjene i ADDENDUM-18 med max_tokens 2 000.
+Samme TYNNE regelfil (00d69c09) som originalkjøringen — ellers er det ikke samme måling."""
+import re, json, subprocess, sys, hashlib, time
+from pathlib import Path
+REPO=Path.home()/"dev/gjenopptak"
+UT=Path('/Volumes/Vault/gjenopptak-kilder/ekstraksjon/2026-09-26/addendum-18')
+SP=Path('/private/tmp/claude-501/-Users-eirikbottennicolaysen-avalyset/1024847e-ef08-48fa-bd0a-2b2d9235bb89/scratchpad')
+def nokkel():
+    for l in (Path.home()/'.zshenv').read_text(encoding='utf-8').splitlines():
+        m=re.match(r'\\s*(?:export\\s+)?ANTHROPIC_API_KEY_NORDVAULT\\s*=\\s*(.*)$', l)
+        if m: return m.group(1).strip().strip('"').strip("'")
+    raise SystemExit("ingen nokkel")
+REGLER=(SP/'blind-q-regler.md').read_text(encoding='utf-8')
+RSHA=hashlib.sha256(REGLER.encode()).hexdigest()
+assert RSHA.startswith("00d69c09ed8b9045"), RSHA
+SYSTEM=(REGLER + "\\n\\n---\\n\\nDu far en tekstbit om gangen. Avgjor om den er et TREFF etter reglene over. "
+        "Svar bare med JSON pa en linje: {\\"treff\\": true|false, \\"begrunnelse\\": \\"<en setning>\\"}. "
+        "Ingen annen tekst.")
+def _post(k, payload):
+    body=json.dumps(payload).encode()
+    r=subprocess.run(["curl","-sS","-o","-","-w","\\n%{http_code}","-X","POST",
+        "https://api.anthropic.com/v1/messages","-H","content-type: application/json",
+        "-H","anthropic-version: 2023-06-01","-H",f"x-api-key: {k}","--data-binary","@-"],
+        input=body, capture_output=True, timeout=300)
+    ut=r.stdout.decode(); i=ut.rfind("\\n")
+    return ut[i+1:].strip(), ut[:i]
+def kall(k, modell, tekst):
+    base={"model":modell,"max_tokens":2000,"system":SYSTEM,"messages":[{"role":"user","content":tekst}]}
+    kode,svar=_post(k, dict(base, temperature=0))
+    if kode=="400" and "temperature" in svar:
+        kode,svar=_post(k, base); return kode, svar, True
+    return kode, svar, False
+def parse(s):
+    m=re.search(r'\\{.*?\\}', s.strip(), re.S)
+    if not m: return None
+    try: return json.loads(m.group(0))
+    except Exception: return None
+if __name__=="__main__":
+    modell=sys.argv[1]; kort=sys.argv[2]
+    k=nokkel()
+    rows={json.loads(x)['id']:json.loads(x) for x in (REPO/'data/port-presisjonssett-ADDENDUM10.jsonl').read_text(encoding='utf-8').splitlines() if x.strip()}
+    gamle=[json.loads(x) for x in (UT/f'{kort}-dommer.jsonl').read_text(encoding='utf-8').splitlines() if x.strip()]
+    avk=[r['id'] for r in gamle if (parse(r['raasvar']) is None or 'treff' not in (parse(r['raasvar']) or {}))
+         and (r['usage'].get('output_tokens',0) or 0) >= 300]
+    print(f"{modell}: {len(avk)} avkuttede passasjer skal kjores om med max_tokens 2000: {avk}", flush=True)
+    logg=UT/f'{kort}-avkuttet-rekjort.jsonl'
+    t0=time.time()
+    with logg.open('a', encoding='utf-8') as f:
+        for pid in avk:
+            kode,svar,utelatt=kall(k, modell, rows[pid]['tekst'])
+            if not kode.startswith("2"):
+                print(f"  HTTP {kode} pa {pid}", flush=True)
+                if kode in ("401","403"): print("STOPP: 401/403", flush=True); break
+                continue
+            d=json.loads(svar); txt=" ".join(b.get('text','') for b in d.get('content',[]))
+            f.write(json.dumps(dict(id=pid, utvalgstype=rows[pid]['utvalgstype'], modell=d.get('model'),
+                signatur=dict(model_id=d.get('model'), temperature=("utelatt" if utelatt else 0),
+                    temperature_utelatt=utelatt, max_tokens=2000, regel_sha256=RSHA,
+                    addendum="ADDENDUM-19 §3b (rekjoring av avkuttet ADDENDUM-18-passasje)"),
+                usage=d.get('usage',{}), raasvar=txt.strip()), ensure_ascii=False)+"\\n"); f.flush()
+    print(f"FERDIG {modell}: {(time.time()-t0)/60:.1f} min", flush=True)
+'''
+ast.parse(rek); (SP/'a18_rekjor.py').write_text(rek, encoding='utf-8')
+print("a18_rekjor.py OK")
+PY

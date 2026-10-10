@@ -1,6 +1,6 @@
 # Hvordan de seks gjenåpningscasene ble valgt — slik det faktisk skjedde
 
-**Skrevet 03.10.2026, etter ekstern fagfellevurdering (hovedinnvending 5, spørsmål 5).** Kildene er dokumentene som ble
+**Skrevet 03.10.2026, etter en ekstern vurdering gjort av en språkmodell (hovedinnvending 5, spørsmål 5).** *(Rettet 10.10.2026: sto «etter ekstern fagfellevurdering». Leseren var en språkmodell (GPT); ingen menneskelig fagfelle har lest manuskriptet.)* Kildene er dokumentene som ble
 skrevet da valgene ble tatt: `docs/LOFTBARE-VURDERING-v1.md` (21.09.2026) og `docs/SAKBEHANDLING-2026-09-27-triage.md`
 (27.09.2026), med sakregisteret `docs/saker/REGISTER-SAKER.md`. Ingenting her er lagt til i ettertid utover sammenstillingen.
 
