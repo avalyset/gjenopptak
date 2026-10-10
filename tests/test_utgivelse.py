@@ -48,8 +48,9 @@ def test_ekskluderingslisten_beholder_bare_nyeste_utkast():
     assert "docs/MANUSKRIPT-v2.10-UTKAST.md" in beholdt
     assert set(utelatt) == {"docs/MANUSKRIPT-v2-UTKAST.md", "docs/MANUSKRIPT-v2.1-UTKAST.md",
                             "docs/MANUSKRIPT-v2.5-UTKAST.md", "docs/INSTRUKSER-v1.3.md",
-                            "docs/patch/MASTER-x.md", "docs/ROADMAP.md", "docs/BYGGEPLAN.md"}
-    assert {"docs/MANUSKRIPT-v0.1.md", "docs/METODE.md", "docs/MASTER-PATCH-2026-09-26.md"} <= set(beholdt)
+                            "docs/patch/MASTER-x.md", "docs/ROADMAP.md", "docs/BYGGEPLAN.md",
+                            "docs/MASTER-PATCH-2026-09-26.md"}          # versjon 3 (03.10.2026)
+    assert {"docs/MANUSKRIPT-v0.1.md", "docs/METODE.md"} <= set(beholdt)
 
 
 def test_ekskluderingslisten_v2_ferdig_manus_fortrenger_utkastet_og_preprintkilden_holdes_ute():
@@ -68,6 +69,24 @@ def test_zipgruppene_er_bare_nye_grupper_og_taket_er_zenodos():
     assert _i_zip("git:abc:docs/saker/SAK-08/LUKKET.md", "saker-SAK-08-LUKKET.md") == ("saker.zip", "saker/SAK-08/LUKKET.md")
     assert _i_zip("git:abc:docs/FAKTASJEKK-MANUSKRIPT-v2.7-2026-09-30.md", "x")[0] == "faktasjekk-manuskript.zip"
     assert _i_zip("vault:oppdrag-gjenvunnet/OPPHAV.md", "oppdrag-gjenvunnet-OPPHAV.md") == ("oppdrag.zip", "oppdrag-gjenvunnet-OPPHAV.md")
-    # filer som alt er deponert i v0.3.0, holdes utenfor zip
-    assert _i_zip("git:abc:docs/decisions/0001-korpusgrense-aapen-fulltekst.md", "decisions-0001-x.md") is None
+    # v0.5.0 (03.10.2026): ADR-ene pakkes i én zip for å holde posten under taket; addendaene står alene
+    assert _i_zip("git:abc:docs/decisions/0001-korpusgrense-aapen-fulltekst.md", "decisions-0001-x.md") == (
+        "decisions.zip", "0001-korpusgrense-aapen-fulltekst.md")
     assert _i_zip("git:abc:ADDENDUM-25.md", "ADDENDUM-25.md") is None
+
+
+def test_ekskluderingslisten_v4_v3_fortrenger_alle_v2_og_v01_star():
+    from gjenopptak.utgivelse import utelat
+    stier = ["docs/MANUSKRIPT-v0.1.md", "docs/MANUSKRIPT-v2.8-UTKAST.md", "docs/MANUSKRIPT-v2.9.md",
+             "docs/MANUSKRIPT-v3.md", "docs/MANUSKRIPT-FAKTA-2026-09-28.md", "docs/SVARBREV-v3.md"]
+    beholdt, utelatt = utelat(stier)
+    assert set(utelatt) == {"docs/MANUSKRIPT-v2.8-UTKAST.md", "docs/MANUSKRIPT-v2.9.md"}
+    assert set(beholdt) == {"docs/MANUSKRIPT-v0.1.md", "docs/MANUSKRIPT-v3.md", "docs/MANUSKRIPT-FAKTA-2026-09-28.md",
+                            "docs/SVARBREV-v3.md"}
+
+
+def test_case_dokumentene_utenfor_saker_pakkes_i_saker_zip():
+    from gjenopptak.utgivelse import _i_zip
+    assert _i_zip("git:abc:docs/PS-246-RESULTAT.md", "PS-246-RESULTAT.md") == ("saker.zip", "sakbehandling/PS-246-RESULTAT.md")
+    assert _i_zip("git:abc:docs/HERON-KOLLASJON-VURDERING-v2.md", "x")[0] == "saker.zip"
+    assert _i_zip("git:abc:docs/RESULTAT-ADDENDUM-25.md", "RESULTAT-ADDENDUM-25.md") is None

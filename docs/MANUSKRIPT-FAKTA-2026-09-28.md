@@ -574,3 +574,33 @@ leserens verdikter.
 * **Ikke at forskjellen i tetthet mot de 25 første arkeologiverkene er et funn om feltet.** Målingen skiller
   ikke utvalg fra felt.
 * **Ikke at registerhodet bærer det målte recall-tallet.** Det står «ikke målt» (skjemaet), se over.
+
+## 10 Revisjon etter ekstern fagfellevurdering (03.10.2026)
+
+**Generert** av `classify/reanalyse_fagfelle.py` fra `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` (Vault; deponeres som `revisjon-reanalyse.json`). Klyngeenhet verket, 10 000 replikater, frø 734248. Fullt dokument: `docs/REANALYSE-2026-10-03.md`; tallmanifest: `docs/TALLMANIFEST.md`.
+
+| tall | verdi | kilde |
+|---|---|---|
+| κ koder 1 mot koder 2, verksklynget 95 % | **0,812 [0,711–0,909]**; rå 96,2 %, PABAK 0,925, AC1 0,953 | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| κ koder 4 mot koder 2, verksklynget 95 % | **0,899 [0,833–0,974]**; rå 98,1 %, PABAK 0,963, AC1 0,977 | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| κ koder 4 mot koder 1, verksklynget 95 % | **0,781 [0,675–0,877]**; rå 95,6 %, PABAK 0,912, AC1 0,945 | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| κ Opus ett kall mot koder 1, verksklynget 95 % | **0,636 [0,503–0,744]**; rå 93,8 %, PABAK 0,875, AC1 0,925 | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| κ 0,812 − 0,636, paret | **0,177**; passasje [0,044–0,323], verksklynget [0,057–0,318] — **utelukker 0** | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| blind bekreftelse, post hoc port (ADDENDUM-23), verksklynget 95 % | **85/100 [75,7–92,3]**; 33 verk, største 21 rader | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| blind bekreftelse, fase 3 (ADDENDUM-25), verksklynget 95 % | **85/100 [76,2–93,8]**; 38 verk, største 20 rader | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| silens recall, fase 3, verksklynget 95 % | **95/104 [76,9–96,7]**; 12 verk, største 51 rader | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| leserens recall, fase 3, verksklynget 95 % | **85/104 [60,9–89,7]**; 12 verk, største 51 rader | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| register v2 (432): H7 av alle rader, verksklynget 95 % | **289/432 [58,2–79,7]** | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| register v2 (432): løftbar H1–H6 av avklarte, verksklynget 95 % | **77/406 [9,0–26,5]** | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| fase 3-register (673): H7 av alle rader, verksklynget 95 % | **425/673 [56,7–73,7]** | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| fase 3-register (673): løftbar H1–H6 av avklarte, verksklynget 95 % | **101/628 [9,5–20,5]** | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| arkeologi: positiv rate blant silkandidater / silkandidatenes andel av tekstbitene | **274/990 = 27,7 %** / 14,7 % | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| energimodellering: positiv rate blant silkandidater / silkandidatenes andel av tekstbitene | **68/1129 = 6,0 %** / 17,5 % | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| klinisk_epidemiologi: positiv rate blant silkandidater / silkandidatenes andel av tekstbitene | **53/347 = 15,3 %** / 10,0 % | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| tekstvitenskap: positiv rate blant silkandidater / silkandidatenes andel av tekstbitene | **37/378 = 9,8 %** / 6,8 % | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| grunnrate c), cellevektet | **3,42 %**; stratifisert [1,3–7,2] %, verksklynget [1,3–7,5] % — **erstatter [2,12–7,95]** | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| register v2 (432): unike erklæringer etter deduplisering | **276** av 432 rader (269 deler setning); H7 183/257, H1–H6 42/245 | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+| fase 3-register (673): unike erklæringer etter deduplisering | **424** av 673 rader (443 deler setning); H7 265/402, H1–H6 53/375 | `revisjon-2026-10/reanalyse.json` `ac782709d90ada77…` |
+
+**Ikke påstå:** at κ-tallene viser gyldighet (alle kodere er modeller; ADDENDUM-27 er ikke kjørt); at 3,42 % er en prevalens i litteraturen; at feltforskjellene er forskjeller i forekomst; at de seks casene sier noe om hvor ofte tilgang er hindringen (`docs/CASEUTVALG-2026-10-03.md`: utvalget er skjønn).
+

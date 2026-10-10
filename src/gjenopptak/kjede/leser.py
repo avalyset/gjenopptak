@@ -216,7 +216,11 @@ class CCLeser:
             raise LeserFeil(
                 f"claude-CLI-en kunne ikke autentisere ({svar.get('result')}). Kjør «claude "
                 f"login» i en terminal og start på nytt.")
-        return {"usage": svar.get("usage"), "total_cost_usd": svar.get("total_cost_usd"),
+        # modelUsage fra svaret (02.10.2026): modell-ID per økt kommer fra instansen selv, ikke fra
+        # konfigurasjonen (RESULTAT-ADDENDUM-25 § 0.2).
+        return {"usage": svar.get("usage"), "modelUsage": svar.get("modelUsage"),
+                "modeller_i_svaret": sorted((svar.get("modelUsage") or {}).keys()),
+                "total_cost_usd": svar.get("total_cost_usd"),
                 "num_turns": svar.get("num_turns"), "is_error": svar.get("is_error"),
                 "resultat": str(svar.get("result"))[:400],
                 "minutter": round((time.time() - t0) / 60, 1)}

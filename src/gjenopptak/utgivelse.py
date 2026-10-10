@@ -49,10 +49,14 @@ REPO_UTENFOR = ("docs/patch/",)
 #: ``**`` dekker alle underkataloger. Det nyeste manuskriptet under ``NYESTE_UNNTATT`` er unntatt: bare det
 #: siste (høyest versjonsnummer, utkast eller ikke) deponeres. Versjon 2 (02.10.2026): fra v2.9 heter manuset
 #: ``MANUSKRIPT-v2.9.md``, så v2.8-utkastet faller ut; preprintens kilde holdes ute fordi den deponeres som PDF.
-UTELATT_VERSJON = "2 (02.10.2026, eierens avgjørelse)"
+#: Versjon 3 (03.10.2026): `docs/MASTER-PATCH-*.md` holdes ute som `docs/patch/**` — patcher til den interne
+#: MASTER-fila; posten ville ellers fått 101 filer. Den ligger i git-bundlen.
+#: Versjon 4 (03.10.2026): manus v3 erstatter v2.9 — alle `MANUSKRIPT-v2*.md` holdes ute, og unntaket for det nyeste
+#: gjelder `MANUSKRIPT-v<tall>*.md` (v0.1 står som før: den matcher ikke ekskluderingen).
+UTELATT_VERSJON = "4 (03.10.2026)"
 UTELATT = ("docs/INSTRUKSER-*.md", "docs/patch/**", "ROADMAP.md", "docs/ROADMAP.md",
-           "docs/BYGGEPLAN.md", "docs/MANUSKRIPT-v2*-UTKAST.md", "docs/PREPRINT-v*.md")
-NYESTE_UNNTATT = "docs/MANUSKRIPT-v2*.md"
+           "docs/BYGGEPLAN.md", "docs/MANUSKRIPT-v2*.md", "docs/PREPRINT-v*.md", "docs/MASTER-PATCH-*.md")
+NYESTE_UNNTATT = "docs/MANUSKRIPT-v[0-9]*.md"
 
 #: Filer i repoet som ikke er dokumenter, men som en låst måling leste eller som depositumet
 #: tidligere har båret.
@@ -90,6 +94,13 @@ VAULT_FILER = (
     ("fase3-kjede-nokkel.jsonl", "fase3-kjede/nokkel.jsonl"),
     # v0.4.1 (02.10.2026): preprinten deponeres rendret; kilden er docs/PREPRINT-v2.md i repoet.
     ("PREPRINT-v2.pdf", "manuskript/preprint-v2/PREPRINT-v2.pdf"),
+    # v0.5.0 (03.10.2026), etter fagfellevurderingen: reanalysen, kandidatlista som indeks uten tekst (register v2, 432
+    # rader, tekst_sha256 per rad) og utvalgsfila for den menneskelige valideringen (ADDENDUM-27; blindfil og nøkkel
+    # holdes ute — tekst og nøkkelregelen).
+    ("revisjon-reanalyse.json", "revisjon-2026-10/reanalyse.json"),
+    ("register-v2-indeks.jsonl", "revisjon-2026-10/register-v2-indeks.jsonl"),
+    ("menneskevalidering-utvalg.json", "revisjon-2026-10/menneskevalidering/utvalg.json"),
+    ("menneskevalidering-skjema.csv", "revisjon-2026-10/menneskevalidering/skjema.csv"),
 )
 
 #: Fase 3s kjøringskatalog på Vault (relativ til gjenopptak-kilder/): leserens verdikter pakkes som zip.
@@ -126,6 +137,14 @@ def _i_zip(kilde: str, navn: str) -> tuple[str, str] | None:
         return "saker.zip", rel.removeprefix("docs/")
     if rel and Path(rel).match("docs/FAKTASJEKK-MANUSKRIPT-*.md"):
         return "faktasjekk-manuskript.zip", Path(rel).name
+    # v0.5.0 (03.10.2026): case-dokumentene utenfor docs/saker/ (case A = PS-246, Heron- og løftbarhetsvurderingene)
+    # inn i saker.zip under sakbehandling/, så posten holder seg under taket med manus v3.1 og svarbrevet.
+    if rel and any(Path(rel).match(m) for m in ("docs/PS-246-*.md", "docs/HERON-KOLLASJON-VURDERING-*.md",
+                                                 "docs/LOFTBARE-VURDERING-*.md")):
+        return "saker.zip", "sakbehandling/" + Path(rel).name
+    # v0.5.0: beslutningsnotatene (ADR) i én zip, for å holde posten under Zenodos tak på 100 filer.
+    if rel and rel.startswith("docs/decisions/"):
+        return "decisions.zip", Path(rel).name
     if kilde.startswith("vault:") and (navn.startswith("oppdrag-") or navn in ("arbeidsliste-oppdrag-koder-c.md",
                                                                              "fase3-oppdrag-presisjon.md")):
         return "oppdrag.zip", navn

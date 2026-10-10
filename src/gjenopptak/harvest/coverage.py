@@ -290,6 +290,29 @@ TOPIC_REJECTED: dict[str, tuple[tuple[str, str, str], ...]] = {
     "energimodellering": (),
 }
 
+#: Felt utenfor PREREG-ens fire, hvert definert i sitt eget addendum. Topics er godkjent etter regelen i
+#: ADDENDUM-01 § 4; et felt uten eget topic avgrenses i tillegg med et ordfilter på tittelen, og
+#: godkjenningsregelen anvendes da på rammen selv (de fem mest siterte i vinduet, med filteret).
+#: Fase 4 (ADDENDUM-26): OpenAlex har ingen topic for paleografi, kodikologi eller tekstkritikk —
+#: søkene samler seg i T10595 og T14210 (begge godkjent 5/5 i ADDENDUM-01, begge i tekstvitenskap).
+PROSPEKTIVE_FELT: dict[str, dict[str, object]] = {
+    "haandskrift": {
+        "topics": ("T10595", "T14210"),
+        "tittel": "(manuscript OR manuscripts OR palaeography OR paleography OR palaeographical OR "
+                  "paleographic OR codicology OR codicological OR scribe OR scribes OR scriptorium OR "
+                  "codex OR codices)",
+        "addendum": "ADDENDUM-26",
+    },
+}
+
+
+def felt_topics(field_key: str) -> tuple[str, ...]:
+    """Topic-ID-ene for et PREREG-felt eller et prospektivt felt."""
+    if field_key in PROSPEKTIVE_FELT:
+        return tuple(PROSPEKTIVE_FELT[field_key]["topics"])  # type: ignore[arg-type]
+    return TOPIC_IDS[field_key]
+
+
 #: Den positive kontrollen i PREREG-v1 §7. Rammen MÅ fange den.
 POSITIVE_CONTROL_DOI = "10.1016/j.apenergy.2018.04.048"
 POSITIVE_CONTROL_FIELD = "energimodellering"
@@ -383,9 +406,13 @@ def measure_field(
 # --------------------------------------------------------------------------- #
 
 def frame_filter(field_key: str, *, year: int | None = None) -> str:
-    """Den operasjonelle rammen fra ADDENDUM-01 §3.1, eventuelt for ett år."""
-    ids = TOPIC_IDS[field_key]
+    """Den operasjonelle rammen fra ADDENDUM-01 §3.1, eventuelt for ett år. Et prospektivt felt får
+    i tillegg sitt ordfilter på tittelen, mellom topics og år (ADDENDUM-26 § 2)."""
     aar = f"publication_year:{year}" if year else year_filter()
+    if field_key in PROSPEKTIVE_FELT:
+        d = PROSPEKTIVE_FELT[field_key]
+        return f"{topic_filter(felt_topics(field_key))},title.search:{d['tittel']},{aar},open_access.is_oa:true"
+    ids = TOPIC_IDS[field_key]
     return f"{topic_filter(ids)},{aar},open_access.is_oa:true"
 
 

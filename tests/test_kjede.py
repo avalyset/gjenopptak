@@ -281,3 +281,87 @@ def test_registerleddets_eget_hode_bestaar_skjemaet(k, tmp_path):
     assert hode["forbehold"]["leser_datert"].startswith("datert 30.09.2026, claude-opus-5, regelfil 234695dd")
     assert hode["forbehold"]["silrecall"] == "ikke målt" and hode["navnepolicy"] == "verk, ikke person"
     assert "silens flagg" in hode["forbehold"]["verksnivaa"] and hode["bekreftet"] is True
+
+
+# --------------------------------------------------------- gjenopptakbare ledd (02.10.2026)
+class _StubK:
+    """Konfig med kjøringskatalog og kladd i tmp; alt annet fra den ekte konfigen."""
+
+    def __init__(self, rot: Path, ekte: K.Konfig):
+        self.rot, self.ekte, self.vault_mål = rot, ekte, rot
+
+    def kjøring(self, navn: str) -> Path:
+        return self.rot / navn
+
+    def verdi(self, *a):
+        return self.ekte.verdi(*a)
+
+    def sti(self, seksjon: str, nøkkel: str) -> Path:
+        return self.rot / "kladd" if nøkkel == "kladd_rot" else self.ekte.sti(seksjon, nøkkel)
+
+
+def _jl(p: Path, rader: list[dict]) -> None:
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rader), encoding="utf-8")
+
+
+def test_ekstraksjonen_fortsetter_et_paabegynt_ledd_og_kutter_halvskrevet_hale(k, tmp_path, monkeypatch):
+    """RESULTAT-ADDENDUM-25 § 0.5: den låste versjonen hoppet over hele leddet når utfila fantes."""
+    from gjenopptak.kjede import ledd as L
+    kj = L.Kjøring(k=_StubK(tmp_path, k), navn="eks", verk=["W1", "W2"])
+    vt = int(k.verdi("ekstraksjon", "vindu_tegn"))
+    _jl(kj.fil("2-tekstbiter.jsonl"), [
+        {"doc_id": "W1", "start_index": 0, "end_index": 4, "tekst": "a" * (vt + 10)},
+        {"doc_id": "W2", "start_index": 0, "end_index": 4, "tekst": "b" * 20}])
+    første = {"work_id": "W1", "vindu": 1, "tokens_inn": 1, "veggtid": 0.0, "utdata_raa": "Q: gammel"}
+    f = kj.fil("4-ekstraksjon.jsonl")
+    f.write_text(json.dumps(første, ensure_ascii=False) + "\n" + '{"work_id": "W1", "vin', encoding="utf-8")
+    kall = []
+    monkeypatch.setattr(L, "kanari", lambda kj_, s: {"ok": True})
+    monkeypatch.setattr(L, "_ollama", lambda k_, s, l, b, **kw: kall.append(b[:1]) or {"response": "Q: ny",
+                                                                                    "prompt_eval_count": 2})
+    r = L.steg_ekstraksjon(kj)
+    rader = [json.loads(l) for l in f.read_text(encoding="utf-8").splitlines()]
+    assert [(x["work_id"], x["vindu"]) for x in rader] == [("W1", 1), ("W1", 2), ("W2", 1)]
+    assert rader[0] == første and kall == ["a", "b"]
+    assert r["vinduer"] == r["vinduer_ventet"] == 3 and r["fortsatt_fra"] == 1 and r["hale_kuttet_bytes"] > 0
+    assert kj.gjort("ekstraksjon")
+
+
+def test_ekstraksjonen_foeres_ikke_ferdig_med_et_vindu_som_mangler(k, tmp_path, monkeypatch):
+    from gjenopptak.kjede import ledd as L
+    kj = L.Kjøring(k=_StubK(tmp_path, k), navn="eks2", verk=["W1"])
+    _jl(kj.fil("2-tekstbiter.jsonl"), [{"doc_id": "W1", "start_index": 0, "end_index": 4, "tekst": "x"}])
+    monkeypatch.setattr(L, "kanari", lambda kj_, s: {"ok": True})
+
+    def død(*a, **kw):
+        raise RuntimeError("ollama døde")
+    monkeypatch.setattr(L, "_ollama", død)
+    with pytest.raises(RuntimeError):
+        L.steg_ekstraksjon(kj)
+    assert not kj.gjort("ekstraksjon")
+
+
+def test_leserleddet_foeres_ikke_ferdig_med_en_delvis_oekt(k, tmp_path, monkeypatch):
+    """LAERDOM § 45: den låste versjonen førte «les» gjort med økt 3 på 30 av 343."""
+    from gjenopptak.kjede import ledd as L
+    from gjenopptak.kjede import leser as LS
+    kj = L.Kjøring(k=_StubK(tmp_path, k), navn="les", verk=[])
+    per_okt = []
+    for o, ids in ((1, ["A1", "A2"]), (2, ["B1", "B2", "B3"])):
+        b = tmp_path / "les" / "blind" / f"blind-okt-{o}.jsonl"
+        _jl(b, [{"id": i, "tekst": "t"} for i in ids])
+        op = tmp_path / "les" / "blind" / f"oppdrag-okt-{o}.md"
+        op.write_text("oppdrag", encoding="utf-8")
+        per_okt.append({"okt": o, "n": len(ids), "blind": str(b), "oppdrag": str(op)})
+    kj.før("blind", {"per_okt": per_okt, "nøkkel": str(tmp_path / "n.jsonl")})
+
+    def økt(self, oppdrag, utfil):
+        ids = ["A1", "A2"] if "okt-1" in utfil.name else ["B1"]
+        _jl(utfil, [{"id": i, "treff": False, "klasse": "INGEN", "begrunnelse": "x", "tvil": False} for i in ids])
+        return {"usage": {}, "modelUsage": {"claude-opus-5": {}}}
+    monkeypatch.setattr(LS.CCLeser, "kjør_økt", økt)
+    monkeypatch.setattr(L.shutil, "which", lambda _: "/usr/bin/claude")
+    with pytest.raises(L.LeddFeil, match="økt 2 1 av 3"):
+        L.steg_les(kj)
+    assert not kj.gjort("les") and kj.gjort("les_avbrutt")

@@ -168,3 +168,13 @@ manuset gjelder nå `docs/MANUSKRIPT-v2*.md`, utkast eller ikke, så v2.8-utkast
 står i byggeren (`src/gjenopptak/utgivelse.py`: `UTELATT`, `NYESTE_UNNTATT`, `_versjon`, og PDF-en i `VAULT_FILER`),
 som er med i kildetarballen. `MANUSKRIPT-v2.8-UTKAST.md` i repoet er satt tilbake til de deponerte bytene (sha256
 `dd723f01…`, LAERDOM § 49).
+
+## Versjon 0.5.0 (2026-10-03)
+
+**Versjons-DOI:** **10.5281/zenodo.23120143** (reservert i utkastet før bygget; satt inn i manus v3.1 og CITATION.cff før opplasting).
+
+### Forberedelsen
+
+Bygget etter ekstern fagfellevurdering (`docs/RELEASE-NOTES-v0.5.0.md`). Utkastet ligger på Vault, `zenodo/v0.5.0-utkast/`;
+filkart mot v0.4.1 i `zenodo/v0.5.0-bygg/UTGIVELSE-0.5.0.json`. **Publiseres ikke før eierens go.** `CITATION.cff` bærer
+0.5.0 og 03.10.2026; datoen settes til publiseringsdatoen, og utkastet bygges på nytt, før publisering.

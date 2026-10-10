@@ -173,3 +173,23 @@ def test_akkurat_sidetall_pluss_gulv_blir_komplett(tmp_path):
     tr = transport(600, _sider(3), remaining=[53, 52, 51, 50])
     res = fz.freeze_field("energimodellering", tmp_path / "raw", http=klient(tr))
     assert res.complete and res.n_rows == 600 and res.remaining_at_end == 50
+
+
+def test_tungt_boolsk_filter_strupes_og_429_gis_nye_forsoek(tmp_path, monkeypatch):
+    """02.10.2026: «haandskrift» har tolv OR. OpenAlex ga 429 på første side rett etter tellingen, og
+    frysingen skrev en tom liste merket UFULLSTENDIG. Nå venter den og prøver igjen."""
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    kall = {"side": 0}
+    hdr = {"x-ratelimit-remaining": "900", "x-ratelimit-limit": "1000"}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if "cursor" not in request.url.params:
+            return httpx.Response(200, json={"meta": {"count": 2}, "results": []}, headers=hdr)
+        kall["side"] += 1
+        if kall["side"] == 1:
+            return httpx.Response(429, json={"error": "Rate limit exceeded"})
+        return httpx.Response(200, json={"meta": {"count": 2, "next_cursor": None},
+                                         "results": [_work(1), _work(2)]}, headers=hdr)
+    res = fz.freeze_field("haandskrift", tmp_path / "raw", http=klient(httpx.MockTransport(handler)))
+    assert res.complete and res.n_rows == 2 and kall["side"] == 2
+    assert fz._tung(res.filter_str) and not fz._tung("topics.id:T10421|T10087,publication_year:2015-2020")

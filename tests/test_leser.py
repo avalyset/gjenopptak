@@ -33,3 +33,16 @@ def test_to_implementasjoner_samme_form():
     cc = CCLeser(modell="claude-opus-5", rot=__import__("pathlib").Path("."))
     for l in (lok, cc):
         assert callable(l) and isinstance(l.signatur(), dict) and l.navn
+
+
+def test_ccleser_foerer_modelusage_fra_svaret(monkeypatch, tmp_path):
+    """RESULTAT-ADDENDUM-25 § 0.2: modell-ID per leserøkt skal komme fra svaret, ikke fra konfigurasjonen."""
+    import json
+    import subprocess
+    from types import SimpleNamespace
+    from gjenopptak.kjede.leser import CCLeser
+    svar = {"is_error": False, "result": "ferdig", "usage": {"input_tokens": 1}, "num_turns": 3,
+            "modelUsage": {"claude-opus-5": {"inputTokens": 1}}}
+    monkeypatch.setattr(subprocess, "run", lambda *a, **kw: SimpleNamespace(stdout=json.dumps(svar), stderr=""))
+    b = CCLeser(modell="claude-opus-5", rot=tmp_path).kjør_økt("oppdrag", tmp_path / "ut.jsonl")
+    assert b["modelUsage"] == svar["modelUsage"] and b["modeller_i_svaret"] == ["claude-opus-5"]

@@ -2,6 +2,13 @@
 
     python -m gjenopptak.kjede.gjenoppta --sjekk
     python -m gjenopptak.kjede.gjenoppta
+    python -m gjenopptak.kjede.gjenoppta --fase fase4 --sjekk
+
+**Faser (02.10.2026).** Rutinen gjelder hver prospektive kjøring med eget addendum, ikke bare fase 3. En fase
+er addendumet, Vault-katalogen, utvalget og kjøringens navn (``FASER``). Låsecommiten er den som **la til**
+addendumet (``git log --diff-filter=A``); for fase 3 står den eksplisitt (`f19a3e3`). Worktreet ligger på
+``<fase>/worktree-<lås>`` på Vault. Fase 4 kjøres gjennom rutinen fra første ledd, så etterkontrollen gjelder
+også første kall.
 
 Eierens regel 28.09.2026 (RESULTAT-ADDENDUM-25 § 0.3): en fase 3-kjøring som avbrytes, gjenopptas fra
 låsecommiten `f19a3e3` i en git worktree på Vault, slik at alle ledd kjører med de sha256-ene
@@ -40,6 +47,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+from dataclasses import dataclass
 import json
 import os
 import re
@@ -52,13 +60,44 @@ from ..vault import require_vault
 from . import referanseport as RP
 
 REPO = Path(__file__).resolve().parents[3]
+MÅ_FINNES = ("src/gjenopptak/kjede/cli.py",)
+
+
+@dataclass(frozen=True)
+class Fase:
+    navn: str                    # Vault-katalogen, f.eks. «fase3»
+    addendum: str                # addendumet som låser kjøringen
+    utvalg: str                  # utvalgsfila i Vault-katalogen
+    verk: str                    # verkslista i Vault-katalogen
+    kjøring: str                 # kjøringens navn (``--navn``)
+    lås: str | None = None       # låsecommiten; None = commiten som la til addendumet
+
+    def låsecommit(self, *, cwd: Path = REPO) -> str:
+        if self.lås:
+            return _git("rev-parse", self.lås, cwd=cwd)
+        la_til = _git("log", "--diff-filter=A", "--format=%H", "--", self.addendum, cwd=cwd).split()
+        if len(la_til) != 1:
+            raise GjenopptakNekt(f"{self.addendum} er lagt til i {len(la_til)} commits; ventet nøyaktig én")
+        return la_til[0]
+
+    def worktree(self, lås: str) -> str:
+        return f"{self.navn}/worktree-{lås[:7]}"     # relativ til Vault-målet
+
+    def kjøringsargumenter(self, vault_fase: Path) -> list[str]:
+        return ["--verk", str(vault_fase / self.verk), "--utvalg", str(vault_fase / self.utvalg),
+                "--navn", self.kjøring, "--leser", "cli"]
+
+
+FASER = {
+    "fase3": Fase("fase3", "ADDENDUM-25.md", "utvalg-fase3-arkeologi.jsonl", "verk-fase3.txt", "fase3-kjede",
+                  lås="f19a3e3"),
+    "fase4": Fase("fase4", "ADDENDUM-26.md", "utvalg-fase4-haandskrift.jsonl", "verk-fase4.txt", "fase4-kjede"),
+}
+# Bakoverkompatible navn for fase 3 (testene og RESULTAT-ADDENDUM-25 § 0.3 viser til dem).
 LÅS = "f19a3e3"
 ADDENDUM = "ADDENDUM-25.md"
 VAULT_FASE3 = "fase3"
-WORKTREE = "fase3/worktree-f19a3e3"          # relativ til Vault-målet
-KJØRING = ["--verk", "{fase3}/verk-fase3.txt", "--utvalg", "{fase3}/utvalg-fase3-arkeologi.jsonl",
-           "--navn", "fase3-kjede", "--leser", "cli"]
-MÅ_FINNES = ("src/gjenopptak/kjede/cli.py",)
+WORKTREE = "fase3/worktree-f19a3e3"
 
 
 class GjenopptakNekt(RuntimeError):
@@ -283,7 +322,16 @@ def etterkontroll(kd: Path, ledd: list[str] | tuple[str, ...], *, skjemaer: Path
         elif navn == "dommer":
             antall(navn, "3-dommer.jsonl", (L.get("tekstbiter") or {}).get("tekstbiter"))
         elif navn == "ekstraksjon":
-            antall(navn, "4-ekstraksjon.jsonl", L["ekstraksjon"].get("vinduer"))
+            # 02.10.2026: leddets eget antall er ikke nok — et delresultat førte sitt eget antall som
+            # ferdig (RESULTAT-ADDENDUM-25 § 0.5). Hvert verk i tekstbitene skal ha minst ett vindu, og
+            # et ledd som fører ``vinduer_ventet``, skal ha så mange rader.
+            e = L["ekstraksjon"]
+            antall(navn, "4-ekstraksjon.jsonl", e.get("vinduer_ventet", e.get("vinduer")))
+            if (kd / "2-tekstbiter.jsonl").is_file() and (kd / "4-ekstraksjon.jsonl").is_file():
+                tb = {r["doc_id"] for r in _rader(kd / "2-tekstbiter.jsonl")}
+                ek = {r["work_id"] for r in _rader(kd / "4-ekstraksjon.jsonl")}
+                if tb - ek:
+                    m(navn, f"{len(tb - ek)} verk i tekstbitene mangler i ekstraksjonen, f.eks. {sorted(tb - ek)[0]}")
         elif navn == "union":
             antall(navn, "5-union.jsonl", L["union"].get("union"))
         elif navn == "blind":
@@ -347,12 +395,12 @@ def planlegg(fra: str | None, om: bool) -> list[tuple[list[str], list[str]]]:
     return [(første, list(LEDD[:j + 1])), (["--from", ETTER_LES[0], "--om"], list(LEDD))]
 
 
-def rest_oppdrag(oppdrag: str, *, okt: int, ventet: int, rest: int, k: int) -> str:
+def rest_oppdrag(oppdrag: str, *, okt: int, ventet: int, rest: int, k: int, navn: str = "fase3-kjede") -> str:
     """Oppdraget for økt ``okt`` omskrevet til de ``rest`` udømte: bare blindfil, utfil, kladdekatalog og
     antall byttes. Alt annet — regler, sperreliste, utdataform — står ordrett."""
     ut = oppdrag
     bytt = [(f"blind/blind-okt-{okt}.jsonl", f"fullforing/okt-{okt}-rest{k}/blind.jsonl"),
-            (f"fase3-kjede/7-verdikter-okt-{okt}.jsonl", f"fase3-kjede/fullforing/okt-{okt}-rest{k}/verdikter.jsonl"),
+            (f"{navn}/7-verdikter-okt-{okt}.jsonl", f"{navn}/fullforing/okt-{okt}-rest{k}/verdikter.jsonl"),
             (f"kladd/okt-{okt}/", f"kladd/okt-{okt}-rest{k}/"),
             (f"Les {ventet} blindede", f"Les {rest} blindede"),
             (f"— {ventet} linjer", f"— {rest} linjer"),
@@ -404,7 +452,7 @@ def fullfør_økt(kd: Path, okt: int, *, kjør=None) -> dict:
     rd.mkdir(parents=True)
     (rd / "blind.jsonl").write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rest), encoding="utf-8")
     oppdrag = rest_oppdrag((kd / "blind" / f"oppdrag-okt-{okt}.md").read_text(encoding="utf-8"),
-                           okt=okt, ventet=len(blind), rest=len(rest), k=k)
+                           okt=okt, ventet=len(blind), rest=len(rest), k=k, navn=kd.name)
     (rd / "oppdrag.md").write_text(oppdrag, encoding="utf-8")
     før = f.read_bytes()
     logg = {"tid": datetime.now(timezone.utc).isoformat(timespec="seconds"), "okt": okt, "rest": k,
@@ -432,36 +480,37 @@ def fullfør_økt(kd: Path, okt: int, *, kjør=None) -> dict:
     return logg
 
 
-def sjekk(*, vault: Path | None = None) -> dict:
+def sjekk(*, vault: Path | None = None, fase: Fase = FASER["fase3"]) -> dict:
     vault = vault or require_vault()
-    wt = vault / WORKTREE
+    lås = fase.låsecommit()
+    wt = vault / fase.worktree(lås)
     if not (wt / ".git").exists():
-        raise GjenopptakNekt(f"worktreet finnes ikke: {wt} (git worktree add --detach {wt} {LÅS})")
-    lås = _git("rev-parse", LÅS)
+        raise GjenopptakNekt(f"worktreet finnes ikke: {wt} (git worktree add --detach {wt} {lås[:7]})")
     head = _git("rev-parse", "HEAD", cwd=wt)
     if head != lås:
         raise GjenopptakNekt(f"worktreets HEAD {head[:12]} er ikke låsecommiten {lås[:12]}")
     endret = _git("status", "--porcelain", "--untracked-files=no", cwd=wt)
     if endret:
         raise GjenopptakNekt(f"sporede filer er endret i worktreet:\n{endret}")
-    tabell = låst_tabell(_git("show", f"{lås}:{ADDENDUM}"))
+    tabell = låst_tabell(_git("show", f"{lås}:{fase.addendum}"))
     avvik = sjekk_sha(wt, tabell)
     if avvik:
-        raise GjenopptakNekt("sha256 avviker fra ADDENDUM-25 § 9: " + "; ".join(avvik))
+        raise GjenopptakNekt(f"sha256 avviker fra {fase.addendum.removesuffix('.md')} § 9: " + "; ".join(avvik))
     imp = subprocess.run([sys.executable, "-c", "import gjenopptak; print(gjenopptak.__file__)"],
                          capture_output=True, text=True, env={**os.environ, "PYTHONPATH": str(wt / "src")},
                          cwd=wt).stdout.strip()
     if not imp.startswith(str(wt)):
         raise GjenopptakNekt(f"gjenopptak importeres fra {imp}, ikke fra worktreet")
-    fase3 = vault / VAULT_FASE3
-    sandkasse = sjekk_sandkasse(wt, vault)
+    vf = vault / fase.navn
+    sandkasse = sjekk_sandkasse(wt, vault, fase.kjøring)
     ollama = krev_ollama(ollama_vert(wt))
-    rp = RP.sjekk(fase3 / "utvalg-fase3-arkeologi.jsonl", vault / "MANIFEST-VAULT.md")
+    rp = RP.sjekk(vf / fase.utvalg, vault / "MANIFEST-VAULT.md")
     if rp is None:
         raise GjenopptakNekt("materialet erklærer ikke noe referansesett — feil utvalg?")
-    return {"worktree": str(wt), "lås": lås, "filer_sjekket": len(tabell),
+    return {"fase": fase.navn, "worktree": str(wt), "lås": lås, "filer_sjekket": len(tabell),
             "cli_sha256": tabell["src/gjenopptak/kjede/cli.py"], "import": imp,
-            "referanseport": rp, "ollama": ollama, "sandkasse": sandkasse, "kjører_allerede": kjører_allerede("fase3-kjede")}
+            "referanseport": rp, "ollama": ollama, "sandkasse": sandkasse,
+            "kjører_allerede": kjører_allerede(fase.kjøring)}
 
 
 def _nå() -> str:
@@ -475,14 +524,16 @@ def _logg(fase3: Path, rad: dict) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    p.add_argument("--fase", choices=sorted(FASER), default="fase3", help="hvilken låst kjøring")
     p.add_argument("--sjekk", action="store_true", help="bare sjekkene; start ingenting")
     p.add_argument("--fra", help="første ledd som kjøres (sendes som --from); ført i loggen")
     p.add_argument("--om", action="store_true", help="kjør ledd fram til og med les om selv om de er ført ferdige")
     p.add_argument("--fullfor-okt", type=int, metavar="N",
                    help="fullfør de udømte i den delvise leserøkta N i én ny instans, og stopp")
     a = p.parse_args(argv)
+    fase = FASER[a.fase]
     try:
-        s = sjekk()
+        s = sjekk(fase=fase)
     except (GjenopptakNekt, RP.ReferansePortFeil) as e:
         print(f"GJENOPPTAK NEKTET: {e}", file=sys.stderr)
         return 2
@@ -494,8 +545,8 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     wt = Path(s["worktree"])
     vault = wt.parents[1]
-    fase3 = vault / VAULT_FASE3
-    navn = KJØRING[KJØRING.index("--navn") + 1]
+    fase3 = vault / fase.navn                    # fasens Vault-katalog (navnet er historisk)
+    navn = fase.kjøring
     kd = wt / "data" / "kjede" / navn
     skjemaer = wt / "src" / "gjenopptak" / "schemas"
     if a.fullfor_okt is not None:
@@ -512,7 +563,9 @@ def main(argv: list[str] | None = None) -> int:
     except GjenopptakNekt as e:
         print(f"GJENOPPTAK NEKTET: {e}", file=sys.stderr)
         return 2
-    t = json.loads((kd / "tilstand.json").read_text(encoding="utf-8"))
+    # En kjøring som ikke har startet (første kall for en ny fase) har ingen tilstandsfil ennå.
+    ts = kd / "tilstand.json"
+    t = json.loads(ts.read_text(encoding="utf-8")) if ts.is_file() else {"ledd": {}}
     okter = [ø["okt"] for ø in ((t["ledd"].get("blind") or {}).get("per_okt") or [])]
     if any("--to" in args for args, _ in plan):
         stå = {n: x for n, x in verdiktstatus(kd, okter).items() if x["status"] in ("delvis", "korrupt")}
@@ -523,11 +576,12 @@ def main(argv: list[str] | None = None) -> int:
             return 2
     før = fotavtrykk(kd)
     kopi = fase3 / f"tilstand-foer-gjenopptak-{_nå().replace(':', '')}.json"
-    kopi.write_bytes((kd / "tilstand.json").read_bytes())
+    if ts.is_file():
+        kopi.write_bytes(ts.read_bytes())
     _logg(fase3, {"tid": _nå(), "lås": s["lås"], "cli_sha256": s["cli_sha256"], "filer_sjekket": s["filer_sjekket"],
                   "nøkkel_sha256": s["referanseport"]["nøkkel_sha256"], "plan": [x for x, _ in plan],
-                  "tilstand_før": {"fil": kopi.name, "sha256": sha256(kopi)}, "verdiktfiler_før": før})
-    grunn = [x.format(fase3=fase3) for x in KJØRING]
+                  "tilstand_før": ({"fil": kopi.name, "sha256": sha256(kopi)} if kopi.is_file() else None), "verdiktfiler_før": før})
+    grunn = fase.kjøringsargumenter(fase3)
     with (fase3 / "kjede.log").open("a", encoding="utf-8") as fh:
         fh.write(f"\ngjenopptatt {_nå()} fra worktree {wt} på {s['lås'][:12]}, cli.py {s['cli_sha256'][:16]}…\n")
         for args, dekker in plan:

@@ -276,3 +276,41 @@ def test_omskriving_oppdages_men_forlengelse_er_lov(tmp_path):
 def test_rest_oppdraget_nekter_når_malen_ikke_passer():
     with pytest.raises(GjenopptakNekt, match="inneholder ikke"):
         rest_oppdrag("et helt annet oppdrag", okt=3, ventet=343, rest=313, k=1)
+
+
+# --- 02.10.2026: faser, og ekstraksjonens dekning --------------------------------------------------------
+
+def test_fase3_har_den_eksplisitte_laasen_og_fase4_slaar_den_opp(tmp_path):
+    import subprocess
+    from gjenopptak.kjede.gjenoppta import FASER, Fase
+    assert FASER["fase3"].låsecommit().startswith("f19a3e3")
+    assert FASER["fase3"].worktree(FASER["fase3"].låsecommit()) == "fase3/worktree-f19a3e3"
+    r = tmp_path / "repo"
+    r.mkdir()
+    g = lambda *a: subprocess.run(["git", "-C", str(r), *a], check=True, capture_output=True, text=True).stdout
+    g("init", "-q"); g("config", "user.email", "t@t"); g("config", "user.name", "t")
+    (r / "a.txt").write_text("a"); g("add", "a.txt"); g("commit", "-qm", "før")
+    (r / "ADDENDUM-26.md").write_text("lås"); g("add", "ADDENDUM-26.md"); g("commit", "-qm", "lås")
+    lås = g("rev-parse", "HEAD").strip()
+    (r / "b.txt").write_text("b"); g("add", "b.txt"); g("commit", "-qm", "etter")
+    f = Fase("fase4", "ADDENDUM-26.md", "u.jsonl", "v.txt", "fase4-kjede")
+    assert f.låsecommit(cwd=r) == lås and f.worktree(lås) == f"fase4/worktree-{lås[:7]}"
+
+
+def test_rest_oppdraget_bytter_kjoeringens_eget_navn():
+    o = OPPDRAG.format(n=2, t=10).replace("fase3-kjede", "fase4-kjede")
+    ut = rest_oppdrag(o, okt=2, ventet=10, rest=4, k=1, navn="fase4-kjede")
+    assert "fase4-kjede/fullforing/okt-2-rest1/verdikter.jsonl" in ut and "Les 4 blindede" in ut
+
+
+def test_etterkontrollen_ser_verk_som_mangler_i_ekstraksjonen(tmp_path):
+    """RESULTAT-ADDENDUM-25 § 0.5: 81 av 100 verk ble ført som ferdig ekstraksjon med sitt eget antall."""
+    kd = tmp_path / "k"
+    _skriv(kd / "2-tekstbiter.jsonl", [{"doc_id": w, "start_index": 0} for w in ("W1", "W2", "W3")])
+    _skriv(kd / "4-ekstraksjon.jsonl", [{"work_id": "W1", "vindu": 1}, {"work_id": "W2", "vindu": 1}])
+    t = {"ledd": {"ekstraksjon": {"tid": "2026-10-02T10:00:00+00:00", "vinduer": 2}}}
+    (kd / "tilstand.json").write_text(_json.dumps(t))
+    assert etterkontroll(kd, ["ekstraksjon"]) == ["ekstraksjon: 1 verk i tekstbitene mangler i ekstraksjonen, f.eks. W3"]
+    t["ledd"]["ekstraksjon"]["vinduer_ventet"] = 3
+    (kd / "tilstand.json").write_text(_json.dumps(t))
+    assert "ekstraksjon: 4-ekstraksjon.jsonl har 2 rader, ventet 3" in etterkontroll(kd, ["ekstraksjon"])

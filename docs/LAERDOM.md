@@ -1028,3 +1028,35 @@ overlevde. **Flaks er ikke en sikringsrutine.**
 * **Filer:** `docs/PREPRINT-v2.md`, `docs/MANUSKRIPT-v2.8-UTKAST.md`, `docs/patch/INSTRUKSER-2026-10-02-ki-erklaering.md`.
 * **Regel (02.10.2026):** en fil beholder aldri et versjonsnavn etter at bytene avviker fra det deponerte. `MANUSKRIPT-v2.8-UTKAST.md` er satt
   tilbake til de deponerte bytene (sha256 `dd723f01…`); endringene står i `MANUSKRIPT-v2.9.md`, deponert med v0.4.1.
+
+## 50 Ekstern fagfellevurdering: klyngene, en paret test og en referanse som fantes likevel (2026-10-03)
+
+* **Målt:** en ekstern vurdering (major revision) av manus v2.9, og en reanalyse av tallene med verket som klyngeenhet
+  (`docs/REANALYSE-2026-10-03.md`, generert fra `revisjon-2026-10/reanalyse.json`). Referansene i vurderingen slått opp i
+  arXiv, Crossref og Europe PMC (`docs/REVISJON-2026-10-03-REFERANSER.md`).
+* **Tall:**
+  * κ-intervallene endres lite med verksklynger (92 verk i 320-settet): 0,812 [0,711–0,909] mot [0,697–0,906].
+  * Der få verk bærer mange rader, blir intervallene mye bredere: leserens recall i fase 3 [60,9–89,7] mot [73,2–88,0]
+    (12 verk, ett med 51 av 104); løftbar H1–H6 i kandidatlista [9,0–26,5] mot [15,4–23,1] (ett verk med 113 rader).
+  * **Differansen 0,812 − 0,636 er etablert** med paret bootstrap ([0,044–0,323]; verksklynget [0,057–0,318]). Manuset sa
+    «not statistically established» fordi de separate intervallene overlappet — feil slutning, feil vei.
+  * Intervallet [2,12–7,95] for grunnraten var ikke et konfidensintervall: bare bomratens Wilson-grenser, uten presisjonens
+    usikkerhet. Riktig: [1,3–7,2] stratifisert, [1,3–7,5] verksklynget.
+  * 432 kandidatrader er **276 unike erklæringer**; 673 i fase 3 er 424. Kjeden deduplikerer ikke.
+  * **BAGELS finnes** (Al Azher m.fl., Findings of EMNLP 2025, 10.18653/v1/2025.findings-emnlp.1050; arXiv 22.05.2025).
+    § 23 rad 1 (26.09) førte den som ikke-eksisterende. Det var et falskt nei.
+* **Slutning:**
+  * **Uavhengighet er en antakelse som må prøves, ikke et standardvalg.** Wilson over passasjer er greit der radene er spredt
+    på mange verk og misvisende der ett verk bærer halvparten. Verket er klyngeenheten fra nå av.
+  * **Overlappende intervaller er ikke en test.** En differanse mellom to mål på samme materiale testes paret.
+  * **Et negativt eksistenssøk er svakt belegg.** § 23-regelen («slå opp i kilden») var riktig, men oppslaget 26.09 var for
+    snevert. Før en referanse føres som ikke-eksisterende, føres søkestrengen og svaret fra arXiv, Crossref **og** ACL
+    Anthology/Europe PMC, med sha. Et nei uten logget søk er ikke et funn.
+  * **Et «beste anslag» må ha en estimator som kan skrives ut.** Den kunne, men intervallet sto feil fra 20.09 til 03.10 uten at
+    noen faktasjekk fanget det, fordi faktasjekkene kontrollerte at tallet stod i en fil — ikke hvordan det var regnet.
+* **Gjort:** `classify/reanalyse_fagfelle.py`, `registry/deponering.py` (registerindeks og tallmanifest),
+  `docs/CASEUTVALG-2026-10-03.md` (utvalget er skjønn), ADDENDUM-27 (menneskelig validering, låst `93ac431`, prøve trukket,
+  ikke kjørt), FAKTA § 10. Ingen låst fil endret; § 23 står som den ble skrevet.
+* **Filer:** `docs/REANALYSE-2026-10-03.md`, `docs/REVISJON-2026-10-03-REFERANSER.md`, `docs/CASEUTVALG-2026-10-03.md`,
+  `docs/TALLMANIFEST.md`, `docs/KODEBOK-MENNESKER-v1.md`, `ADDENDUM-27.md`, `docs/RESULTAT-ADDENDUM-27.md`,
+  `docs/MANUSKRIPT-FAKTA-2026-09-28.md` § 10.

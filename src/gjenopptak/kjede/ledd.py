@@ -105,6 +105,22 @@ def _les_jsonl(p: Path) -> list[dict]:
     return [json.loads(l) for l in p.read_text(encoding="utf-8").splitlines() if l.strip()]
 
 
+def _trim_hale(p: Path) -> int:
+    """Kutt en halvskrevet siste linje (ingen avsluttende linjeskift) før et ledd føyer til fila.
+
+    Lagt til 02.10.2026 (LAERDOM § 44): en prosess som dør mellom ``write`` og ``flush`` kan etterlate en
+    avkuttet JSON-linje, og da feiler både ``_les_jsonl`` og gjenopptaket. Returnerer antall bytes kuttet."""
+    if not p.is_file():
+        return 0
+    b = p.read_bytes()
+    if not b or b.endswith(b"\n"):
+        return 0
+    i = b.rfind(b"\n")
+    behold = b[:i + 1] if i >= 0 else b""
+    p.write_bytes(behold)
+    return len(b) - len(behold)
+
+
 def _skriv_jsonl(rader: list[dict], p: Path) -> str:
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rader), encoding="utf-8")
@@ -344,6 +360,7 @@ def steg_dommer(kj: Kjøring, *, cache: Path | None = None) -> dict:
     if not pas:
         raise LeddFeil("ledd 2 (tekstbiter) har ikke kjørt")
     utfil = kj.fil("3-dommer.jsonl")
+    _trim_hale(utfil)
     ferdige = {(r["doc_id"], r["start_index"]) for r in _les_jsonl(utfil)}
     fra_cache = 0
     if cache and not ferdige:
@@ -404,11 +421,16 @@ def steg_ekstraksjon(kj: Kjøring, *, cache: Path | None = None) -> dict:
     """Kjør ekstraksjonen per dokumentvindu og hent ut Q-linjene.
 
     ``cache`` er en ferdig ``ekstraksjon-logg.jsonl``. Verk som finnes der, kjøres ikke om.
+
+    **Gjenopptakbar (02.10.2026).** Et påbegynt ledd fortsettes fra første vindu som mangler; leddet føres
+    ferdig bare når hvert vindu i planen har én rad. Den låste fase 3-versjonen hoppet over hele leddet når
+    utfila fantes, og ville ført et delresultat som ferdig (RESULTAT-ADDENDUM-25 § 0.5).
     """
     pas = _les_jsonl(kj.fil("2-tekstbiter.jsonl"))
     if not pas:
         raise LeddFeil("ledd 2 (tekstbiter) har ikke kjørt")
     utfil = kj.fil("4-ekstraksjon.jsonl")
+    kuttet = _trim_hale(utfil)
     verk = sorted({p["doc_id"] for p in pas})
     gjort = {(r["work_id"], r["vindu"]) for r in _les_jsonl(utfil)}
     fra_cache = 0
@@ -420,38 +442,48 @@ def steg_ekstraksjon(kj: Kjøring, *, cache: Path | None = None) -> dict:
             fra_cache = len(rader)
     kan = None
     vt = int(kj.k.verdi("ekstraksjon", "vindu_tegn"))
-    if not gjort:
+    per_verk: dict[str, list[dict]] = {}
+    for p in pas:
+        per_verk.setdefault(p["doc_id"], []).append(p)
+    plan: list[tuple[str, int, str]] = []
+    for wid in verk:
+        biter = sorted(per_verk[wid], key=lambda d: d["start_index"])
+        # Vindu = sammenhengende tekst per verk, delt så num_ctx ikke bindes.
+        tekst = "\n".join(b["tekst"] for b in biter)
+        deler = [tekst[i:i + vt] for i in range(0, len(tekst), vt)] or [""]
+        plan += [(wid, nr, del_) for nr, del_ in enumerate(deler, 1)]
+    rest = [x for x in plan if (x[0], x[1]) not in gjort]
+    if rest:
         kan = kanari(kj, "ekstraksjon")
         ledetekst = kj.k.sti("ekstraksjon", "ledetekst").read_text(encoding="utf-8")
-        per_verk: dict[str, list[dict]] = {}
-        for p in pas:
-            per_verk.setdefault(p["doc_id"], []).append(p)
         with utfil.open("a", encoding="utf-8") as fh:
-            for wid in verk:
-                biter = sorted(per_verk[wid], key=lambda d: d["start_index"])
-                # Vindu = sammenhengende tekst per verk, delt så num_ctx ikke bindes.
-                tekst = "\n".join(b["tekst"] for b in biter)
-                deler = [tekst[i:i + vt] for i in range(0, len(tekst), vt)] or [""]
-                for nr, del_ in enumerate(deler, 1):
-                    t0 = time.time()
-                    svar = _ollama(kj.k, "ekstraksjon", ledetekst, del_)
-                    fh.write(json.dumps({
-                        "work_id": wid, "vindu": nr,
-                        "tokens_inn": svar.get("prompt_eval_count"),
-                        "veggtid": round(time.time() - t0, 2),
-                        "utdata_raa": svar.get("response", ""),
-                        "signatur": {"model_id": str(kj.k.verdi("ekstraksjon", "modell")),
-                                     "temperature": kj.k.verdi("ekstraksjon", "temperatur"),
-                                     "seed": kj.k.verdi("ekstraksjon", "fro"),
-                                     "num_ctx": kj.k.verdi("ekstraksjon", "num_ctx"),
-                                     "prompt_sha256": str(kj.k.verdi("ekstraksjon",
-                                                                     "ledetekst_sha256"))},
-                    }, ensure_ascii=False) + "\n")
-                    fh.flush()
+            for wid, nr, del_ in rest:
+                t0 = time.time()
+                svar = _ollama(kj.k, "ekstraksjon", ledetekst, del_)
+                fh.write(json.dumps({
+                    "work_id": wid, "vindu": nr,
+                    "tokens_inn": svar.get("prompt_eval_count"),
+                    "veggtid": round(time.time() - t0, 2),
+                    "utdata_raa": svar.get("response", ""),
+                    "signatur": {"model_id": str(kj.k.verdi("ekstraksjon", "modell")),
+                                 "temperature": kj.k.verdi("ekstraksjon", "temperatur"),
+                                 "seed": kj.k.verdi("ekstraksjon", "fro"),
+                                 "num_ctx": kj.k.verdi("ekstraksjon", "num_ctx"),
+                                 "prompt_sha256": str(kj.k.verdi("ekstraksjon",
+                                                                 "ledetekst_sha256"))},
+                }, ensure_ascii=False) + "\n")
+                fh.flush()
     rader = _les_jsonl(utfil)
+    fikk = [(r["work_id"], r["vindu"]) for r in rader]
+    ventet = {(w, n) for w, n, _ in plan}
+    if len(fikk) != len(ventet) or set(fikk) != ventet:
+        raise LeddFeil(f"ekstraksjonen har {len(set(fikk) & ventet)} av {len(ventet)} vinduer "
+                       f"({len(fikk)} rader); leddet føres ikke ferdig")
     q = [l[2:].strip() for r in rader for l in r["utdata_raa"].splitlines()
          if l.strip().startswith("Q:") and norm(l.strip()[2:])]
-    res = {"vinduer": len(rader), "fra_cache": fra_cache, "q_linjer": len(q), "kanari": kan,
+    res = {"vinduer": len(rader), "vinduer_ventet": len(plan), "verk": len(verk),
+           "fortsatt_fra": len(plan) - len(rest), "hale_kuttet_bytes": kuttet,
+           "fra_cache": fra_cache, "q_linjer": len(q), "kanari": kan,
            "fil": str(utfil), "sha256": sha256_fil(utfil)}
     kj.før("ekstraksjon", res)
     return res
@@ -698,6 +730,14 @@ def steg_les(kj: Kjøring, *, tørr: bool = False, cache: Path | None = None,
            "cache": str(cache) if cache else None,
            "feltavvik": sorted(set(a for a in avvik if a))[:20],
            "n_feltavvik": len(set(a for a in avvik if a))}
+    # 02.10.2026 (LAERDOM § 45): et ledd som ikke leverte alle økter, føres ikke som ferdig. Den låste
+    # fase 3-versjonen førte «les» gjort med økter på 0 og 30 av 343, og kjeden kjørte videre.
+    uferdige = [ø for ø in ferdig if ø.get("status") == "AVVIK"]
+    if uferdige and not tørr:
+        kj.før("les_avbrutt", res)
+        raise LeddFeil("leserleddet er ikke ferdig: " + "; ".join(
+            f"økt {ø['okt']} {ø['dømt']} av {ø['ventet']}" for ø in uferdige)
+            + ". Fullfør delvise økter og start leddet på nytt.")
     kj.før("les", res)
     return res
 

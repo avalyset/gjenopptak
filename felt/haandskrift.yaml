@@ -1,0 +1,21 @@
+# Feltdefinisjon for kjeden. Prospektivt felt, fase 4 (ADDENDUM-26) — utenfor PREREG-ens fire.
+# OpenAlex har ingen topic for paleografi, kodikologi eller tekstkritikk: feltnære søk samler seg i
+# T10595 og T14210 (begge godkjent 5/5 i ADDENDUM-01). Feltet avgrenses derfor i tillegg med et
+# ordfilter på tittelen, og godkjenningsregelen er anvendt på rammen selv (5/5, 02.10.2026).
+# Filteret står i `harvest/coverage.py` (PROSPEKTIVE_FELT) og i rammens manifestrad.
+
+felt: haandskrift
+topics: [T10595, T14210]
+ar: [2015, 2020]
+ar_spurt: [2015, 2020]
+tittelfilter: "(manuscript OR manuscripts OR palaeography OR paleography OR palaeographical OR paleographic OR codicology OR codicological OR scribe OR scribes OR scriptorium OR codex OR codices)"
+
+ramme:
+  fil: frames/frame-haandskrift-RAW.jsonl    # relativ til Vault-målet
+  sha256: 6e444a0837d6559906096b15ff6371ee6b630391d387702cc4171410225eaf75
+  rader: 807
+  krav: hentbar                            # is_oa true OG fulltekst faktisk hentbar
+
+terskler:
+  n_verk: 100                       # trukket i fase 4 (ADDENDUM-26 § 2)
+  gulv: 0

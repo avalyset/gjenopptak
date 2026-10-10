@@ -38,6 +38,29 @@ SELECT = "id,doi,publication_year,primary_topic,open_access,best_oa_location"
 #: Under dette antallet gjenstående kall stopper frysingen.
 REMAINING_FLOOR = 50
 
+#: OpenAlex (målt 02.10.2026): en spørring med mer enn fem boolske operatorer (OR/AND/NOT) får høyst ett kall
+#: i sekundet per klient; ellers 429 «Rate limit exceeded». Frysingen av «haandskrift» (tolv OR) stoppet på
+#: første side av den grunn. Pausen gjelder bare slike filtre; 429 gis noen nye forsøk.
+TUNG_BOOLSK_PAUSE = 1.2
+FORSØK_429 = 5
+
+
+def _tung(filter_str: str) -> bool:
+    import re
+    return len(re.findall(r"\b(?:OR|AND|NOT)\b", filter_str)) > 5
+
+
+def _hent_side(c: httpx.Client, params: dict, *, tung: bool) -> httpx.Response:
+    import time
+    for forsøk in range(FORSØK_429):
+        if tung:
+            time.sleep(TUNG_BOOLSK_PAUSE)
+        r = c.get(OPENALEX, params=params)
+        if r.status_code != 429:
+            return r
+        time.sleep(TUNG_BOOLSK_PAUSE * (forsøk + 2))
+    return r
+
 #: Margin over det beregnede sidetallet som kreves før frysingen starter.
 #: Den kan ikke være lavere enn gulvet: starter frysingen med færre enn
 #: sidetall + gulv kall igjen, faller remaining under gulvet før siste side, og
@@ -153,8 +176,8 @@ def freeze_field(
             if max_pages is not None and page >= max_pages:
                 res.stopped_at_cursor = cursor
                 break
-            r = c.get(OPENALEX, params={"filter": filter_str, "per-page": str(PER_PAGE),
-                                        "cursor": cursor, "select": SELECT})
+            r = _hent_side(c, {"filter": filter_str, "per-page": str(PER_PAGE),
+                               "cursor": cursor, "select": SELECT}, tung=_tung(filter_str))
             res.calls_used += 1
             remaining, _ = _limits(r)
             res.remaining_at_end = remaining
@@ -218,10 +241,10 @@ def main(argv: list[str] | None = None) -> int:
     import argparse
     import sys
 
-    from .coverage import TOPIC_IDS
+    from .coverage import PROSPEKTIVE_FELT, TOPIC_IDS
 
     ap = argparse.ArgumentParser(description="Frys rammelisten for ett felt (ett felt per døgn).")
-    ap.add_argument("--field", choices=list(TOPIC_IDS), required=True)
+    ap.add_argument("--field", choices=list(TOPIC_IDS) + list(PROSPEKTIVE_FELT), required=True)
     ap.add_argument("--data-dir", type=Path, default=Path("data"))
     ap.add_argument("--floor", type=int, default=REMAINING_FLOOR)
     ap.add_argument("--margin", type=int, default=START_MARGIN)

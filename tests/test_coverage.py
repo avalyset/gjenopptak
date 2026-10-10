@@ -153,3 +153,12 @@ def test_addendum02_gjengir_kontrollene_og_de_aapne_postene():
     tekst.must_hit("Ingen trekking av utvalg er utført")
     # Kontrollene skal aldri havne i nevneren:
     tekst.must_hit("utenfor nevneren")
+
+
+def test_prospektivt_felt_haandskrift_har_ordfilter_paa_tittelen_og_staar_utenfor_de_fire():
+    """ADDENDUM-26 § 2: filteret som ga 807 verk 02.10.2026, med topics, tittel, år og OA i den rekkefølgen."""
+    assert "haandskrift" not in cv.TOPIC_IDS and cv.felt_topics("haandskrift") == ("T10595", "T14210")
+    f = cv.frame_filter("haandskrift")
+    assert f.startswith("topics.id:T10595|T14210,title.search:(manuscript OR manuscripts OR palaeography")
+    assert f.endswith("codex OR codices),publication_year:2015-2020,open_access.is_oa:true")
+    assert cv.frame_filter("arkeologi") == "topics.id:T10421|T10087,publication_year:2015-2020,open_access.is_oa:true"
